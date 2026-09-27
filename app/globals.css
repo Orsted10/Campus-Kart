@@ -1,26 +1,400 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where([data-theme="dark"] *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
   }
 }
 
+
+/* ---------------------------------------------------------------- tokens */
+
+:root {
+  --bg: #f4f0e8;
+  --surface: #faf9f6;
+  --surface-2: #ede9e0;
+  --text: #171717;
+  --muted: #6f6c66;
+  --border: #d8d3c8;
+  --blue: #2875d3;
+  --blue-ink: #1f62bc;
+  --food: #c9653b;
+  --food-ink: #a94e28;
+  --rides: #2875d3;
+  --rides-ink: #1f62bc;
+  --essentials: #65705a;
+  --essentials-ink: #4c5543;
+  --ink: #171717;
+  --shade: rgb(23 23 23 / 0.06);
+  --shade-strong: rgb(23 23 23 / 0.12);
+  --scene-line: #cfc8ba;
+  --scene-block: #e7e2d6;
+  --scene-block-2: #ded8ca;
+  --on-accent: #faf9f6;
+  --nav-bg: rgb(244 240 232 / 0.82);
+  --accent-soft: rgb(40 117 211 / 0.1);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #151515;
+  --surface: #1d1d1b;
+  --surface-2: #242422;
+  --text: #f5f1e8;
+  --muted: #a7a39a;
+  --border: #34332f;
+  --blue: #2875d3;
+  --blue-ink: #5a9cf2;
+  --food: #c9653b;
+  --food-ink: #d9764a;
+  --rides: #2875d3;
+  --rides-ink: #5a9cf2;
+  --essentials: #65705a;
+  --essentials-ink: #8b9880;
+  --ink: #f5f1e8;
+  --shade: rgb(0 0 0 / 0.3);
+  --shade-strong: rgb(0 0 0 / 0.5);
+  --scene-line: #3a3934;
+  --scene-block: #232321;
+  --scene-block-2: #2b2b28;
+  --on-accent: #f5f1e8;
+  --nav-bg: rgb(21 21 21 / 0.82);
+  --accent-soft: rgb(40 117 211 / 0.16);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface-2);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--border);
+  --color-blue: var(--blue-ink);
+  --color-blue-pure: var(--blue);
+  --color-food: var(--food-ink);
+  --color-rides: var(--rides-ink);
+  --color-essentials: var(--essentials-ink);
+  --font-sans: var(--font-geist), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument), Georgia, serif;
+}
+
+/* ------------------------------------------------------------------ base */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+  overflow-x: clip;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv05";
+  overflow-x: clip;
+  max-width: 100%;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* grid/flex children must be allowed to shrink below their intrinsic size,
+   otherwise wide images expand the layout viewport on small screens */
+.grid > *,
+.flex > * {
+  min-width: 0;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--blue);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ------------------------------------------------------------ typography */
+
+.display {
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.micro {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.hairline {
+  border: 1px solid var(--border);
+}
+
+.rule {
+  height: 1px;
+  background: var(--border);
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.btn-solid {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn-solid:hover {
+  background: var(--blue-ink);
+  color: #fff;
+}
+
+.btn-ghost {
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  border-color: var(--text);
+}
+
+.btn .arrow {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ------------------------------------------------------------------ nav */
+
+.nav-shell {
+  transition: padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease,
+    opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link {
+  position: relative;
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link[data-active="true"] {
+  color: var(--text);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 1px;
+  width: 100%;
+  background: currentcolor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link:hover::after,
+.nav-link[data-active="true"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------------------------------------------------------------- panels */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.overlay-sheet {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(18px) saturate(1.1);
+  border: 1px solid var(--border);
+}
+
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.3s ease;
+}
+
+.field::placeholder {
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.field[data-invalid="true"] {
+  border-color: var(--food);
+}
+
+/* ------------------------------------------------------------ scene art */
+
+.scene-grid line {
+  stroke: var(--scene-line);
+}
+
+.tick {
+  stroke: var(--scene-line);
+}
+
+.route-dash {
+  stroke-dasharray: 6 10;
+  animation: dash-run 1.6s linear infinite;
+}
+
+@keyframes dash-run {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+.draw {
+  stroke-dasharray: var(--len, 1200);
+  stroke-dashoffset: var(--len, 1200);
+}
+
+.pulse-ring {
+  transform-origin: center;
+  animation: pulse-ring 3.2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------ utilities */
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.no-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-bar {
+  scrollbar-width: none;
+}
+
+.snap-x-row {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-x-row > * {
+  scroll-snap-align: center;
+}
+
+.vertical-rl {
+  writing-mode: vertical-rl;
+}
+
+[data-cursor] {
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  [data-cursor] {
+    cursor: auto;
+  }
+}
+
+/* --------------------------------------------------------------- motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.12s !important;
+  }
+
+  .route-dash,
+  .pulse-ring {
+    animation: none !important;
+  }
 }
