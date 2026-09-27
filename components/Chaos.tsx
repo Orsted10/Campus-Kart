@@ -19,15 +19,8 @@ export default function Chaos() {
 
   return (
     <section id="chaos" className="relative overflow-hidden px-5 pb-[14vh] pt-[12vh] sm:px-8">
-      {/* Background Matrix & Gradient Glow */}
-      <div className="pointer-events-none absolute inset-0 select-none" aria-hidden="true">
-        <div
-          className="absolute left-1/2 top-1/2 h-[700px] w-[900px] -translate-x-1/2 -translate-y-1/2 opacity-20"
-          style={{
-            background: "radial-gradient(circle, var(--food) 0%, transparent 70%)",
-            filter: "blur(90px)",
-          }}
-        />
+      {/* Background Constellation Lines */}
+      <div className="pointer-events-none absolute inset-0 select-none opacity-30" aria-hidden="true">
         <svg viewBox="0 0 760 460" className="h-full w-full opacity-40" preserveAspectRatio="xMidYMid slice">
           {FRAG_PATHS.map((f, i) => (
             <path
