@@ -14,7 +14,6 @@ export default function Hero() {
   const sceneWrap = useRef<HTMLDivElement | null>(null);
   const copy = useRef<HTMLDivElement | null>(null);
   const bigWord = useRef<HTMLDivElement | null>(null);
-  const leadLine = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
   const [hoverKind, setHoverKind] = useState<ServiceId | null>(null);
   const active = CAMPUSES.find((c) => c.id === campus) ?? CAMPUSES[0];
@@ -34,8 +33,7 @@ export default function Hero() {
         0,
       )
         .to(copy.current, { y: -110, opacity: 0, ease: "power1.in" }, 0)
-        .fromTo(bigWord.current, { xPercent: 0 }, { xPercent: -22, ease: "none" }, 0)
-        .fromTo(leadLine.current, { scaleX: 0 }, { scaleX: 1, ease: "none" }, 0.35);
+        .fromTo(bigWord.current, { xPercent: 0 }, { xPercent: -22, ease: "none" }, 0);
     }, el);
     return () => ctx.revert();
   }, [reduced]);
@@ -244,11 +242,12 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* route that carries the eye into the next scene */}
+        {/* Seamless gradient blend into the next section */}
         <div
-          ref={leadLine}
-          className="absolute bottom-0 left-0 h-px w-full origin-left"
-          style={{ background: "var(--blue)", transform: "scaleX(0)" }}
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] select-none z-10"
+          style={{
+            background: "linear-gradient(to bottom, transparent 0%, var(--bg) 100%)",
+          }}
           aria-hidden="true"
         />
       </div>
