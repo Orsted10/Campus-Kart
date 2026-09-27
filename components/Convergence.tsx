@@ -121,7 +121,7 @@ export default function Convergence() {
     <section id="connect" ref={section} className="relative h-[320vh]">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 pt-24 sm:px-8 lg:px-[4vw]">
-          <span className="micro">Act III — connect</span>
+          <span className="micro">connect</span>
           <span className="micro">
             system state · <span className="text-blue">synchronising</span>
           </span>

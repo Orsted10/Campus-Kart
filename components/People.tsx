@@ -36,7 +36,7 @@ export default function People() {
       <div className="mx-auto max-w-[1400px]">
         <div ref={head} className="flex items-center gap-3">
           <span className="h-px w-8" style={{ background: "var(--blue)" }} />
-          <span className="micro">Act V — believe</span>
+          <span className="micro">believe</span>
         </div>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-end">

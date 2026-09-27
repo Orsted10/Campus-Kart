@@ -20,7 +20,7 @@ export default function Ecosystem() {
     <section id="ecosystem" className="relative px-5 pb-[12vh] pt-[8vh] sm:px-8 lg:px-[4vw]">
       <div className="mx-auto max-w-[1400px]">
         <div className="flex items-end justify-between gap-6 border-t border-line pt-6">
-          <span className="micro">Act IV — experience</span>
+          <span className="micro">experience</span>
           <span className="micro text-right">
             campus services · <span style={{ color: meta.ink }}>{meta.label}</span>
           </span>

@@ -44,7 +44,7 @@ export default function Chaos() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--food)] shadow-[0_0_8px_var(--food)]" />
           </span>
           <span className="micro font-mono text-[11px] tracking-[0.18em] text-[var(--text)] font-medium">
-            ACT II · RECOGNIZE THE FRAGMENTATION
+            RECOGNIZE THE FRAGMENTATION
           </span>
         </div>
 

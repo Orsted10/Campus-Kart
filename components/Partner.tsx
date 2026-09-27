@@ -27,7 +27,7 @@ export default function Partner() {
       <div className="mx-auto max-w-[1400px]">
         <div className="border-t border-line pt-6">
           <div className="flex items-center justify-between">
-            <span className="micro">Act VI — join</span>
+            <span className="micro">join</span>
             <span className="micro">Lead generation · no backend attached</span>
           </div>
         </div>
