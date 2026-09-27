@@ -87,46 +87,69 @@ export default function Hero() {
         <div className="pointer-events-none absolute inset-0">
           <div
             ref={copy}
-            className="pointer-events-auto absolute left-5 right-5 top-[14svh] sm:left-8 lg:left-[4vw] lg:top-[22vh] lg:w-[40vw] z-10"
+            className="pointer-events-auto absolute left-5 right-5 top-[14svh] sm:left-8 lg:left-[4vw] lg:top-[20vh] lg:w-[42vw] z-10"
           >
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8" style={{ background: "var(--blue)" }} />
-              <span className="micro">
-                {active.name.split(" ")[0]} campus · {active.city}
+            {/* Top Location Glass Badge */}
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-3.5 py-1.5 backdrop-blur-md shadow-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--blue)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--blue)] shadow-[0_0_8px_var(--blue)]" />
+              </span>
+              <span className="micro font-mono text-[11px] tracking-[0.18em] text-[var(--text)] font-medium">
+                CHANDIGARH UNIVERSITY · UNNAO, UP
               </span>
             </div>
 
-            <h1 className="display mt-5 text-[clamp(2.7rem,7.4vw,6.4rem)]">
+            <h1 className="display mt-6 text-[clamp(2.8rem,7.2vw,6.2rem)] leading-[0.92] tracking-[-0.035em]">
               EVERYTHING
               <br />
               CAMPUS.
               <br />
-              <span className="serif-accent text-blue">One</span> KART.
+              <span className="relative inline-block">
+                <span className="serif-accent text-blue italic pr-2">One</span>
+                <span className="bg-gradient-to-r from-[var(--text)] to-[var(--muted)] bg-clip-text text-transparent font-extrabold">KART.</span>
+              </span>
             </h1>
 
-            <p className="lede mt-6">
-              Food. Rides. Essentials. Campus life — one place, moving with the way you already live.
+            <p className="lede mt-6 text-[clamp(1rem,1.4vw,1.25rem)] text-[var(--muted)] leading-relaxed max-w-[42ch]">
+              <span className="font-semibold text-[var(--food-ink)]">Food.</span>{" "}
+              <span className="font-semibold text-[var(--rides-ink)]">Rides.</span>{" "}
+              <span className="font-semibold text-[var(--essentials-ink)]">Essentials.</span>{" "}
+              Campus life — one place, moving with the way you already live.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3.5">
               <Magnetic>
                 <button
                   type="button"
-                  className="btn btn-solid"
+                  className="btn btn-solid !h-12 !px-7 text-[15px] font-semibold !rounded-full shadow-[0_12px_32px_-6px_rgba(59,130,246,0.35)] transition-all duration-300 hover:shadow-[0_16px_40px_-4px_rgba(59,130,246,0.5)] hover:scale-[1.02] relative group overflow-hidden"
                   onClick={() => scrollToId("ecosystem")}
                   data-cursor="cta"
                 >
-                  Explore CampusKart <Arrow />
+                  <span className="relative z-10 flex items-center gap-2">
+                    Explore CampusKart <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </button>
               </Magnetic>
               <button
                 type="button"
-                className="btn btn-ghost"
+                className="btn !h-12 !px-7 text-[15px] font-medium !rounded-full border border-[var(--border)] bg-[var(--surface)]/70 backdrop-blur-md transition-all duration-300 hover:bg-[var(--surface-2)] hover:border-[var(--text)]/40 hover:scale-[1.02] group"
                 onClick={() => scrollToId("how")}
                 data-cursor="cta"
               >
-                See How It Works <Arrow />
+                See How It Works <Arrow className="opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0.5" />
               </button>
+            </div>
+
+            {/* Micro Live Campus Pill Stats */}
+            <div className="mt-8 flex items-center gap-3.5 text-[11px] font-mono text-[var(--muted)] tracking-wider">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--food)]" /> 12 CANTEENS ACTIVE
+              </span>
+              <span className="text-[var(--border)]">|</span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--rides)]" /> 24/7 GATE SHUTTLE
+              </span>
             </div>
           </div>
 
