@@ -18,7 +18,7 @@ export default function Chaos() {
   const headRef = useReveal<HTMLDivElement>(24);
 
   return (
-    <section id="chaos" className="relative overflow-hidden px-5 pb-[14vh] pt-[12vh] sm:px-8">
+    <section id="chaos" className="relative overflow-hidden px-5 pb-[4vh] pt-[6vh] sm:px-8">
       {/* Background Constellation Lines */}
       <div className="pointer-events-none absolute inset-0 select-none opacity-30" aria-hidden="true">
         <svg viewBox="0 0 760 460" className="h-full w-full opacity-40" preserveAspectRatio="xMidYMid slice">
@@ -61,7 +61,7 @@ export default function Chaos() {
       </div>
 
       {/* Spatial Time Cards Matrix */}
-      <div className="relative mx-auto mt-[8vh] max-w-[1400px] lg:h-[65vh]">
+      <div className="relative mx-auto mt-[3vh] max-w-[1400px] lg:h-[42vh]">
         {MOMENTS.map((m, i) => {
           const isOpen = open === m.time;
           const accent =
@@ -167,7 +167,7 @@ export default function Chaos() {
         })}
       </div>
 
-      <div className="relative mx-auto mt-[6vh] max-w-[1400px] flex items-center justify-between border-t border-[var(--border)] pt-5 text-[12px] font-mono text-[var(--muted)]">
+      <div className="relative mx-auto mt-[1vh] max-w-[1400px] flex items-center justify-between border-t border-[var(--border)] pt-4 text-[12px] font-mono text-[var(--muted)]">
         <span className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-[var(--food)]" /> 5 UNCONNECTED APPS
         </span>

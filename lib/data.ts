@@ -88,7 +88,7 @@ export const MOMENTS: Moment[] = [
     service: "rides",
     scene: "Heading off-campus. Need a cab waiting at Outside Gate for an early train.",
     x: 4,
-    y: 2,
+    y: 0,
     rot: -1.5,
   },
   {
@@ -97,7 +97,7 @@ export const MOMENTS: Moment[] = [
     service: "food",
     scene: "Craving food from outside. Order delivered right to your campus block.",
     x: 68,
-    y: 2,
+    y: 0,
     rot: 1.5,
   },
   {
@@ -106,7 +106,7 @@ export const MOMENTS: Moment[] = [
     service: "rides",
     scene: "Heading out for town or market. Need an auto waiting at Outside Gate.",
     x: 36,
-    y: 30,
+    y: 26,
     rot: -1,
   },
   {
@@ -115,7 +115,7 @@ export const MOMENTS: Moment[] = [
     service: "essentials",
     scene: "Submission tomorrow. The shop downstairs closed at eight.",
     x: 68,
-    y: 58,
+    y: 52,
     rot: 1.5,
   },
   {
@@ -124,7 +124,7 @@ export const MOMENTS: Moment[] = [
     service: "essentials",
     scene: "A fever, an empty shelf, and no open counter on campus.",
     x: 4,
-    y: 58,
+    y: 52,
     rot: -1.5,
   },
 ];
