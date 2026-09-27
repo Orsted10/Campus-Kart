@@ -144,11 +144,11 @@ export default function Hero() {
             {/* Micro Live Campus Pill Stats */}
             <div className="mt-8 flex items-center gap-3.5 text-[11px] font-mono text-[var(--muted)] tracking-wider">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--food)]" /> 12 CANTEENS ACTIVE
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--food)]" /> OUTSIDE RESTAURANTS
               </span>
               <span className="text-[var(--border)]">|</span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--rides)]" /> 24/7 GATE SHUTTLE
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--rides)]" /> CABS & RIDES AT GATE
               </span>
             </div>
           </div>

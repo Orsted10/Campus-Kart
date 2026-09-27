@@ -9,14 +9,14 @@ export const SERVICE_META: Record<
     accent: "var(--food)",
     ink: "var(--food-ink)",
     line: "Terracotta route",
-    blurb: "From the stall you trust, to the bench you're sitting on.",
+    blurb: "Top outside restaurants & eateries, delivered straight to your block.",
   },
   rides: {
     label: "Rides",
     accent: "var(--rides)",
     ink: "var(--rides-ink)",
     line: "Blue road",
-    blurb: "Gate to hostel, lab to library — across campus, on time.",
+    blurb: "Outside cabs, autos & rides from the gate directly to your destination.",
   },
   essentials: {
     label: "Essentials",
@@ -40,7 +40,7 @@ export const CAMPUSES: Campus[] = [
     id: "chandigarh-unnao",
     name: "Chandigarh University",
     city: "Unnao, UP",
-    zones: ["Hostels 1 & 2", "University Block F & E", "Canteen Hub", "Outside Gate"],
+    zones: ["Hostels 1 & 2", "University Block F & E", "Food & Resto Hub", "Outside Gate"],
     note: "Chandigarh University, Unnao (Uttar Pradesh) Campus · Official Blueprint",
   },
 ];
@@ -59,10 +59,10 @@ export type PulseNode = {
 };
 
 export const PULSE_NODES: PulseNode[] = [
-  { id: "n3", label: "Outside Gate", sub: "Ride Pickup Stand", kind: "rides", x: 400, y: 105 },
-  { id: "n8", label: "Spine Junction", sub: "Cycle & Shuttle Hub", kind: "rides", x: 400, y: 175 },
+  { id: "n3", label: "Outside Gate", sub: "Cab & Auto Pickup Stand", kind: "rides", x: 400, y: 105 },
+  { id: "n8", label: "Spine Junction", sub: "Ride & Cab Route", kind: "rides", x: 400, y: 175 },
   { id: "n5", label: "Block F", sub: "University Academic Wing", kind: "campus", x: 572, y: 175 },
-  { id: "n6", label: "Block E Food", sub: "University Canteen", kind: "food", x: 436, y: 285 },
+  { id: "n6", label: "Block E Food", sub: "Outside Food Hub", kind: "food", x: 436, y: 285 },
   { id: "n7", label: "Block E Lab", sub: "Science & Innovation", kind: "campus", x: 400, y: 285 },
   { id: "n2", label: "Hostel 1 Gate", sub: "Residential Zone 01", kind: "campus", x: 320, y: 375 },
   { id: "n4", label: "Hostel 2 Store", sub: "Essentials & Stationery", kind: "essentials", x: 480, y: 375 },
