@@ -84,9 +84,9 @@ export type Moment = {
 export const MOMENTS: Moment[] = [
   {
     time: "08:12",
-    line: "Running late.",
+    line: "Early trip.",
     service: "rides",
-    scene: "Bag in one hand. Lecture in nine minutes. The gate is far.",
+    scene: "Heading off-campus. Need a cab waiting at Outside Gate for an early train.",
     x: 4,
     y: 2,
     rot: -1.5,
@@ -95,16 +95,16 @@ export const MOMENTS: Moment[] = [
     time: "13:18",
     line: "Need lunch.",
     service: "food",
-    scene: "Between two lectures, the queue outside is longer than the break.",
+    scene: "Craving food from outside. Order delivered right to your campus block.",
     x: 68,
     y: 2,
     rot: 1.5,
   },
   {
     time: "17:47",
-    line: "Need a ride.",
+    line: "Outside ride.",
     service: "rides",
-    scene: "Lab ended on the far side. Hostel is a twenty minute walk away.",
+    scene: "Heading out for town or market. Need an auto waiting at Outside Gate.",
     x: 36,
     y: 30,
     rot: -1,
@@ -143,17 +143,17 @@ export const FRAGMENTS = [
 export const SCENARIOS = [
   {
     time: "8:10 AM",
-    title: "Late for class.",
+    title: "Heading off campus.",
     service: "rides" as ServiceId,
-    action: "Ride.",
-    detail: "Two taps at the hostel steps. The cab already knows the academic spine.",
+    action: "Outside Cab.",
+    detail: "Book an outside cab to be ready at Outside Gate when you arrive at the exit.",
   },
   {
     time: "1:30 PM",
     title: "Hungry between lectures.",
     service: "food" as ServiceId,
     action: "Food.",
-    detail: "The canteen you like, ordered from the corridor, ready when you arrive.",
+    detail: "Outside restaurant food, ordered from your phone, delivered to your block.",
   },
   {
     time: "7:15 PM",
@@ -189,7 +189,7 @@ export const DISHES = [
   { id: "roll", name: "Paneer Roll", vendor: "Roll House", price: "₹110", mins: 11 },
 ];
 
-export const RIDE_POINTS = ["Hostel", "Academic Block", "Main Gate", "Library", "Food Court"];
+export const RIDE_POINTS = ["Outside Gate", "Unnao Railway Station", "City Market", "Lucknow Airport", "Mall Road"];
 
 export const SEARCH_SUGGESTIONS = [
   { text: "Food near hostel", target: "ecosystem", service: "food" as ServiceId },

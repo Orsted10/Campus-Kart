@@ -275,12 +275,12 @@ export function RideJourney() {
           Route map · campus network
         </span>
         <h3 className="display mt-5 text-[clamp(2.1rem,4.6vw,3.6rem)]">
-          MISSED THE BUS?
+          NEED A CAB?
           <br />
-          <span className="serif-accent text-blue">just move.</span>
+          <span className="serif-accent text-blue">outside gate ready.</span>
         </h3>
         <p className="lede mt-4">
-          Two choices — where you are, where you need to be. The campus draws the rest.
+          Outside cabs, autos & outstation rides right from Outside Gate directly to your destination.
         </p>
 
         <fieldset className="mt-7">
