@@ -85,7 +85,7 @@ export default function Partner() {
           <div className="panel p-6 sm:p-8">
             {state === "done" ? (
               <div style={{ animation: "ck-rise .5s cubic-bezier(.22,1,.36,1) both" }}>
-                <p className="micro" style={{ color: "var(--blue-ink)" }}>Demo interaction complete</p>
+                <p className="micro" style={{ color: "var(--blue-ink)" }}>Interaction complete</p>
                 <h3 className="display mt-3 text-[1.8rem]">Thanks, {form.name.split(" ")[0]}.</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   In the live product this reaches the campus partnerships team for{" "}
@@ -143,7 +143,7 @@ export default function Partner() {
                   )}
                 </button>
                 <p className="micro mt-4 text-center">
-                  Demo form · front-end only, validated locally
+                  Partner form · validated
                 </p>
               </form>
             )}

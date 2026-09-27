@@ -37,32 +37,11 @@ export type Campus = {
 
 export const CAMPUSES: Campus[] = [
   {
-    id: "riyana",
-    name: "Riyana Institute of Technology",
-    city: "Pune",
-    zones: ["Hostel North", "Academic Spine", "Food Court", "Main Gate"],
-    note: "Example campus — demo layout",
-  },
-  {
-    id: "salt-lake",
-    name: "Salt Lake Polytechnic",
-    city: "Kolkata",
-    zones: ["Hall 4", "Central Quad", "Canteen Row", "East Gate"],
-    note: "Example campus — demo layout",
-  },
-  {
-    id: "kumaraguru",
-    name: "Kumaraguru College",
-    city: "Coimbatore",
-    zones: ["Residency", "Innovation Block", "Annapoorna", "Trichy Road"],
-    note: "Example campus — demo layout",
-  },
-  {
-    id: "vidyanagar",
-    name: "Vidyanagar University",
-    city: "Hyderabad",
-    zones: ["Boys Hostel", "Science Wing", "Snack Junction", "Metro Gate"],
-    note: "Example campus — demo layout",
+    id: "chandigarh-unnao",
+    name: "Chandigarh University",
+    city: "Unnao, UP",
+    zones: ["Hostels 1 & 2", "University Block F & E", "Canteen Hub", "Outside Gate"],
+    note: "Chandigarh University, Unnao (Uttar Pradesh) Campus · Official Blueprint",
   },
 ];
 
@@ -80,14 +59,14 @@ export type PulseNode = {
 };
 
 export const PULSE_NODES: PulseNode[] = [
-  { id: "n1", label: "Annapoorna", sub: "Food point · open", kind: "food", x: 206, y: 168 },
-  { id: "n2", label: "Hostel North", sub: "Zone · 4 blocks", kind: "campus", x: 132, y: 372 },
-  { id: "n3", label: "Main Gate", sub: "Ride pickup", kind: "rides", x: 668, y: 452 },
-  { id: "n4", label: "Campus Mart", sub: "Essentials · restocking", kind: "essentials", x: 618, y: 152 },
-  { id: "n5", label: "Academic Spine", sub: "Zone · labs + lecture", kind: "campus", x: 404, y: 268 },
-  { id: "n6", label: "Chai Point", sub: "Food point · open", kind: "food", x: 300, y: 470 },
-  { id: "n7", label: "Library", sub: "Zone · quiet hours", kind: "campus", x: 520, y: 372 },
-  { id: "n8", label: "Cycle Stand", sub: "Ride pickup", kind: "rides", x: 470, y: 108 },
+  { id: "n3", label: "Outside Gate", sub: "Ride Pickup Stand", kind: "rides", x: 400, y: 105 },
+  { id: "n8", label: "Spine Junction", sub: "Cycle & Shuttle Hub", kind: "rides", x: 400, y: 175 },
+  { id: "n5", label: "Block F", sub: "University Academic Wing", kind: "campus", x: 572, y: 175 },
+  { id: "n6", label: "Block E Food", sub: "University Canteen", kind: "food", x: 436, y: 285 },
+  { id: "n7", label: "Block E Lab", sub: "Science & Innovation", kind: "campus", x: 400, y: 285 },
+  { id: "n2", label: "Hostel 1 Gate", sub: "Residential Zone 01", kind: "campus", x: 320, y: 375 },
+  { id: "n4", label: "Hostel 2 Store", sub: "Essentials & Stationery", kind: "essentials", x: 480, y: 375 },
+  { id: "n1", label: "Central Mart", sub: "Campus Supply Store", kind: "essentials", x: 400, y: 375 },
 ];
 
 /* --------------------------------------------------------------- chaos */

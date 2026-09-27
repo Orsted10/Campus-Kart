@@ -17,36 +17,16 @@ type Props = {
 };
 
 const ROUTES: Record<ServiceId, string> = {
-  food: "M206,168 C 270,215 320,238 404,268 C 452,286 474,330 520,372",
-  rides: "M668,452 C 604,472 520,472 460,460 C 380,446 300,430 240,410 C 190,394 158,382 132,372",
-  essentials: "M618,152 C 540,178 466,204 404,268 C 332,336 220,352 132,372",
+  rides: "M320,375 H400 V87",
+  food: "M320,375 H400 V285 H436",
+  essentials: "M480,375 H400 V175 H572",
 };
-
-const BLOCKS = [
-  { x: 66, y: 316, w: 172, h: 124, r: -1, label: "HOSTEL NORTH", sub: "4 blocks" },
-  { x: 326, y: 206, w: 196, h: 112, r: 0.6, label: "ACADEMIC SPINE", sub: "lecture + labs" },
-  { x: 468, y: 330, w: 124, h: 92, r: -0.8, label: "LIBRARY", sub: "quiet hours" },
-  { x: 150, y: 112, w: 162, h: 92, r: 0.8, label: "FOOD COURT", sub: "12 points" },
-  { x: 556, y: 96, w: 146, h: 96, r: -0.6, label: "CAMPUS MART", sub: "essentials" },
-  { x: 612, y: 306, w: 138, h: 96, r: 1, label: "SPORTS", sub: "courts" },
-  { x: 348, y: 60, w: 132, h: 86, r: -1.2, label: "SCIENCE", sub: "wing B" },
-  { x: 646, y: 428, w: 116, h: 58, r: 0.5, label: "MAIN GATE", sub: "pickup" },
-];
-
-const ROADS = [
-  "M18,300 H784",
-  "M404,14 V546",
-  "M96,140 C 190,180 240,250 300,300",
-  "M556,540 C 556,436 640,404 786,392",
-  "M66,470 H640",
-  "M470,60 C 540,70 580,96 620,140",
-];
 
 export default function CampusScene({
   mode = "all",
   interactive = true,
   movers = true,
-  showLabels = true,
+  showLabels = false,
   className = "",
   onHover,
   onNodeClick,
@@ -63,22 +43,8 @@ export default function CampusScene({
   const serviceKeys: ServiceId[] = ["food", "rides", "essentials"];
 
   useEffect(() => {
-    const svg = wrap.current;
-    if (!svg || !interactive || reduced) return;
-    const onMove = (e: globalThis.MouseEvent) => {
-      const rect = svg.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      if (grid.current)
-        grid.current.style.transform = `translate3d(${nx * -6}px, ${ny * -6}px, 0)`;
-      if (blocksRef.current)
-        blocksRef.current.style.transform = `translate3d(${nx * 14}px, ${ny * 14}px, 0)`;
-      if (routesRef.current)
-        routesRef.current.style.transform = `translate3d(${nx * 22}px, ${ny * 22}px, 0)`;
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [interactive, reduced]);
+    // Map stays firmly anchored in a clean fixed position
+  }, []);
 
   const dim = (k: ServiceId) => {
     if (mode === "all") return 1;
@@ -95,149 +61,256 @@ export default function CampusScene({
   return (
     <svg
       ref={wrap}
-      viewBox="0 0 800 560"
+      viewBox="0 0 800 500"
       className={className}
       role="img"
-      aria-label="Stylised top-down map of an example campus with routes connecting food points, ride pickups and essential stores"
+      aria-label="Chandigarh University Unnao Campus architectural blueprint"
       onMouseMove={handleMove}
       onMouseLeave={() => onHover?.(null)}
       style={{ overflow: "visible" }}
     >
       <defs>
-        <pattern id={`${uid}-tick`} width="26" height="26" patternUnits="userSpaceOnUse">
-          <path d="M0 0 H6 M0 0 V6" className="tick" strokeWidth="1" fill="none" opacity="0.5" />
+        <pattern id={`${uid}-grid`} width="24" height="24" patternUnits="userSpaceOnUse">
+          <path d="M0 0 H24 M0 0 V24" stroke="var(--border)" strokeWidth="0.4" fill="none" opacity="0.25" />
         </pattern>
-        <linearGradient id={`${uid}-fade`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--surface)" stopOpacity="0" />
-          <stop offset="100%" stopColor="var(--surface)" stopOpacity="0.9" />
-        </linearGradient>
       </defs>
 
-      {/* ---------------------------------------------------- contours */}
-      <g ref={grid} style={{ transition: "transform .6s cubic-bezier(.22,1,.36,1)" }}>
-        <rect x="0" y="0" width="800" height="560" fill={`url(#${uid}-tick)`} opacity="0.55" />
-        {[0, 1, 2, 3, 4].map((i) => (
-          <path
-            key={i}
-            d={`M-20,${70 + i * 118} C 180,${30 + i * 118} 420,${130 + i * 118} 820,${
-              50 + i * 118
-            }`}
-            fill="none"
-            className="tick"
-            strokeWidth="1"
-            opacity={0.45}
-          />
-        ))}
-        <text x="18" y="34" className="micro" fill="var(--muted)" fontSize="11">
-          ZONE GRID / DEMO CAMPUS
+      {/* ---------------------------------------------------- grid background */}
+      <g ref={grid} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
+        <rect x="0" y="0" width="800" height="500" fill={`url(#${uid}-grid)`} opacity="0.8" />
+        <text x="24" y="24" className="micro" fill="var(--muted)" fontSize="10" letterSpacing="1.8">
+          CHANDIGARH UNIVERSITY (UNNAO, UP)
         </text>
-        <text x="686" y="34" className="micro" fill="var(--muted)" fontSize="11">
-          N ↑
+        <text x="776" y="24" textAnchor="end" className="micro" fill="var(--muted)" fontSize="10" letterSpacing="1.8">
+          ARCHITECTURAL BLUEPRINT · N ↑
         </text>
       </g>
 
-      {/* ------------------------------------------------------ roads */}
-      <g ref={blocksRef} style={{ transition: "transform .5s cubic-bezier(.22,1,.36,1)" }}>
-        {ROADS.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="var(--scene-line)" strokeWidth="1.5" />
-        ))}
-        {ROADS.map((d, i) => (
-          <path
-            key={`d-${i}`}
-            d={d}
-            fill="none"
-            stroke="var(--scene-line)"
-            strokeWidth="8"
-            opacity="0.22"
-            strokeLinecap="round"
-          />
-        ))}
+      {/* ------------------------------------------------------ buildings & roads */}
+      <g ref={blocksRef} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
+        {/* Main Road Spine */}
+        <path d="M400,90 V375" fill="none" stroke="var(--scene-line)" strokeWidth="4" opacity="0.6" />
+        <path d="M400,90 V375" fill="none" stroke="var(--blue)" strokeWidth="1.5" strokeDasharray="6 6" opacity="0.8" />
 
-        {BLOCKS.map((b) => {
-          const kind: NodeKind =
-            b.label === "FOOD COURT" ? "food" : b.label === "CAMPUS MART" ? "essentials" : "campus";
-          const active =
-            mode !== "all" && ((mode === "food" && kind === "food") || (mode === "essentials" && kind === "essentials"));
-          return (
-            <g
-              key={b.label}
-              data-kind={kind}
-              transform={`rotate(${b.r} ${b.x + b.w / 2} ${b.y + b.h / 2})`}
-              onMouseEnter={() => onHover?.(kind)}
-              style={{ cursor: interactive ? "pointer" : "auto" }}
-            >
-              <rect
-                x={b.x + 4}
-                y={b.y + 6}
-                width={b.w}
-                height={b.h}
-                fill="var(--shade)"
-                rx="2"
-              />
-              <rect
-                x={b.x}
-                y={b.y}
-                width={b.w}
-                height={b.h}
-                fill="var(--scene-block)"
-                stroke="var(--scene-line)"
-                strokeWidth="1.2"
-                rx="2"
-                style={{ transition: "fill .5s ease" }}
-              />
-              <path
-                d={`M${b.x},${b.y + b.h * 0.62} H${b.x + b.w}`}
-                stroke="var(--scene-line)"
-                strokeWidth="1"
-              />
-              <path
-                d={`M${b.x + b.w * 0.36},${b.y} V${b.y + b.h}`}
-                stroke="var(--scene-line)"
-                strokeWidth="1"
-                opacity="0.7"
-              />
-              {active && (
-                <rect
-                  x={b.x - 4}
-                  y={b.y - 4}
-                  width={b.w + 8}
-                  height={b.h + 8}
-                  fill="none"
-                  stroke={mode === "food" ? "var(--food)" : "var(--essentials)"}
-                  strokeWidth="1.5"
-                  strokeDasharray="4 5"
-                  rx="3"
-                />
-              )}
-              {showLabels && (
-                <text
-                  x={b.x + 8}
-                  y={b.y + 18}
-                  fontSize="10.5"
-                  letterSpacing="1.4"
-                  fill="var(--text)"
-                  opacity="0.75"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
-                  {b.label}
-                </text>
-              )}
-            </g>
-          );
-        })}
+        {/* Branch Road to Block F */}
+        <path d="M400,165 H570" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+
+        {/* Branch Road to Block E */}
+        <path d="M400,270 H436" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+
+        {/* Branch Road to Hostel 1 & 2 */}
+        <path d="M320,375 H480" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+
+        {/* 1. OUTSIDE GATE RECTANGLE (Top) */}
+        <g data-kind="rides" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("rides")}>
+          <rect
+            x="250"
+            y="52"
+            width="300"
+            height="38"
+            rx="6"
+            fill="var(--scene-block)"
+            stroke="var(--blue)"
+            strokeWidth="1.8"
+          />
+          <rect
+            x="254"
+            y="56"
+            width="292"
+            height="30"
+            rx="4"
+            fill="none"
+            stroke="var(--blue)"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            opacity="0.35"
+          />
+          <text
+            x="400"
+            y="75"
+            textAnchor="middle"
+            fontSize="11.5"
+            letterSpacing="1.8"
+            fill="var(--text)"
+            fontWeight="600"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            OUTSIDE GATE (CAMPUS ENTRY & EXIT)
+          </text>
+        </g>
+
+        {/* 2. UNIVERSITY BLOCK F (Top Right Hexagon) */}
+        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
+          <polygon
+            points="660,165 637.5,204 592.5,204 570,165 592.5,126 637.5,126"
+            fill="var(--scene-block)"
+            stroke="var(--blue)"
+            strokeWidth="1.8"
+          />
+          <polygon
+            points="652,165 631.5,198 598.5,198 578,165 598.5,132 631.5,132"
+            fill="none"
+            stroke="var(--blue)"
+            strokeWidth="1"
+            opacity="0.4"
+          />
+          <text
+            x="615"
+            y="161"
+            textAnchor="middle"
+            fontSize="11"
+            letterSpacing="1.5"
+            fill="var(--text)"
+            fontWeight="600"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            BLOCK F
+          </text>
+          <text
+            x="615"
+            y="175"
+            textAnchor="middle"
+            fontSize="8.5"
+            letterSpacing="1.2"
+            fill="var(--muted)"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            UNIVERSITY
+          </text>
+        </g>
+
+        {/* 3. UNIVERSITY BLOCK E (Middle Right Hexagon) */}
+        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
+          <polygon
+            points="524,270 502,308 458,308 436,270 458,232 502,232"
+            fill="var(--scene-block)"
+            stroke="var(--scene-line)"
+            strokeWidth="1.8"
+          />
+          <polygon
+            points="516,270 496,302 464,302 444,270 464,238 496,238"
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="1"
+            opacity="0.4"
+          />
+          <text
+            x="480"
+            y="266"
+            textAnchor="middle"
+            fontSize="10.5"
+            letterSpacing="1.5"
+            fill="var(--text)"
+            fontWeight="600"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            BLOCK E
+          </text>
+          <text
+            x="480"
+            y="280"
+            textAnchor="middle"
+            fontSize="8"
+            letterSpacing="1.2"
+            fill="var(--muted)"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            UNIVERSITY
+          </text>
+        </g>
+
+        {/* 4. HOSTEL 1 (Bottom Left Inverted Triangle) */}
+        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
+          <polygon
+            points="200,375 320,375 260,475"
+            fill="var(--scene-block)"
+            stroke="var(--food)"
+            strokeWidth="1.8"
+          />
+          <polygon
+            points="212,379 308,379 260,461"
+            fill="none"
+            stroke="var(--food)"
+            strokeWidth="1"
+            opacity="0.35"
+          />
+          <text
+            x="260"
+            y="402"
+            textAnchor="middle"
+            fontSize="11"
+            letterSpacing="1.5"
+            fill="var(--text)"
+            fontWeight="600"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            HOSTEL 1
+          </text>
+          <text
+            x="260"
+            y="416"
+            textAnchor="middle"
+            fontSize="8"
+            letterSpacing="1"
+            fill="var(--muted)"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            RESIDENTIAL
+          </text>
+        </g>
+
+        {/* 5. HOSTEL 2 (Bottom Right Inverted Triangle) */}
+        <g data-kind="essentials" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("essentials")}>
+          <polygon
+            points="480,375 600,375 540,475"
+            fill="var(--scene-block)"
+            stroke="var(--essentials)"
+            strokeWidth="1.8"
+          />
+          <polygon
+            points="492,379 588,379 540,461"
+            fill="none"
+            stroke="var(--essentials)"
+            strokeWidth="1"
+            opacity="0.35"
+          />
+          <text
+            x="540"
+            y="402"
+            textAnchor="middle"
+            fontSize="11"
+            letterSpacing="1.5"
+            fill="var(--text)"
+            fontWeight="600"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            HOSTEL 2
+          </text>
+          <text
+            x="540"
+            y="416"
+            textAnchor="middle"
+            fontSize="8"
+            letterSpacing="1"
+            fill="var(--muted)"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            RESIDENTIAL
+          </text>
+        </g>
       </g>
 
       {/* ---------------------------------------------------- routes */}
-      <g ref={routesRef} style={{ transition: "transform .4s cubic-bezier(.22,1,.36,1)" }}>
+      <g ref={routesRef} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
         {serviceKeys.map((k) => (
           <g key={k} style={{ opacity: dim(k), transition: "opacity .5s ease" }}>
             <path
               d={ROUTES[k]}
               fill="none"
               stroke={SERVICE_META[k].accent}
-              strokeWidth="7"
+              strokeWidth="5"
               strokeLinecap="round"
-              opacity="0.14"
+              opacity="0.18"
             />
             <path
               id={`${uid}-${k}`}
@@ -249,19 +322,8 @@ export default function CampusScene({
               className={reduced ? "" : "route-dash"}
             />
             {movers && !reduced && (
-              <circle r="4.5" fill={SERVICE_META[k].accent}>
-                <animateMotion dur={k === "rides" ? "7s" : "9s"} repeatCount="indefinite" rotate="auto">
-                  <mpath href={`#${uid}-${k}`} />
-                </animateMotion>
-              </circle>
-            )}
-            {movers && !reduced && (
-              <circle r="3" fill="var(--text)" opacity="0.5">
-                <animateMotion
-                  dur={k === "rides" ? "7s" : "9s"}
-                  begin={k === "rides" ? "-3.5s" : "-4.5s"}
-                  repeatCount="indefinite"
-                >
+              <circle r="4" fill={SERVICE_META[k].accent}>
+                <animateMotion dur={k === "rides" ? "6s" : "8s"} repeatCount="indefinite" rotate="auto">
                   <mpath href={`#${uid}-${k}`} />
                 </animateMotion>
               </circle>
@@ -270,7 +332,7 @@ export default function CampusScene({
         ))}
       </g>
 
-      {/* ----------------------------------------------------- nodes */}
+      {/* ----------------------------------------------------- pulse nodes */}
       <g>
         {PULSE_NODES.map((n) => {
           const accent =
@@ -293,44 +355,41 @@ export default function CampusScene({
               style={{ cursor: interactive ? "pointer" : "auto" }}
             >
               {isActive && !reduced && (
-                <circle cx={n.x} cy={n.y} r="7" fill="none" stroke={accent} strokeWidth="1.5" className="pulse-ring" />
+                <circle cx={n.x} cy={n.y} r="7" fill="none" stroke={accent} strokeWidth="1.4" className="pulse-ring" />
               )}
-              <circle cx={n.x} cy={n.y} r="16" fill="transparent" />
+              <circle cx={n.x} cy={n.y} r="14" fill="transparent" />
               <circle
                 cx={n.x}
                 cy={n.y}
-                r={isActive ? 7 : 5}
+                r={isActive ? 6 : 4.5}
                 fill="var(--bg)"
                 stroke={accent}
                 strokeWidth="2"
                 style={{ transition: "r .35s cubic-bezier(.22,1,.36,1)" }}
               />
-              <circle cx={n.x} cy={n.y} r="2" fill={accent} />
-              {showLabels && (
-                <g
-                  style={{
-                    opacity: isActive || mode === "all" ? 1 : 0.45,
-                    transition: "opacity .4s ease",
-                  }}
-                >
+              <circle cx={n.x} cy={n.y} r="1.8" fill={accent} />
+              
+              {showLabels && isActive && (
+                <g style={{ opacity: 1, transition: "opacity .3s ease" }}>
+                  <rect
+                    x={n.x + 10}
+                    y={n.y - 12}
+                    width={n.label.length * 7.5 + 16}
+                    height="20"
+                    rx="10"
+                    fill="var(--surface)"
+                    stroke="var(--border)"
+                    strokeWidth="1"
+                  />
                   <text
-                    x={n.x + 13}
-                    y={n.y - 2}
-                    fontSize="11"
+                    x={n.x + 18}
+                    y={n.y + 2}
+                    fontSize="10"
                     fill="var(--text)"
-                    style={{ fontFamily: "var(--font-sans)", fontWeight: 500 }}
-                  >
-                    {n.label}
-                  </text>
-                  <text
-                    x={n.x + 13}
-                    y={n.y + 11}
-                    fontSize="9"
-                    letterSpacing="1.2"
-                    fill="var(--muted)"
+                    fontWeight="600"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
-                    {n.sub.toUpperCase()}
+                    {n.label}
                   </text>
                 </g>
               )}
@@ -341,3 +400,6 @@ export default function CampusScene({
     </svg>
   );
 }
+
+
+

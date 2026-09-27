@@ -6,27 +6,25 @@ import { useApp, useReducedMotion } from "@/lib/store";
 import { gsap } from "@/lib/motion";
 
 const ZONES = [
-  { id: "z1", label: "Hostel North", x: 70, y: 380, w: 210, h: 130, kind: "zone" },
-  { id: "z2", label: "Academic Spine", x: 370, y: 230, w: 250, h: 120, kind: "zone" },
-  { id: "z3", label: "Food Court", x: 150, y: 90, w: 200, h: 105, kind: "food" },
-  { id: "z4", label: "Campus Mart", x: 640, y: 95, w: 190, h: 105, kind: "essentials" },
-  { id: "z5", label: "Library", x: 560, y: 400, w: 150, h: 100, kind: "zone" },
-  { id: "z6", label: "Sports Courts", x: 760, y: 300, w: 170, h: 90, kind: "zone" },
+  { id: "z1", label: "Campus Outside Gate", x: 300, y: 45, w: 400, h: 70, kind: "rides" },
+  { id: "z2", label: "University Block F", x: 640, y: 170, w: 230, h: 130, kind: "zone" },
+  { id: "z3", label: "University Block E", x: 480, y: 310, w: 210, h: 120, kind: "zone" },
+  { id: "z4", label: "Hostel 1", x: 160, y: 450, w: 240, h: 140, kind: "food" },
+  { id: "z5", label: "Hostel 2", x: 480, y: 450, w: 240, h: 140, kind: "essentials" },
 ];
 
 const MARKERS = [
-  { id: "m1", label: "Pickup · Gate side", x: 900, y: 545, kind: "pickup" },
-  { id: "m2", label: "Pickup · Hostel steps", x: 175, y: 545, kind: "pickup" },
-  { id: "m3", label: "Vendor · Annapoorna", x: 250, y: 142, kind: "vendor" },
-  { id: "m4", label: "Vendor · Chai Point", x: 300, y: 300, kind: "vendor" },
-  { id: "m5", label: "Store · Campus Mart", x: 735, y: 147, kind: "vendor" },
-  { id: "m6", label: "Pickup · Library", x: 635, y: 450, kind: "pickup" },
+  { id: "m1", label: "Outside Gate Pickup", x: 500, y: 80, kind: "pickup" },
+  { id: "m2", label: "Hostel 1 Pickup", x: 280, y: 520, kind: "pickup" },
+  { id: "m3", label: "Block F Canteen", x: 755, y: 235, kind: "vendor" },
+  { id: "m4", label: "Block E Lab Hub", x: 585, y: 370, kind: "vendor" },
+  { id: "m5", label: "Hostel 2 Store", x: 600, y: 520, kind: "vendor" },
 ];
 
 const MAP_ROUTES: { id: ServiceId; d: string }[] = [
-  { id: "food", d: "M250,142 C 300,200 340,250 420,280 C 470,300 520,320 560,450" },
-  { id: "rides", d: "M900,545 C 760,560 600,545 420,530 C 300,520 220,540 175,545" },
-  { id: "essentials", d: "M735,147 C 660,190 560,220 470,270 C 380,320 270,360 175,470" },
+  { id: "food", d: "M280,520 H500 V370 H585" },
+  { id: "rides", d: "M280,520 V450 H500 V80" },
+  { id: "essentials", d: "M755,235 H500 V450 H600" },
 ];
 
 export default function CampusMap() {

@@ -69,7 +69,7 @@ export default function People() {
                 08:10 · hostel steps
               </span>
               <span className="micro" style={{ color: "var(--text)" }}>
-                Photo · demo
+                Photo
               </span>
             </figcaption>
           </figure>
@@ -136,7 +136,7 @@ export default function People() {
                 21:09 · library, second floor
               </span>
               <span className="micro" style={{ color: "var(--text)" }}>
-                Photo · demo
+                Photo
               </span>
             </figcaption>
           </figure>

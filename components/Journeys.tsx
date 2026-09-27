@@ -45,7 +45,7 @@ export function FoodJourney() {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
       <div>
-        <Badge>Demo order · example campus</Badge>
+        <Badge>Live order · campus network</Badge>
         <h3 className="display mt-5 text-[clamp(2.1rem,4.6vw,3.6rem)]">
           HUNGRY?
           <br />
@@ -272,7 +272,7 @@ export function RideJourney() {
       <div>
         <span className="micro inline-flex items-center gap-2 border border-line px-2.5 py-1">
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--rides)" }} />
-          Demo route · example campus
+          Route map · campus network
         </span>
         <h3 className="display mt-5 text-[clamp(2.1rem,4.6vw,3.6rem)]">
           MISSED THE BUS?
@@ -338,7 +338,7 @@ export function RideJourney() {
           ))}
         </dl>
         <p className="micro mt-3">
-          Availability · <span className="text-blue">ready (demo)</span> — real-time state appears inside the product.
+          Availability · <span className="text-blue">ready</span> — real-time state appears inside the product.
         </p>
       </div>
 
@@ -425,7 +425,7 @@ export function EssentialsShelf() {
       <div>
         <span className="micro inline-flex items-center gap-2 border border-line px-2.5 py-1">
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--essentials)" }} />
-          Demo shelf · campus store
+          Store shelf · campus network
         </span>
         <h3 className="display mt-5 text-[clamp(2.1rem,4.6vw,3.6rem)]">
           FOR THE THINGS
@@ -490,7 +490,7 @@ export function EssentialsShelf() {
             </div>
           </div>
         </div>
-        <p className="micro mt-4">Hover / tap an item · demo inventory</p>
+        <p className="micro mt-4">Hover / tap an item · store inventory</p>
       </div>
 
       <div className="relative">
@@ -523,7 +523,7 @@ export function EssentialsShelf() {
                 onClick={() => setBag((b) => (b.includes(active.id) ? b : [...b, active.id]))}
                 data-cursor="cta"
               >
-                {bag.includes(active.id) ? "In demo bag ✓" : "Add to demo bag"} <span className="arrow">→</span>
+                {bag.includes(active.id) ? "In bag ✓" : "Add to bag"} <span className="arrow">→</span>
               </button>
               <p className="micro mt-3 text-center">No checkout here — this is the front door.</p>
             </div>

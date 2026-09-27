@@ -41,39 +41,14 @@ export function Wordmark({ className = "" }: { className?: string }) {
 
 export function Magnetic({
   children,
-  strength = 0.28,
   className = "",
 }: {
   children: ReactNode;
   strength?: number;
   className?: string;
 }) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const reduced = useReducedMotion();
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || reduced) return;
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2);
-      const dy = e.clientY - (r.top + r.height / 2);
-      const dist = Math.hypot(dx, dy);
-      if (dist < r.width * 0.9 + 60) {
-        el.style.transform = `translate(${dx * strength}px, ${dy * strength}px)`;
-      } else {
-        el.style.transform = "translate(0,0)";
-      }
-    };
-    const onLeave = () => (el.style.transform = "translate(0,0)");
-    window.addEventListener("mousemove", onMove, { passive: true });
-    el.addEventListener("mouseleave", onLeave);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
-    };
-  }, [strength, reduced]);
   return (
-    <span ref={ref} className={`inline-block transition-transform duration-500 ${className}`}>
+    <span className={`inline-block ${className}`}>
       {children}
     </span>
   );
@@ -244,42 +219,37 @@ export function Nav() {
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-[90] flex justify-center px-3 sm:px-5 transition-all duration-700 ease-out"
+        className="fixed inset-x-0 top-0 z-[90] flex justify-center px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
         style={{ 
           pointerEvents: overlay === "menu" ? "none" : "auto",
-          paddingTop: state === "compact" ? "12px" : "24px"
+          paddingTop: state === "compact" ? "10px" : "18px"
         }}
       >
         <nav
-          className={`relative flex w-full items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
+          className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             state === "compact"
-              ? "max-w-[1000px] rounded-full border border-[var(--border)] py-2 px-3 sm:px-4 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.15)] bg-[var(--nav-bg)] backdrop-blur-2xl"
-              : "max-w-[1400px] rounded-2xl border border-transparent py-3 px-3 sm:px-5 bg-transparent"
+              ? "max-w-[1040px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.25)] bg-[var(--nav-bg)] backdrop-blur-2xl"
+              : "max-w-[1400px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[var(--nav-bg)]/60 backdrop-blur-md shadow-sm"
           }`}
           style={{
             opacity: hidden && overlay === "none" ? 0 : 1,
-            transform: hidden && overlay === "none" ? "translateY(-150%) scale(0.95)" : "translateY(0) scale(1)",
+            transform: hidden && overlay === "none" ? "translateY(-140%) scale(0.96)" : "translateY(0) scale(1)",
             pointerEvents: hidden ? "none" : "auto",
-            boxShadow: state === "compact" ? "inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 16px 40px -12px rgba(0, 0, 0, 0.2)" : "none",
           }}
           aria-label="Primary"
         >
-          {state === "compact" && (
-             <div className="absolute inset-0 pointer-events-none rounded-full bg-gradient-to-r from-transparent via-[var(--text)] to-transparent opacity-5" style={{ backgroundSize: "200% 100%", animation: "shine 8s infinite linear" }} />
-          )}
-          
           <button
             type="button"
             onClick={() => go("#top")}
-            className="flex items-center gap-2.5 relative z-10 transition-transform duration-300 hover:scale-105"
+            className="flex items-center gap-3 relative z-10 shrink-0 transition-transform duration-300 hover:scale-[1.03]"
             aria-label="CampusKart home"
             data-cursor="link"
           >
-            <Mark size={state === "compact" ? 28 : 34} />
+            <Mark size={state === "compact" ? 28 : 32} />
             <Wordmark className="hidden sm:inline" />
           </button>
 
-          <div className="hidden items-center gap-1 lg:flex p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/50 backdrop-blur-md relative z-10">
+          <div className="hidden items-center gap-1 lg:flex p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10">
             {NAV_LINKS.filter((l) =>
               ["Food", "Rides", "Essentials", "How it Works", "For Partners"].includes(l.label),
             ).map((l) => {
@@ -289,14 +259,14 @@ export function Nav() {
                 <button
                   key={l.label}
                   type="button"
-                  className={`relative px-5 py-2 text-[13px] tracking-wide font-medium transition-colors duration-500 rounded-full ${
-                    isActive ? "text-[var(--bg)]" : "text-[var(--text)] hover:text-[var(--blue)]"
+                  className={`relative px-4 py-1.5 text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
+                    isActive ? "text-[var(--bg)] font-semibold" : "text-[var(--text)] opacity-75 hover:opacity-100 hover:text-[var(--blue)]"
                   }`}
                   onClick={() => go(l.href, l.service)}
                   data-cursor="link"
                 >
                   {isActive && (
-                    <span className="absolute inset-0 bg-[var(--text)] rounded-full -z-10 shadow-md" style={{ willChange: "transform" }} />
+                    <span className="absolute inset-0 bg-[var(--text)] rounded-full -z-10 shadow-sm" style={{ willChange: "transform" }} />
                   )}
                   {l.label}
                 </button>
@@ -304,17 +274,17 @@ export function Nav() {
             })}
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 relative z-10">
+          <div className="flex items-center gap-2 sm:gap-3 relative z-10 shrink-0">
             <button
               type="button"
               onClick={() => openOverlay("search")}
               aria-label="Search CampusKart"
               data-cursor="link"
-              className="grid h-10 w-10 place-items-center rounded-full bg-[var(--shade)] text-muted transition-all duration-300 hover:bg-[var(--text)] hover:text-[var(--bg)] hover:scale-105 hover:shadow-lg"
+              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] text-muted transition-all duration-300 hover:bg-[var(--text)] hover:text-[var(--bg)] hover:scale-105"
             >
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.7" />
-                <path d="M11 11l3.5 3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M11 11l3.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
             </button>
             <div className="transition-transform duration-300 hover:scale-105">
@@ -322,7 +292,7 @@ export function Nav() {
             </div>
             <button
               type="button"
-              className="px-4 py-2 text-[14px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)]"
+              className="px-3.5 py-1.5 text-[14px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)] whitespace-nowrap"
               onClick={(e) =>
                 openOverlay("login", { x: e.clientX, y: e.clientY })
               }
@@ -330,20 +300,20 @@ export function Nav() {
             >
               Login
             </button>
-            <Magnetic strength={0.3}>
+            <Magnetic strength={0.22}>
               <button
                 type="button"
-                className="btn btn-solid !h-10 !px-6 text-[14px] !rounded-full shadow-[0_8px_20px_-6px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.4)] transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10"
+                className="btn btn-solid !h-9 !px-5 text-[13.5px] !rounded-full shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
                 onClick={(e) => openOverlay("register", { x: e.clientX, y: e.clientY })}
                 data-cursor="cta"
               >
-                <span className="relative z-10 flex items-center gap-2 font-semibold tracking-wide">Get Started <Arrow /></span>
+                <span className="relative z-10 flex items-center gap-1.5 font-semibold tracking-tight whitespace-nowrap">Get Started <Arrow /></span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0" />
               </button>
             </Magnetic>
             <button
               type="button"
-              className="grid h-10 w-10 place-items-center rounded-full bg-[var(--shade)] border border-[var(--border)] lg:hidden transition-transform hover:scale-105"
+              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] border border-[var(--border)] lg:hidden transition-transform hover:scale-105 shrink-0"
               aria-label="Open menu"
               onClick={(e) => openOverlay("menu", { x: e.clientX, y: e.clientY })}
               data-cursor="link"
@@ -514,7 +484,7 @@ function MobileMenu({
           </button>
         </div>
         <p className="micro mt-5 text-center">
-          {theme === "dark" ? "Night mode" : "Day mode"} · demo campus
+          {theme === "dark" ? "Night mode" : "Day mode"} · campus network
         </p>
       </div>
     </div>

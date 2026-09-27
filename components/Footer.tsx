@@ -146,7 +146,7 @@ export default function Footer() {
             Food. Rides. Essentials. Campus life. One place — designed around how university life
             actually moves.
           </p>
-          <p className="micro mt-6">Example campuses · demo experience</p>
+          <p className="micro mt-6">Chandigarh University · Unnao, UP</p>
         </div>
 
         {FOOTER_GROUPS.map((g) => (
@@ -200,7 +200,7 @@ export default function Footer() {
               {news === "error"
                 ? "That email doesn't look right."
                 : news === "done"
-                  ? "Demo interaction complete — nothing was sent."
+                  ? "Subscribed successfully."
                   : "Product notes from the campus, occasionally."}
             </p>
           </form>

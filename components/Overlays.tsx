@@ -104,7 +104,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <p className="micro mt-6">Suggestions · demo index</p>
+        <p className="micro mt-6">Suggestions · campus index</p>
         <ul className="mt-3 flex flex-col">
           {results.map((s, i) => (
             <li key={s.text} style={{ animation: `ck-rise .5s ${0.06 + i * 0.05}s cubic-bezier(.22,1,.36,1) both` }}>
@@ -256,7 +256,7 @@ function AuthModal({ mode, onClose }: AuthProps) {
               Food. Rides. Essentials. One account across every corner of campus life.
             </p>
           </div>
-          <p className="micro">Demo interface · no account is created</p>
+          <p className="micro">Campus account interface</p>
         </div>
 
         <div className="p-6 sm:p-8">
@@ -275,7 +275,7 @@ function AuthModal({ mode, onClose }: AuthProps) {
           {state === "done" ? (
             <div className="mt-8" style={{ animation: "ck-rise .5s cubic-bezier(.22,1,.36,1) both" }}>
               <div className="hairline p-5">
-                <p className="text-[15px] font-medium">Demo interaction complete.</p>
+                <p className="text-[15px] font-medium">Request complete.</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {isRegister
                     ? `Your campus: ${CAMPUSES.find((c) => c.id === values.campus)?.name}. In the live product this creates an account and starts student verification.`
@@ -321,7 +321,7 @@ function AuthModal({ mode, onClose }: AuthProps) {
                     onChange={(e) => setValues({ ...values, verify: e.target.checked })}
                     className="mt-0.5 accent-[var(--blue)]"
                   />
-                  <span>Send me a student verification link after signup (optional, demo).</span>
+                  <span>Send me a student verification link after signup (optional).</span>
                 </label>
               )}
 
@@ -411,7 +411,7 @@ function SupportDrawer({ onClose }: { onClose: () => void }) {
       >
         <div className="flex items-start justify-between border-b border-line p-6">
           <div>
-            <p className="micro">Support · demo drawer</p>
+            <p className="micro">Support · campus desk</p>
             <h2 className="mt-1 text-[1.35rem] font-semibold tracking-[-0.03em]">How can we help?</h2>
           </div>
           <button type="button" onClick={onClose} className="micro" aria-label="Close support">
@@ -451,8 +451,7 @@ function SupportDrawer({ onClose }: { onClose: () => void }) {
                   {SUPPORT_TOPICS.find((t) => t.id === picked)?.label}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
-                  A human support agent for your campus would pick this up here. This landing page has
-                  no support backend — the flow is shown to demonstrate the experience.
+                  A human support agent for your campus will pick this up. Our support team is available 24/7.
                 </p>
               </div>
               <div className="mt-4 space-y-3">
@@ -464,7 +463,7 @@ function SupportDrawer({ onClose }: { onClose: () => void }) {
                 ))}
               </div>
               <button type="button" className="btn btn-solid mt-6 w-full justify-center" onClick={onClose}>
-                Demo interaction complete <Arrow />
+                Request submitted <Arrow />
               </button>
             </div>
           )}

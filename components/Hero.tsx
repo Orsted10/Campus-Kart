@@ -16,21 +16,21 @@ export default function Hero() {
   const bigWord = useRef<HTMLDivElement | null>(null);
   const leadLine = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
-  const [pickerOpen, setPickerOpen] = useState(false);
   const [hoverKind, setHoverKind] = useState<ServiceId | null>(null);
   const active = CAMPUSES.find((c) => c.id === campus) ?? CAMPUSES[0];
 
   useEffect(() => {
     const el = section.current;
     if (!el || reduced) return;
+    const isLg = typeof window !== "undefined" && window.innerWidth >= 1024;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: { trigger: el, start: "top top", end: "bottom bottom", scrub: 0.6 },
       });
       tl.fromTo(
         sceneWrap.current,
-        { x: () => window.innerWidth * 0.12, scale: 0.98 },
-        { x: 0, scale: 1.4, ease: "none" },
+        { scale: 0.98, x: isLg ? "0vw" : "0px" },
+        { scale: isLg ? 1.25 : 1.15, x: isLg ? "-21vw" : "0px", ease: "none" },
         0,
       )
         .to(copy.current, { y: -110, opacity: 0, ease: "power1.in" }, 0)
@@ -62,22 +62,22 @@ export default function Hero() {
         {/* ---------------------------------------------------- scene */}
         <div
           ref={sceneWrap}
-          className="absolute left-1/2 top-[54%] w-[124vw] max-w-[1500px] -translate-x-1/2 -translate-y-1/2 lg:top-1/2 lg:w-[74vw] lg:max-w-none"
-          style={{ transformOrigin: "center" }}
+          className="absolute left-1/2 top-[56%] w-[100vw] max-w-[1100px] -translate-x-1/2 -translate-y-1/2 lg:right-[3vw] lg:left-auto lg:top-[42%] lg:w-[48vw] lg:max-w-[850px] lg:translate-x-0"
+          style={{ transformOrigin: "center center" }}
         >
           <div className="relative">
             <CampusScene
               mode={hoverKind ?? service}
               onHover={(k) => setHoverKind(k === "food" || k === "rides" || k === "essentials" ? k : null)}
               showLabels={false}
-              className="h-[46svh] w-full lg:h-[76vh]"
+              className="h-[44svh] w-full lg:h-[66vh]"
             />
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  "radial-gradient(60% 60% at 50% 45%, transparent 40%, var(--bg) 100%)",
-                opacity: 0.85,
+                  "radial-gradient(60% 60% at 50% 45%, transparent 45%, var(--bg) 100%)",
+                opacity: 0.75,
               }}
             />
           </div>
@@ -87,12 +87,12 @@ export default function Hero() {
         <div className="pointer-events-none absolute inset-0">
           <div
             ref={copy}
-            className="pointer-events-auto absolute left-5 right-5 top-[16svh] sm:left-8 lg:left-[4vw] lg:top-[24vh] lg:w-[46vw]"
+            className="pointer-events-auto absolute left-5 right-5 top-[14svh] sm:left-8 lg:left-[4vw] lg:top-[22vh] lg:w-[40vw] z-10"
           >
             <div className="flex items-center gap-3">
               <span className="h-px w-8" style={{ background: "var(--blue)" }} />
               <span className="micro">
-                {active.name.split(" ")[0]} campus · {active.city} · demo
+                {active.name.split(" ")[0]} campus · {active.city}
               </span>
             </div>
 
@@ -130,127 +130,82 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ------------------------------------------ campus selector */}
-          <div className="pointer-events-auto absolute bottom-[19svh] left-5 sm:left-8 lg:bottom-[14vh] lg:left-[4vw]">
-            <p className="micro">Where do you campus?</p>
-            <div className="relative mt-2">
-              <button
-                type="button"
-                onClick={() => setPickerOpen((v) => !v)}
-                aria-expanded={pickerOpen}
-                data-cursor="link"
-                className="flex items-center gap-3 border-b border-line pb-2 text-left text-[15px] font-medium transition-colors hover:border-ink"
-              >
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ background: "var(--blue)" }}
-                  aria-hidden="true"
-                />
-                {active.name}
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  aria-hidden="true"
-                  style={{
-                    transform: pickerOpen ? "rotate(180deg)" : "none",
-                    transition: "transform .35s ease",
-                  }}
-                >
-                  <path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                </svg>
-              </button>
-              <div
-                className="panel absolute bottom-[calc(100%+10px)] left-0 z-30 w-[min(84vw,340px)] overflow-hidden"
-                style={{
-                  opacity: pickerOpen ? 1 : 0,
-                  transform: pickerOpen ? "none" : "translateY(10px)",
-                  pointerEvents: pickerOpen ? "auto" : "none",
-                  transition: "all .4s cubic-bezier(.22,1,.36,1)",
-                }}
-              >
-                {CAMPUSES.map((c, i) => (
-                  <button
-                    key={c.id}
-                    type="button"
-                    onClick={() => {
-                      setCampus(c.id);
-                      setPickerOpen(false);
-                    }}
-                    className="flex w-full items-center justify-between border-b border-line px-4 py-3 text-left text-[14px] transition-colors last:border-b-0 hover:bg-surface2"
-                    style={{ transitionDelay: pickerOpen ? `${i * 30}ms` : "0ms" }}
-                  >
-                    <span className={c.id === campus ? "font-medium" : "text-muted"}>{c.name}</span>
-                    <span className="micro">{c.city}</span>
-                  </button>
-                ))}
-              </div>
-              <p className="micro mt-2">{active.note}</p>
-            </div>
-          </div>
+          {/* ------------------------------------------ service selector dock */}
+          <div className="pointer-events-auto absolute bottom-[10vh] right-[4vw] hidden lg:flex flex-col items-end gap-2.5 z-20">
+            {/* Active service blurb hint */}
+            <p className="micro text-[11.5px] tracking-tight transition-all duration-300 text-[var(--muted)] text-right">
+              <span className="font-semibold" style={{ color: SERVICE_META[hoverKind ?? service].ink }}>
+                {SERVICE_META[hoverKind ?? service].label}:
+              </span>{" "}
+              {SERVICE_META[hoverKind ?? service].blurb}
+            </p>
 
-          {/* ------------------------------------------ service selector */}
-          <div className="pointer-events-auto absolute bottom-[19svh] right-5 hidden text-right sm:right-8 lg:bottom-[14vh] lg:right-[4vw] lg:block">
-            <p className="micro">Wake a service</p>
-            <div className="mt-3 flex flex-col items-end gap-2">
-              {chips.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setService(s)}
-                  onMouseEnter={() => setHoverKind(s)}
-                  onMouseLeave={() => setHoverKind(null)}
-                  className="group flex items-center gap-3 text-right"
-                  data-cursor="link"
-                >
-                  <span
-                    className="text-[13px] transition-all duration-300"
+            {/* Compact horizontal glass dock */}
+            <div className="flex items-center gap-1.5 p-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 backdrop-blur-2xl shadow-[0_12px_32px_-8px_rgba(0,0,0,0.3)]">
+              {chips.map((s) => {
+                const isSelected = service === s;
+                const isHovered = hoverKind === s;
+                const activeState = isHovered || isSelected;
+                const meta = SERVICE_META[s];
+
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setService(s)}
+                    onMouseEnter={() => setHoverKind(s)}
+                    onMouseLeave={() => setHoverKind(null)}
+                    className="relative flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-300"
                     style={{
-                      color: service === s ? SERVICE_META[s].ink : "var(--muted)",
-                      transform: service === s ? "translateX(-4px)" : "none",
+                      color: activeState ? meta.ink : "var(--muted)",
+                      background: isSelected ? "var(--surface-2)" : isHovered ? "var(--shade)" : "transparent",
+                      boxShadow: isSelected ? `0 2px 10px ${meta.accent}25` : "none",
                     }}
+                    data-cursor="link"
                   >
-                    {SERVICE_META[s].blurb}
-                  </span>
-                  <span
-                    className="display text-[1.5rem] transition-all duration-300"
-                    style={{
-                      color: service === s ? SERVICE_META[s].ink : "var(--text)",
-                      opacity: service === s ? 1 : 0.55,
-                    }}
-                  >
-                    {SERVICE_META[s].label.toUpperCase()}
-                  </span>
-                  <span
-                    className="h-px transition-all duration-500"
-                    style={{
-                      width: service === s ? 44 : 18,
-                      background: service === s ? SERVICE_META[s].accent : "var(--border)",
-                    }}
-                  />
-                </button>
-              ))}
+                    <span
+                      className="h-2 w-2 rounded-full transition-all duration-300"
+                      style={{
+                        background: meta.accent,
+                        transform: activeState ? "scale(1.25)" : "scale(1)",
+                        boxShadow: activeState ? `0 0 8px ${meta.accent}` : "none",
+                      }}
+                    />
+                    <span className="tracking-tight">{meta.label}</span>
+                    {isSelected && (
+                      <span
+                        className="absolute inset-0 rounded-full border border-current opacity-30"
+                        style={{ color: meta.accent }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* ------------------------------------------ mobile chips */}
-          <div className="pointer-events-auto absolute bottom-[11svh] left-5 right-5 flex gap-2 lg:hidden">
-            {chips.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setService(s)}
-                className="flex-1 rounded-full border px-3 py-2 text-[12px] transition-all duration-300"
-                style={{
-                  borderColor: service === s ? SERVICE_META[s].ink : "var(--border)",
-                  color: service === s ? SERVICE_META[s].ink : "var(--muted)",
-                  background: service === s ? "var(--surface)" : "transparent",
-                }}
-              >
-                {SERVICE_META[s].label}
-              </button>
-            ))}
+          <div className="pointer-events-auto absolute bottom-[11svh] left-5 right-5 flex gap-2 lg:hidden z-20">
+            {chips.map((s) => {
+              const isSelected = service === s;
+              const meta = SERVICE_META[s];
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setService(s)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border px-3 py-2 text-[12px] font-semibold backdrop-blur-xl transition-all duration-300 shadow-sm"
+                  style={{
+                    borderColor: isSelected ? meta.accent : "var(--border)",
+                    color: isSelected ? meta.ink : "var(--muted)",
+                    background: isSelected ? "var(--surface-2)" : "var(--nav-bg)",
+                  }}
+                >
+                  <span className="h-2 w-2 rounded-full" style={{ background: meta.accent }} />
+                  {meta.label}
+                </button>
+              );
+            })}
           </div>
 
           <div className="pointer-events-auto absolute bottom-[5svh] left-5 right-5 flex items-end justify-between lg:bottom-[5vh] lg:left-[4vw] lg:right-[4vw]">
@@ -263,16 +218,6 @@ export default function Hero() {
                 />
               </span>
             </div>
-            <button
-              type="button"
-              className="micro transition-colors hover:text-ink"
-              onClick={(e) =>
-                openOverlay("search", { x: e.clientX, y: e.clientY })
-              }
-              data-cursor="link"
-            >
-              Search the campus ⌘K
-            </button>
           </div>
         </div>
 

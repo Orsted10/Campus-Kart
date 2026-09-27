@@ -22,7 +22,7 @@ export default function Ecosystem() {
         <div className="flex items-end justify-between gap-6 border-t border-line pt-6">
           <span className="micro">Act IV — experience</span>
           <span className="micro text-right">
-            demo content · <span style={{ color: meta.ink }}>{meta.label}</span>
+            campus services · <span style={{ color: meta.ink }}>{meta.label}</span>
           </span>
         </div>
 

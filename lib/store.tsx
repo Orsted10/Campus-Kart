@@ -106,7 +106,7 @@ export function useReducedMotion() {
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => "light" as Theme);
-  const [campus, setCampus] = useState("riyana");
+  const [campus, setCampus] = useState("chandigarh-unnao");
   const [service, setService] = useState<ServiceId>("food");
   const [pickup, setPickup] = useState("Hostel");
   const [destination, setDestination] = useState("Main Gate");
