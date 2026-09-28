@@ -302,14 +302,14 @@ export default function Convergence() {
                   SYSTEM SYNCHRONIZED
                 </span>
               </div>
-              <h2 className="display text-[clamp(2.6rem,7.5vw,6.4rem)] leading-[0.92] tracking-[-0.035em]">
+              <h2 className="display text-[clamp(2.6rem,7.5vw,6.4rem)] leading-[1.05] tracking-[-0.035em] pb-3">
                 ONE CAMPUS.
                 <br />
-                ONE <span className="serif-accent text-blue italic">ecosystem.</span>
+                ONE <span className="serif-accent text-blue italic inline-block pb-2">ecosystem.</span>
               </h2>
             </div>
-            <p ref={subline} className="micro mx-auto mt-6 max-w-[48ch] text-[1.05rem] text-[var(--muted)] leading-relaxed font-mono" style={{ opacity: 0 }}>
-              Food · Rides · Essentials · People · Places — unified into one real-time pipeline for Chandigarh University (Unnao).
+            <p ref={subline} className="micro mx-auto mt-4 max-w-[38ch] text-[1rem] text-[var(--muted)] leading-relaxed font-mono" style={{ opacity: 0 }}>
+              Food, rides & essentials — unified into one real-time pipeline.
             </p>
           </div>
         </div>
