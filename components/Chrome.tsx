@@ -6,33 +6,24 @@ import { scrollToId, useApp, useReducedMotion } from "@/lib/store";
 
 /* ------------------------------------------------------------------ mark */
 
-export function Mark({ size = 30, className = "" }: { size?: number; className?: string }) {
+export function Mark({ size = 32, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 40 40"
-      className={className}
-      aria-hidden="true"
-      fill="none"
-    >
-      <rect x="1" y="1" width="38" height="38" rx="11" stroke="currentColor" strokeWidth="1.6" />
-      <path
-        d="M9 29 C 15 29 16 11 22 11 C 26 11 27 16 31 16"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <circle cx="31" cy="16" r="3.6" fill="var(--blue)" />
-      <circle cx="9" cy="29" r="2.2" fill="currentColor" />
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
+      <rect width="40" height="40" rx="10" fill="#1e293b" fillOpacity="0.8" />
+      <path d="M8 12h5l3.5 14h16.5l3-10h-21" stroke="#3b82f6" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="18" cy="30" r="2.5" fill="#3b82f6" />
+      <circle cx="28" cy="30" r="2.5" fill="#3b82f6" />
+      <circle cx="20" cy="14" r="2" fill="#ef4444" />
+      <circle cx="26" cy="13" r="2" fill="#f97316" />
+      <circle cx="23" cy="10" r="2" fill="#10b981" />
     </svg>
   );
 }
 
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`text-[15px] font-semibold tracking-[-0.045em] ${className}`}>
-      Campus<span className="text-blue">Kart</span>
+    <span className={`text-[16px] font-extrabold tracking-tight text-white ${className}`}>
+      CAMPUS<span className="text-[#3b82f6]">KART</span>
     </span>
   );
 }
