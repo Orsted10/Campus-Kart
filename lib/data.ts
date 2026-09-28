@@ -212,8 +212,8 @@ export const NAV_LINKS = [
 export const FOOTER_GROUPS = [
   {
     title: "Explore",
-    links: ["Food", "Rides", "Essentials", "Campus map", "How it works"],
-    hrefs: ["#ecosystem", "#ecosystem", "#ecosystem", "#map", "#how"],
+    links: ["Food", "Rides", "Essentials", "How it works"],
+    hrefs: ["#ecosystem", "#ecosystem", "#ecosystem", "#how"],
   },
   {
     title: "Company",
