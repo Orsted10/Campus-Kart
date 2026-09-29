@@ -22,21 +22,16 @@ const EASE_OUT = (t: number) => 1 - Math.pow(1 - t, 3);  /* the deck the mark st
 const DECK_Y = 0.95;
 
 const CART = {
-  basketBottom: { w: 1.52, d: 1.1 },
-  basketTop: { w: 1.94, d: 1.42 },
+  basketBottom: { w: 1.82, d: 1.28 },
+  basketTop: { w: 2.36, d: 1.62 },
   basketY: 0.95,
-  basketH: 1.46,
+  basketH: 1.24,
   rim: 0.09,
 };
 
 function useKartMaterials() {
   return useMemo(() => {
-    /* Brand paint: saturated electric blue that survives a cool sky reflection.
-       envMapIntensity stays low on purpose — cranked up, the metal turns lavender
-       and the mark stops reading as blue at all. */
-    /* Satin cast-metal paint, not chrome. High clearcoat + a bright sky env map
-       mirrored the sunset straight off the front face and turned the mark pale
-       lavender; the brand has to stay saturated blue from every angle. */
+    /* Brand paint: saturated electric blue that survives a cool sky reflection. */
     const blue = new THREE.MeshPhysicalMaterial({
       color: "#0b49d8",
       metalness: 0.06,
@@ -59,8 +54,6 @@ function useKartMaterials() {
       roughness: 0.55,
       envMapIntensity: 0.6,
     });
-    /* the crate grid keeps the cart idiom but in light blue, never white —
-       the mark's identity has to stay blue at a glance */
     const lattice = new THREE.MeshPhysicalMaterial({
       color: "#3f86e0",
       metalness: 0.06,
@@ -163,19 +156,14 @@ function basketGeometry() {
 }
 
 function Basket() {
-  const { blue, blueDeep, blueInner, lattice } = useKartMaterials();
+  const { blue, blueInner, lattice } = useKartMaterials();
   const geo = useMemo(() => basketGeometry(), []);
 
-  /* the crate grid of the mark: thin light-blue bars inset into the front and
-     side faces, framed by a heavier blue rail. Kept sparse — a dense white cage
-     is what made the mark read as a supermarket trolley. */
   const bars = useMemo(() => {
     const { basketBottom: b, basketTop: t, basketH: h } = CART;
     const topW = t.w;
     const out: { p: [number, number, number]; s: [number, number, number] }[] = [];
-    /* Only the camera-facing panel is latticed. Lattice on every face turned the
-       mark into a cage; the side walls stay solid blue so the mass reads. */
-    const cols = 4;
+    const cols = 5;
     const rows = 3;
     const zf = t.d / 2 + 0.03;
     for (let i = 1; i < cols; i++) {
@@ -185,12 +173,11 @@ function Basket() {
     }
     for (let j = 1; j < rows; j++) {
       const y = -h / 2 + (j / rows) * h;
-      out.push({ p: [0, y, zf], s: [topW * 0.9, 0.022, 0.038] });
+      out.push({ p: [0, y, zf], s: [topW * 0.92, 0.022, 0.038] });
     }
     return out;
   }, []);
 
-  /* the rail: a single blue perimeter frame instead of a white cage */
   const frame = useMemo(() => {
     const { basketTop: t, basketH: h } = CART;
     const topW = t.w;
@@ -216,14 +203,12 @@ function Basket() {
           <boxGeometry args={b.s} />
         </mesh>
       ))}
-      {/* hollow interior so a low camera sees depth inside the basket */}          <mesh position={[0, CART.basketH / 2 - 0.14, 0]} material={blueInner}>
-            <boxGeometry args={[CART.basketTop.w - 0.28, 0.1, CART.basketTop.d - 0.28]} />
-          </mesh>
-      {/* top rim */}
+      <mesh position={[0, CART.basketH / 2 - 0.14, 0]} material={blueInner}>
+        <boxGeometry args={[CART.basketTop.w - 0.28, 0.1, CART.basketTop.d - 0.28]} />
+      </mesh>
       <mesh position={[0, CART.basketH / 2 + 0.015, 0]} material={blue} castShadow>
         <boxGeometry args={[CART.basketTop.w + 0.08, 0.1, CART.basketTop.d + 0.08]} />
       </mesh>
-      {/* basket floor pan */}
       <mesh position={[0, -CART.basketH / 2 + 0.05, 0]} material={blueInner}>
         <boxGeometry args={[CART.basketBottom.w - 0.2, 0.08, CART.basketBottom.d - 0.2]} />
       </mesh>
@@ -233,42 +218,103 @@ function Basket() {
 
 /* ---------------------------------------------------------------- handle */
 
+/* Handle styled precisely after the CampusKart Logo Icon:
+   Vertical posts rising from the rear rim, bending 90 degrees horizontally
+   backwards to form the iconic L-shaped push handlebar gesture. */
+
 function Handle() {
   const { blue, blueDeep } = useKartMaterials();
-  /* The handle the brand mark draws: a post standing up off the basket's
-     shoulder, turning at the top into one bar that reaches out past the basket,
-     with the grip at the far end. Straight post, straight bar, one grip — the
-     same gesture as the cart in the logo, and the only version of a handle the
-     hero camera can actually see, since the cart's far side is behind the
-     basket and the load. */
+
+  // Logo Handle geometry coordinates (in cart space)
+  // Basket top rim rear edge is at Y ≈ 2.22, Z ≈ -0.74
+  const handleTopY = 2.64;
+  const handleRearZ = -1.35;
+  const rimRearZ = -0.74;
+
+  const leftX = -1.05;
+  const rightX = 1.05;
+
   return (
     <group>
-      {/* post: stands nearly straight up off the rim's camera-side corner */}
-      <mesh position={[-0.93, 2.87, 0.485]} rotation={[-0.138, 0, 0.064]} material={blue} castShadow>
-        <cylinderGeometry args={[0.092, 0.1, 0.95, 22]} />
+      {/* Left and Right Vertical Rise Posts (from rim up to elbow height) */}
+      <mesh position={[leftX, (2.22 + handleTopY) / 2, rimRearZ]} material={blue} castShadow>
+        <cylinderGeometry args={[0.054, 0.058, handleTopY - 2.22, 18]} />
       </mesh>
-      {/* bar: reaches out past the basket's edge, where a hand takes the cart */}
-      <mesh position={[-1.44, 3.33, 0.42]} rotation={[0, 0, Math.PI / 2]} material={blue} castShadow>
-        <cylinderGeometry args={[0.098, 0.098, 0.98, 22]} />
+      <mesh position={[rightX, (2.22 + handleTopY) / 2, rimRearZ]} material={blue} castShadow>
+        <cylinderGeometry args={[0.054, 0.058, handleTopY - 2.22, 18]} />
       </mesh>
-      {[-0.95, -1.93].map((x) => (
-        <mesh key={`cap${x}`} position={[x, 3.33, 0.42]} material={blue} castShadow>
-          <sphereGeometry args={[0.098, 18, 14]} />
+
+      {/* Left and Right Horizontal Extensions (from vertical post back to push bar) */}
+      <mesh
+        position={[leftX, handleTopY, (rimRearZ + handleRearZ) / 2]}
+        rotation={[Math.PI / 2, 0, 0]}
+        material={blue}
+        castShadow
+      >
+        <cylinderGeometry args={[0.054, 0.054, Math.abs(handleRearZ - rimRearZ), 18]} />
+      </mesh>
+      <mesh
+        position={[rightX, handleTopY, (rimRearZ + handleRearZ) / 2]}
+        rotation={[Math.PI / 2, 0, 0]}
+        material={blue}
+        castShadow
+      >
+        <cylinderGeometry args={[0.054, 0.054, Math.abs(handleRearZ - rimRearZ), 18]} />
+      </mesh>
+
+      {/* Curved 90° Elbow Corner Spheres */}
+      <mesh position={[leftX, handleTopY, rimRearZ]} material={blue} castShadow>
+        <sphereGeometry args={[0.058, 16, 14]} />
+      </mesh>
+      <mesh position={[rightX, handleTopY, rimRearZ]} material={blue} castShadow>
+        <sphereGeometry args={[0.058, 16, 14]} />
+      </mesh>
+      <mesh position={[leftX, handleTopY, handleRearZ]} material={blue} castShadow>
+        <sphereGeometry args={[0.058, 16, 14]} />
+      </mesh>
+      <mesh position={[rightX, handleTopY, handleRearZ]} material={blue} castShadow>
+        <sphereGeometry args={[0.058, 16, 14]} />
+      </mesh>
+
+      {/* Main Transverse Push Handle Bar (matching the logo horizontal bar) */}
+      <mesh position={[0, handleTopY, handleRearZ]} rotation={[0, 0, Math.PI / 2]} material={blue} castShadow>
+        <cylinderGeometry args={[0.056, 0.056, 2.32, 22]} />
+      </mesh>
+
+      {/* Deep Blue Ergonomic Grip Sleeve over the center of the handle bar */}
+      <mesh position={[0, handleTopY, handleRearZ]} rotation={[0, 0, Math.PI / 2]} material={blueDeep} castShadow>
+        <cylinderGeometry args={[0.072, 0.072, 1.94, 24]} />
+      </mesh>
+
+      {/* Rounded Safety End Caps extending outward (matching the logo icon handle tip) */}
+      {[-1.18, 1.18].map((x) => (
+        <mesh key={`logocap${x}`} position={[x, handleTopY, handleRearZ]} material={blueDeep} castShadow>
+          <sphereGeometry args={[0.072, 18, 14]} />
         </mesh>
       ))}
-      {/* the grip: a deeper blue sleeve over the end of the bar */}
-      <mesh position={[-1.64, 3.33, 0.42]} rotation={[0, 0, Math.PI / 2]} material={blueDeep} castShadow>
-        <cylinderGeometry args={[0.112, 0.112, 0.56, 22]} />
-      </mesh>
-      {/* cast clamp bolted over the rim's corner, where the post is mounted */}
+
+      {/* Cast Rim Mount Clamps */}
       <RoundedBox
-        args={[0.3, 0.24, 0.3]}
-        radius={0.055}
+        args={[0.22, 0.16, 0.22]}
+        radius={0.04}
         smoothness={3}
-        position={[-0.92, 2.47, 0.55]}
+        position={[leftX, 2.22, rimRearZ]}
         material={blueDeep}
         castShadow
       />
+      <RoundedBox
+        args={[0.22, 0.16, 0.22]}
+        radius={0.04}
+        smoothness={3}
+        position={[rightX, 2.22, rimRearZ]}
+        material={blueDeep}
+        castShadow
+      />
+
+      {/* Rear Folding Seat Flap / Backplate */}
+      <group position={[0, 2.15, -0.78]} rotation={[-0.22, 0, 0]}>
+        <RoundedBox args={[1.48, 0.62, 0.04]} radius={0.015} material={blueDeep} castShadow />
+      </group>
     </group>
   );
 }
@@ -279,8 +325,6 @@ function Wheel({ position, scale = 1 }: { position: [number, number, number]; sc
   const { rubber, hub } = useKartMaterials();
   return (
     <group position={position} scale={scale}>
-      {/* standing wheel: tyre and hub share the Z axis so the face reads
-          from a low camera instead of collapsing edge-on */}
       <mesh material={rubber} castShadow>
         <torusGeometry args={[0.31, 0.125, 14, 30]} />
       </mesh>
@@ -304,32 +348,30 @@ function Wheel({ position, scale = 1 }: { position: [number, number, number]; sc
 function Cargo() {
   const { cargo } = useKartMaterials();
   return (
-    /* Cargo sits proud of the rim so the brand's red/orange/green read from the
-       hero angle instead of hiding behind the front rail. */
     <group position={[0.02, CART.basketY + CART.basketH + 0.14, 0]}>
-      <mesh position={[-0.5, 0.32, 0.1]} material={cargo.red} castShadow>
-        <sphereGeometry args={[0.37, 30, 24]} />
+      <mesh position={[-0.62, 0.32, 0.1]} material={cargo.red} castShadow>
+        <sphereGeometry args={[0.39, 30, 24]} />
       </mesh>
       <RoundedBox
-        args={[0.56, 0.4, 0.5]}
+        args={[0.62, 0.42, 0.54]}
         radius={0.12}
         smoothness={4}
-        position={[-0.02, 0.2, 0.36]}
+        position={[-0.02, 0.2, 0.38]}
         rotation={[0.12, -0.32, 0.05]}
         material={cargo.orange}
         castShadow
       />
       <RoundedBox
-        args={[0.5, 0.5, 0.5]}
+        args={[0.54, 0.54, 0.54]}
         radius={0.1}
         smoothness={4}
-        position={[0.62, 0.3, -0.06]}
+        position={[0.74, 0.3, -0.06]}
         rotation={[0.05, 0.24, -0.06]}
         material={cargo.green}
         castShadow
       />
-      <mesh position={[0.3, 0.62, 0.16]} material={cargo.blue} castShadow>
-        <sphereGeometry args={[0.19, 22, 18]} />
+      <mesh position={[0.36, 0.62, 0.16]} material={cargo.blue} castShadow>
+        <sphereGeometry args={[0.21, 22, 18]} />
       </mesh>
     </group>
   );
@@ -348,12 +390,12 @@ function Pedestal() {
 
   return (
     <group>
-      {/* ground plinth */}
+      {/* ground plinth: expanded to 4.7m diameter */}
       <mesh position={[0, 0.09, 0]} material={plinth} receiveShadow castShadow>
-        <cylinderGeometry args={[1.78, 1.86, 0.18, 72]} />
+        <cylinderGeometry args={[2.32, 2.42, 0.18, 72]} />
       </mesh>
       <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.86, 2.02, 72]} />
+        <ringGeometry args={[2.42, 2.62, 72]} />
         <meshStandardMaterial
           color="#04122b"
           emissive={new THREE.Color("#2f8dff")}
@@ -364,17 +406,17 @@ function Pedestal() {
       </mesh>
       {/* drum */}
       <mesh position={[0, 0.44, 0]} material={plinthFace} receiveShadow castShadow>
-        <cylinderGeometry args={[1.68, 1.76, 0.52, 72]} />
+        <cylinderGeometry args={[2.2, 2.3, 0.52, 72]} />
       </mesh>
       <mesh position={[0, 0.78, 0]} material={plinthTop} castShadow receiveShadow>
-        <cylinderGeometry args={[1.62, 1.7, 0.2, 72]} />
+        <cylinderGeometry args={[2.12, 2.22, 0.2, 72]} />
       </mesh>
       <mesh position={[0, 0.9, 0]} material={plinthTop}>
-        <cylinderGeometry args={[1.6, 1.6, 0.05, 72]} />
+        <cylinderGeometry args={[2.1, 2.1, 0.05, 72]} />
       </mesh>
       {/* warm light seam under the cap */}
       <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.7, 1.79, 72]} />
+        <ringGeometry args={[2.22, 2.32, 72]} />
         <meshStandardMaterial
           color="#42260e"
           emissive={new THREE.Color("#ffb066")}
@@ -383,10 +425,10 @@ function Pedestal() {
           side={THREE.DoubleSide}
         />
       </mesh>
-      {/* service ring, echoing the product's interface */}
+      {/* service ring */}
       <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <mesh>
-          <ringGeometry args={[1.8, 1.86, 72, 1, 0, Math.PI * 1.3]} />
+          <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
           <meshStandardMaterial
             color="#061428"
             emissive={new THREE.Color("#2f8dff")}
@@ -396,9 +438,9 @@ function Pedestal() {
           />
         </mesh>
       </group>
-      {/* dimensional CAMPUSKART lettering, wrapped across the drum's face */}
+      {/* dimensional CAMPUSKART lettering wrapped on drum */}
       <mesh position={[0, 0.44, 0]}>
-        <cylinderGeometry args={[1.775, 1.785, 0.44, 96, 1, true, -0.52, 1.04]} />
+        <cylinderGeometry args={[2.305, 2.315, 0.44, 96, 1, true, -0.52, 1.04]} />
         <meshStandardMaterial
           map={label}
           emissiveMap={label}
@@ -414,12 +456,9 @@ function Pedestal() {
           toneMapped={false}
         />
       </mesh>
-      {/* Local beauty pair. These used to be directional lights, which in three.js
-          light the whole world — they were flattening the campus behind. As point
-          lights with falloff they only shape the monument. */}
-      <pointLight color="#ffc78c" intensity={30} distance={13} decay={2} position={[2.7, 1.5, 2.6]} />
-      <pointLight color="#9fc6ff" intensity={22} distance={13} decay={2} position={[-3, 1.2, 2.2]} />
-      <pointLight position={[0, 0.25, -1.1]} color="#2f8dff" intensity={10} distance={9} decay={2} />
+      <pointLight color="#ffc78c" intensity={35} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
+      <pointLight color="#9fc6ff" intensity={26} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
+      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={14} distance={11} decay={2} />
       <PedestalGlow />
       <ContactShadow />
     </group>
@@ -430,7 +469,7 @@ function PedestalGlow() {
   const warm = useMemo(() => glowSprite("255,186,120"), []);
   return (
     <group>
-      <sprite position={[0, 1.05, 0.15]} scale={[6.2, 2.6, 1]} renderOrder={5}>
+      <sprite position={[0, 1.05, 0.15]} scale={[8.4, 3.2, 1]} renderOrder={5}>
         <spriteMaterial
           map={warm}
           transparent
@@ -440,7 +479,7 @@ function PedestalGlow() {
           fog={false}
         />
       </sprite>
-      <sprite position={[0, 0.05, 0]} scale={[11, 4, 1]} renderOrder={4}>
+      <sprite position={[0, 0.05, 0]} scale={[14.2, 5.0, 1]} renderOrder={4}>
         <spriteMaterial
           map={warm}
           color="#5ea8ff"
@@ -459,7 +498,7 @@ function ContactShadow() {
   const texture = useMemo(() => contactShadow(), []);
   return (
     <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={2}>
-      <planeGeometry args={[8.5, 8.5]} />
+      <planeGeometry args={[11.5, 11.5]} />
       <meshBasicMaterial map={texture} transparent opacity={0.8} depthWrite={false} />
     </mesh>
   );
@@ -488,14 +527,12 @@ export default function Monument({
 
     if (group.current) {
       const local = t - started.current;
-      // 300–700ms in the load timeline: the mark rises off its pedestal
       const rise = reduced ? 1 : EASE_OUT(Math.min(1, Math.max(0, (local - 0.3) / 0.75)));
       const settle = reduced
         ? 0
         : Math.sin(Math.min(1, Math.max(0, (local - 0.9) / 0.9)) * Math.PI) * 0.018;
       group.current.position.y = DECK_Y - (1 - rise) * 0.85 - settle;
 
-      // idle life: a slow drift, a whisper of rotation, a lean toward the cursor
       const idleYaw = reduced ? 0 : Math.sin(t * 0.17) * 0.02;
       const leanX = reduced ? 0 : -pointer.y * 0.035;
       const leanZ = reduced ? 0 : pointer.x * 0.04;
@@ -517,51 +554,46 @@ export default function Monument({
 
   return (
     <group>
-      {/* the two service lights that answer the active category — rims only.
-          Kept low: as keys they washed the brand blue toward the category hue. */}
-      <pointLight ref={accentLight} position={[-2.9, 3.6, 2.6]} color={accent.color} intensity={26} distance={15} decay={2} />
-      <pointLight ref={rimLight} position={[3.1, 2.6, -2.6]} color={accent.color} intensity={20} distance={16} decay={2} />
+      <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={28} distance={16} decay={2} />
+      <pointLight ref={rimLight} position={[3.8, 2.6, -3.2]} color={accent.color} intensity={22} distance={17} decay={2} />
 
       <Pedestal />
 
       <group ref={group} position={[0, DECK_Y, 0]}>
-        {/* A deliberate 3/4 hero stance: enough yaw that the crate grid and the
-            handle both read, stable enough that the mark never looks tipped.
-            Dead centre on the plinth — an offset here read as a cart parked off
-            to one side of its own pedestal. */}
-        <group rotation={[0.03, -0.5, -0.055]} scale={tier === "low" ? 0.98 : 1}>
+        <group rotation={[0.03, -0.5, -0.055]} scale={tier === "low" ? 1.0 : 1.05}>
           <Basket />
           <Handle />
-          <Wheel position={[-0.66, 0.36, 0.62]} />
-          <Wheel position={[-0.66, 0.36, -0.62]} />
-          <Wheel position={[0.72, 0.36, 0.6]} scale={0.92} />
-          <Wheel position={[0.72, 0.36, -0.6]} scale={0.92} />
-          {/* slim cast chassis — the old solid block read as a scooter body */}
+          <Wheel position={[-0.82, 0.36, 0.72]} />
+          <Wheel position={[-0.82, 0.36, -0.72]} />
+          <Wheel position={[0.88, 0.36, 0.7]} scale={0.92} />
+          <Wheel position={[0.88, 0.36, -0.7]} scale={0.92} />
+
+          {/* Cast Chassis */}
           <mesh position={[0, 0.66, 0]} material={blueDeep} castShadow>
-            <boxGeometry args={[1.36, 0.13, 0.16]} />
+            <boxGeometry args={[1.72, 0.13, 0.16]} />
           </mesh>
-          {[0.6, -0.6].map((z) => (
+          {[0.7, -0.7].map((z) => (
             <mesh key={z} position={[0, 0.66, z]} material={blueDeep} castShadow>
-              <boxGeometry args={[1.42, 0.12, 0.13]} />
+              <boxGeometry args={[1.76, 0.12, 0.13]} />
             </mesh>
           ))}
-          {[0.66, -0.66].map((z) => (
+          {[0.82, -0.82].map((z) => (
             <mesh key={`c${z}`} position={[0, 0.66, z]} material={blueDeep} castShadow>
-              <boxGeometry args={[0.13, 0.12, 1.34]} />
+              <boxGeometry args={[0.13, 0.12, 1.52]} />
             </mesh>
           ))}
-          {/* legs from the chassis up into the basket corners */}
-          {[-0.62, 0.72].map((x) =>
-            [0.5, -0.5].map((z) => (
-              <mesh key={`${x}${z}`} position={[x, 0.85, z]} material={blueDeep} castShadow>
-                <cylinderGeometry args={[0.06, 0.07, 0.36, 10]} />
+          {/* Chassis-to-basket legs */}
+          {[-0.78, 0.88].map((x) =>
+            [0.6, -0.6].map((z) => (
+              <mesh key={`${x}${z}`} position={[x, 0.82, z]} material={blueDeep} castShadow>
+                <cylinderGeometry args={[0.06, 0.07, 0.32, 10]} />
               </mesh>
             )),
           )}
-          {/* axles so the corner wheels read as a cart, not a crate */}
-          {[0.62, -0.62].map((z) => (
+          {/* Axles */}
+          {[0.7, -0.7].map((z) => (
             <mesh key={z} position={[0, 0.36, z]} material={blueDeep} castShadow>
-              <boxGeometry args={[1.4, 0.07, 0.07]} />
+              <boxGeometry args={[1.76, 0.07, 0.07]} />
             </mesh>
           ))}
           <Cargo />
