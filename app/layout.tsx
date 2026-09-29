@@ -11,7 +11,7 @@ const instrument = Instrument_Serif({
   subsets: ["latin"],
 });
 
-const themeBoot = `(function(){try{var s=localStorage.getItem("ck-theme");var m=window.matchMedia("(prefers-color-scheme: dark)").matches;var t=s||(m?"dark":"light");document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="light";}})();`;
+const themeBoot = `(function(){try{var s=localStorage.getItem("ck-theme");var t=s||"dark";document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://campuskart.example"),

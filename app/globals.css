@@ -34,6 +34,7 @@
   --scene-line: #cbd5e1;
   --scene-block: #f1f5f9;
   --scene-block-2: #e2e8f0;
+  --chip-neutral: #475569;
   --on-accent: #ffffff;
   --nav-bg: rgba(248, 246, 240, 0.88);
   --accent-soft: rgba(37, 99, 235, 0.1);
@@ -61,6 +62,7 @@
   --scene-line: rgba(255, 255, 255, 0.15);
   --scene-block: #151722;
   --scene-block-2: #1e2130;
+  --chip-neutral: #b9c8e2;
   --on-accent: #ffffff;
   --nav-bg: rgba(9, 10, 15, 0.85);
   --accent-soft: rgba(59, 130, 246, 0.2);
@@ -389,7 +391,433 @@ a {
   }
 }
 
+/* ================================================================= HERO */
+/* Cinematic first viewport: glass UI floating over a live 3D campus.       */
+
+.ck-hero {
+  --ck-accent: #2f8dff;
+  min-height: 100svh;
+  background: #05070d;
+}
+
+.ck-hero {
+  --ck-px: 0;
+  --ck-py: 0;
+  --ck-scroll: 0;
+}
+
+.ck-hero .ck-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease-out;
+  pointer-events: none;
+  transform: scale(calc(1 - var(--ck-scroll) * 0.04));
+  filter: blur(calc(var(--ck-scroll) * 2px));
+  will-change: transform, filter;
+}
+
+.ck-hero .ck-scene[data-play="1"] {
+  opacity: 1;
+}
+
+/* Depth layers. Each declares how far in front of the world it sits; the 3D
+   camera supplies the rest of the parallax through real perspective. */
+.ck-par {
+  transform: translate3d(
+    calc(var(--ck-px) * var(--depth, 3) * -1px),
+    calc(var(--ck-py) * var(--depth, 3) * -0.7px),
+    0
+  );
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ck-par[data-depth="2"] {
+  --depth: 2;
+}
+.ck-par[data-depth="3"] {
+  --depth: 3;
+}
+.ck-par[data-depth="4"] {
+  --depth: 4;
+}
+.ck-par[data-depth="5"] {
+  --depth: 5;
+}
+.ck-par[data-depth="9"] {
+  --depth: 9;
+}
+
+/* The camera enters the CampusKart world: copy settles back, scene pushes in. */
+.ck-exit {
+  /* A small, exact move. Anything larger reads as the layout sliding around
+     under the reader rather than as the camera leaving the plaza. */
+  transform: translate3d(0, calc(var(--ck-scroll) * -24px), 0) scale(calc(1 - var(--ck-scroll) * 0.02));
+  opacity: calc(1 - var(--ck-scroll) * 0.9);
+  transform-origin: 50% 30%;
+}
+
+.ck-glow {
+  transition: background 0.7s ease;
+  opacity: 0.9;
+}
+
+.ck-vignette {
+  background: radial-gradient(
+    118% 96% at 50% 52%,
+    transparent 40%,
+    rgba(2, 4, 9, 0.5) 76%,
+    rgba(2, 4, 9, 0.9) 100%
+  );
+}
+
+/* ------------------------------------------------------------ typography */
+
+.ck-display {
+  font-weight: 900;
+  text-wrap: balance;
+}
+
+.ck-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.ck-line {
+  display: block;
+  overflow: hidden;
+  padding: 0.01em 0.1em 0.07em 0;
+}
+
+.ck-line-inner {
+  display: block;
+  opacity: 0;
+  transform: translate3d(0, 110%, 0);
+  animation: ck-line-in 1.05s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-play-state: paused;
+  will-change: transform, opacity;
+}
+
+.ck-hero[data-play="1"] .ck-line-inner {
+  animation-play-state: running;
+}
+
+@keyframes ck-line-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ck-in {
+  opacity: 0;
+  animation: ck-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-play-state: paused;
+}
+
+.ck-hero[data-play="1"] .ck-in {
+  animation-play-state: running;
+}
+
+@keyframes ck-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* -------------------------------------------------------------- controls */
+
+.ck-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  height: 46px;
+  padding: 0 1.35rem;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease,
+    background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.ck-btn-primary {
+  background: #fff;
+  color: #070a12;
+  box-shadow: 0 12px 34px -12px rgba(255, 255, 255, 0.6);
+}
+
+.ck-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 48px -14px rgba(255, 255, 255, 0.62);
+}
+
+.ck-btn-ghost {
+  background: rgba(9, 13, 22, 0.6);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.ck-btn-ghost:hover {
+  background: rgba(18, 25, 40, 0.85);
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateY(-2px);
+}
+
+.ck-mouse {
+  position: relative;
+  display: inline-flex;
+  width: 15px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+}
+
+.ck-mouse-dot {
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 3px;
+  height: 5px;
+  margin-left: -1.5px;
+  border-radius: 999px;
+  background: #6fb0ff;
+  box-shadow: 0 0 8px #3b8dff;
+  animation: ck-scroll 2s cubic-bezier(0.6, 0.05, 0.35, 0.95) infinite;
+}
+
+@keyframes ck-scroll {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  62% {
+    transform: translateY(9px);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(9px);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------ category switch */
+
+.ck-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 11, 20, 0.6);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 46px -24px rgba(0, 0, 0, 0.9);
+}
+
+.ck-switch-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(226, 232, 240, 0.7);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ck-switch-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.ck-switch-item[aria-pressed="true"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ck-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--dot);
+  box-shadow: 0 0 10px var(--dot);
+  transition: box-shadow 0.3s ease;
+}
+
+.ck-switch-item[aria-pressed="true"] .ck-dot {
+  box-shadow: 0 0 14px var(--dot), 0 0 0 4px color-mix(in srgb, var(--dot) 20%, transparent);
+}
+
+/* -------------------------------------------------------------- the HUD */
+
+.ck-hud {
+  transform: perspective(1700px) rotateY(-7deg) rotateX(1.4deg);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ck-hud:hover {
+  transform: perspective(1700px) rotateY(-2.5deg) rotateX(0.4deg);
+}
+
+/* A floating AR layer, not a dashboard: hairline border, barely-there glass. */
+.ck-hud-frame {
+  background: linear-gradient(
+    150deg,
+    rgba(150, 197, 255, 0.34),
+    rgba(150, 197, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.03) 68%,
+    rgba(150, 197, 255, 0.16)
+  );
+  box-shadow: 0 30px 90px -46px rgba(0, 0, 0, 0.9), 0 0 48px -30px rgba(47, 141, 255, 0.3);
+}
+
+/* ---------------------------------------------------------- service cards */
+
+.ck-card {
+  --tx: 0deg;
+  --ty: 0deg;
+  --mx: 0px;
+  --my: 0px;
+  --card-accent: #5aa2ff;
+  transform: perspective(1200px) rotateX(var(--ty)) rotateY(var(--tx));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  will-change: transform;
+}
+
+.ck-card:hover {
+  transition-duration: 0.18s;
+}
+
+.ck-card[data-dimmed="true"] {
+  opacity: 0.74;
+}
+
+[data-ck="card-food"] {
+  --card-accent: #ff8a3d;
+}
+
+[data-ck="card-rides"] {
+  --card-accent: #5aa2ff;
+}
+
+[data-ck="card-essentials"] {
+  --card-accent: #35d07f;
+}
+
+.ck-card-frame {
+  transition: border-color 0.35s ease, background-color 0.35s ease, box-shadow 0.4s ease;
+}
+
+.ck-card[data-active="true"] .ck-card-frame {
+  border-color: color-mix(in srgb, var(--card-accent) 55%, transparent);
+  background: rgba(10, 15, 26, 0.8);
+  box-shadow: 0 26px 70px -30px color-mix(in srgb, var(--card-accent) 75%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ck-card:hover .ck-card-frame {
+  border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
+}
+
+.ck-card-icon {
+  color: var(--card-accent);
+  background: color-mix(in srgb, var(--card-accent) 15%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--card-accent) 26%, transparent);
+  transition: box-shadow 0.35s ease, background-color 0.35s ease;
+}
+
+.ck-card[data-active="true"] .ck-card-icon {
+  background: color-mix(in srgb, var(--card-accent) 24%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--card-accent) 45%, transparent),
+    0 0 18px -4px color-mix(in srgb, var(--card-accent) 60%, transparent);
+}
+
+/* Soft-masked artwork: the photo dissolves into the card, never a hard rectangle. */
+.ck-card-photo-wrap {
+  -webkit-mask-image: radial-gradient(125% 118% at 72% 50%, #000 42%, rgba(0, 0, 0, 0.55) 66%, transparent 88%);
+  mask-image: radial-gradient(125% 118% at 72% 50%, #000 42%, rgba(0, 0, 0, 0.55) 66%, transparent 88%);
+}
+
+/* the card's own light, so it reads as a lit miniature world */
+.ck-card-glow {
+  background: radial-gradient(90% 120% at 82% 55%, color-mix(in srgb, var(--card-accent) 22%, transparent), transparent 68%);
+  opacity: 0.65;
+  transition: opacity 0.4s ease;
+}
+
+.ck-card:hover .ck-card-glow {
+  opacity: 1;
+}
+
+.ck-card-photo {
+  filter: saturate(1.06) contrast(1.08) brightness(0.94);
+}
+
+.ck-card-photo-grade[data-service="food"] {
+  background: linear-gradient(200deg, rgba(255, 122, 26, 0.4), transparent 62%);
+  mix-blend-mode: soft-light;
+}
+
+.ck-card-photo-grade[data-service="rides"] {
+  background: linear-gradient(200deg, rgba(47, 141, 255, 0.45), rgba(6, 12, 28, 0.3) 70%);
+  mix-blend-mode: screen;
+}
+
+.ck-card-photo-grade[data-service="essentials"] {
+  background: linear-gradient(200deg, rgba(34, 197, 94, 0.3), transparent 65%);
+  mix-blend-mode: soft-light;
+}
+
+/* ------------------------------------------------------- nav over hero */
+
+.nav-at-hero {
+  --text: #ffffff;
+  --muted: rgba(226, 232, 240, 0.72);
+  --border: rgba(255, 255, 255, 0.14);
+  --shade: rgba(255, 255, 255, 0.08);
+  --nav-bg: rgba(7, 11, 20, 0.52);
+  --bg: #070b14;
+}
+
 /* --------------------------------------------------------------- motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-hero .ck-in,
+  .ck-hero .ck-line-inner {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .ck-hero .ck-scene {
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  .ck-mouse-dot {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .ck-card {
+    transform: none !important;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

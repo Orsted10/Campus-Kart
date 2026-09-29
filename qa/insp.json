@@ -1,0 +1,4941 @@
+{
+ "cam": [
+  0.15,
+  0.98,
+  14.2
+ ],
+ "count": 308,
+ "reflector": 1,
+ "sprites": 29,
+ "reduced": false,
+ "out": [
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 420,
+   "min": [
+    -420,
+    -420,
+    -420
+   ],
+   "max": [
+    420,
+    420,
+    420
+   ],
+   "color": null
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 30,
+   "min": [
+    19,
+    0.15,
+    -85
+   ],
+   "max": [
+    49,
+    14.65,
+    -63
+   ],
+   "color": null
+  },
+  {
+   "type": "PlaneGeometry",
+   "name": "",
+   "params": 13.5,
+   "min": [
+    27.25,
+    8.5,
+    -62.95
+   ],
+   "max": [
+    40.75,
+    12.7,
+    -62.95
+   ],
+   "color": "b9c6d8"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 34,
+   "min": [
+    13,
+    0,
+    -73
+   ],
+   "max": [
+    47,
+    3.2,
+    -51
+   ],
+   "color": "2b3141"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 24,
+   "min": [
+    14,
+    2.9,
+    -59
+   ],
+   "max": [
+    38,
+    4.3,
+    -49
+   ],
+   "color": "1c2130"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 30,
+   "min": [
+    -53,
+    0.1,
+    -90
+   ],
+   "max": [
+    -23,
+    13.1,
+    -70
+   ],
+   "color": null
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 26,
+   "min": [
+    -17,
+    0,
+    -121
+   ],
+   "max": [
+    9,
+    16,
+    -103
+   ],
+   "color": null
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 28,
+   "min": [
+    48,
+    -0.1,
+    -113
+   ],
+   "max": [
+    76,
+    12.9,
+    -95
+   ],
+   "color": null
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 90,
+   "min": [
+    -45,
+    0,
+    -30.5
+   ],
+   "max": [
+    45,
+    0.1,
+    -25.5
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 86,
+   "min": [
+    -43,
+    0.09,
+    -25.65
+   ],
+   "max": [
+    43,
+    0.13,
+    -25.55
+   ],
+   "color": "3a240f"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -33,
+    -0.03,
+    -26.7
+   ],
+   "max": [
+    -19,
+    0.83,
+    -25.3
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    18,
+    -0.03,
+    -30.7
+   ],
+   "max": [
+    34,
+    0.83,
+    -29.3
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -14,
+    -0.03,
+    -34.7
+   ],
+   "max": [
+    -2,
+    0.83,
+    -33.3
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    1,
+    -0.03,
+    -42.7
+   ],
+   "max": [
+    19,
+    0.83,
+    -41.3
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -19.26,
+    -0.11,
+    -27.24
+   ],
+   "max": [
+    -18.74,
+    3.63,
+    -26.74
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8300004286694102,
+   "min": [
+    -20.74,
+    2.47,
+    -27.81
+   ],
+   "max": [
+    -18.37,
+    5.02,
+    -25.58
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.034357853223594,
+   "min": [
+    -20.71,
+    3.64,
+    -27.81
+   ],
+   "max": [
+    -17.94,
+    6.39,
+    -24.82
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0966113683127572,
+   "min": [
+    -21.32,
+    3.04,
+    -28.92
+   ],
+   "max": [
+    -18.23,
+    6.18,
+    -25.56
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9997856652949245,
+   "min": [
+    -20.85,
+    3.9,
+    -27.4
+   ],
+   "max": [
+    -18.81,
+    5.91,
+    -25.3
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.097275805898491,
+   "min": [
+    -19.07,
+    3.84,
+    -29.2
+   ],
+   "max": [
+    -16.91,
+    6.04,
+    -27.04
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6684027777777778,
+   "min": [
+    -20.48,
+    3.45,
+    -28.01
+   ],
+   "max": [
+    -18.71,
+    5.36,
+    -26.28
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8073023834019204,
+   "min": [
+    -18.8,
+    2.84,
+    -29.22
+   ],
+   "max": [
+    -16.88,
+    4.89,
+    -27.24
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6451474622770919,
+   "min": [
+    -20.97,
+    3.67,
+    -27.08
+   ],
+   "max": [
+    -19.56,
+    5.04,
+    -25.62
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9057034465020576,
+   "min": [
+    -21,
+    3.66,
+    -29.74
+   ],
+   "max": [
+    -18.13,
+    6.03,
+    -27.09
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -7.25,
+    -0.11,
+    -31.23
+   ],
+   "max": [
+    -6.75,
+    3.47,
+    -30.75
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.803125,
+   "min": [
+    -9.01,
+    2.02,
+    -31.37
+   ],
+   "max": [
+    -6.64,
+    4.49,
+    -29.28
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0253579389574758,
+   "min": [
+    -7.78,
+    3.01,
+    -32.06
+   ],
+   "max": [
+    -4.82,
+    6.13,
+    -29.38
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9465363511659808,
+   "min": [
+    -8.69,
+    2.69,
+    -32.01
+   ],
+   "max": [
+    -6.72,
+    4.76,
+    -30
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7904256687242798,
+   "min": [
+    -7.57,
+    3.7,
+    -30.75
+   ],
+   "max": [
+    -6.08,
+    5.22,
+    -29.25
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.76227280521262,
+   "min": [
+    -9.1,
+    2.83,
+    -31.7
+   ],
+   "max": [
+    -6.75,
+    5.11,
+    -29.73
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7710283779149519,
+   "min": [
+    -8.23,
+    2.47,
+    -32.55
+   ],
+   "max": [
+    -6.12,
+    4.73,
+    -30.56
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9849022633744855,
+   "min": [
+    -9.29,
+    3.51,
+    -32.04
+   ],
+   "max": [
+    -6.67,
+    6.14,
+    -29.2
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7202524862825789,
+   "min": [
+    -8.31,
+    3.73,
+    -30.92
+   ],
+   "max": [
+    -6.44,
+    5.61,
+    -28.89
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6638074417009602,
+   "min": [
+    -8.1,
+    3.95,
+    -31.36
+   ],
+   "max": [
+    -6.35,
+    5.71,
+    -29.46
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    5.77,
+    -0.1,
+    -30.22
+   ],
+   "max": [
+    6.23,
+    3.3,
+    -29.76
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7762495713305898,
+   "min": [
+    5.5,
+    3.18,
+    -31.64
+   ],
+   "max": [
+    7.77,
+    5.4,
+    -29.74
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.016358024691358,
+   "min": [
+    4.46,
+    2.7,
+    -31.56
+   ],
+   "max": [
+    7.16,
+    5.6,
+    -28.63
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7964613340192044,
+   "min": [
+    4.2,
+    3.25,
+    -30.75
+   ],
+   "max": [
+    6.52,
+    5.57,
+    -28.83
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0810656721536351,
+   "min": [
+    3.61,
+    2.64,
+    -32.28
+   ],
+   "max": [
+    6.41,
+    5.42,
+    -29.25
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9272698045267489,
+   "min": [
+    4.5,
+    3.57,
+    -31.72
+   ],
+   "max": [
+    6.55,
+    5.56,
+    -29.56
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8736539780521262,
+   "min": [
+    5,
+    3.09,
+    -32.02
+   ],
+   "max": [
+    7.41,
+    5.62,
+    -29.84
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6625021433470507,
+   "min": [
+    4.56,
+    3.33,
+    -31.47
+   ],
+   "max": [
+    6.5,
+    5.03,
+    -29.74
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7953575102880658,
+   "min": [
+    5.38,
+    3.82,
+    -32.25
+   ],
+   "max": [
+    7.5,
+    6.06,
+    -29.92
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9219114368998629,
+   "min": [
+    4.99,
+    3.62,
+    -31.43
+   ],
+   "max": [
+    7.17,
+    5.98,
+    -29.14
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    17.73,
+    -0.12,
+    -34.25
+   ],
+   "max": [
+    18.27,
+    3.8,
+    -33.72
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7493741426611797,
+   "min": [
+    17.15,
+    3.46,
+    -35.49
+   ],
+   "max": [
+    19.67,
+    5.71,
+    -33.26
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.00735811042524,
+   "min": [
+    17.2,
+    3.08,
+    -36.04
+   ],
+   "max": [
+    20.57,
+    5.99,
+    -33
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.646386316872428,
+   "min": [
+    16.47,
+    3.53,
+    -34.39
+   ],
+   "max": [
+    18.13,
+    5.15,
+    -32.63
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8717056755829904,
+   "min": [
+    16.92,
+    3.34,
+    -35.47
+   ],
+   "max": [
+    18.91,
+    5.43,
+    -33.45
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0922668038408778,
+   "min": [
+    16.32,
+    2.7,
+    -34.96
+   ],
+   "max": [
+    19.51,
+    6.16,
+    -31.55
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9762795781893003,
+   "min": [
+    17.05,
+    2.7,
+    -34.23
+   ],
+   "max": [
+    20.27,
+    5.99,
+    -31.48
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8401020233196159,
+   "min": [
+    16.96,
+    3.24,
+    -34.02
+   ],
+   "max": [
+    19.02,
+    5.43,
+    -31.96
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8704625342935528,
+   "min": [
+    18.14,
+    3.13,
+    -36.09
+   ],
+   "max": [
+    20.69,
+    5.9,
+    -33.36
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6800154320987655,
+   "min": [
+    17.45,
+    4.69,
+    -36.24
+   ],
+   "max": [
+    19.41,
+    6.8,
+    -34.36
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    29.74,
+    -0.11,
+    -38.24
+   ],
+   "max": [
+    30.26,
+    3.63,
+    -37.74
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7224987139917696,
+   "min": [
+    28.97,
+    3.12,
+    -39.03
+   ],
+   "max": [
+    31.2,
+    4.97,
+    -36.88
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9983581961591221,
+   "min": [
+    28.78,
+    2.92,
+    -40.04
+   ],
+   "max": [
+    31.03,
+    5.29,
+    -37.75
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9963112997256516,
+   "min": [
+    28.04,
+    3.66,
+    -38.69
+   ],
+   "max": [
+    30.69,
+    6.54,
+    -35.89
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6623456790123456,
+   "min": [
+    29.95,
+    3.06,
+    -39.05
+   ],
+   "max": [
+    31.92,
+    4.86,
+    -37.04
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7572638031550069,
+   "min": [
+    29.37,
+    4.04,
+    -39.26
+   ],
+   "max": [
+    31.35,
+    6.17,
+    -37.32
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0789051783264747,
+   "min": [
+    29.3,
+    3.47,
+    -38.8
+   ],
+   "max": [
+    32.78,
+    6.87,
+    -35.88
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.017701903292181,
+   "min": [
+    29.02,
+    3.74,
+    -39.71
+   ],
+   "max": [
+    31.99,
+    6.93,
+    -36.49
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9455675582990397,
+   "min": [
+    28.3,
+    3.69,
+    -39.33
+   ],
+   "max": [
+    30.49,
+    6.03,
+    -37.07
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9381194272976681,
+   "min": [
+    29.26,
+    2.84,
+    -38.58
+   ],
+   "max": [
+    32.22,
+    5.28,
+    -35.83
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -31.28,
+    -0.12,
+    -40.26
+   ],
+   "max": [
+    -30.72,
+    3.96,
+    -39.71
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6956232853223594,
+   "min": [
+    -32.32,
+    2.97,
+    -40.68
+   ],
+   "max": [
+    -30.16,
+    5.12,
+    -38.34
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.989358281893004,
+   "min": [
+    -31.16,
+    3.05,
+    -40.48
+   ],
+   "max": [
+    -28.73,
+    5.41,
+    -37.95
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8462362825788752,
+   "min": [
+    -33.02,
+    3.35,
+    -40.23
+   ],
+   "max": [
+    -30.3,
+    6.24,
+    -37.71
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9529856824417009,
+   "min": [
+    -32.6,
+    2.74,
+    -40.89
+   ],
+   "max": [
+    -30.14,
+    5.38,
+    -38.34
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9222608024691358,
+   "min": [
+    -31.72,
+    3.39,
+    -40.24
+   ],
+   "max": [
+    -28.53,
+    6.03,
+    -37.29
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6815307784636488,
+   "min": [
+    -33.41,
+    3.84,
+    -40.8
+   ],
+   "max": [
+    -31.01,
+    6.07,
+    -38.72
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6953017832647462,
+   "min": [
+    -30.65,
+    4.58,
+    -42.03
+   ],
+   "max": [
+    -29.14,
+    6.06,
+    -40.5
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0206725823045266,
+   "min": [
+    -31.91,
+    4.63,
+    -40.89
+   ],
+   "max": [
+    -29.5,
+    7.15,
+    -38.47
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6962234224965707,
+   "min": [
+    -30.89,
+    3.61,
+    -41.29
+   ],
+   "max": [
+    -28.79,
+    5.72,
+    -39.01
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    -16.08,
+    0,
+    -21.08
+   ],
+   "max": [
+    -15.92,
+    4.2,
+    -20.92
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    -16.16,
+    4.08,
+    -21.16
+   ],
+   "max": [
+    -15.84,
+    4.4,
+    -20.84
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    7.92,
+    0,
+    -22.08
+   ],
+   "max": [
+    8.08,
+    4.2,
+    -21.92
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    7.84,
+    4.08,
+    -22.16
+   ],
+   "max": [
+    8.16,
+    4.4,
+    -21.84
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    26.92,
+    0,
+    -24.08
+   ],
+   "max": [
+    27.08,
+    4.2,
+    -23.92
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    26.84,
+    4.08,
+    -24.16
+   ],
+   "max": [
+    27.16,
+    4.4,
+    -23.84
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 17,
+   "min": [
+    -1.15,
+    2,
+    -22.8
+   ],
+   "max": [
+    14.15,
+    2.59,
+    -19.2
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.2,
+   "min": [
+    -5.42,
+    0,
+    -19.78
+   ],
+   "max": [
+    -4.98,
+    2.34,
+    -19.34
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.2,
+   "min": [
+    -2.27,
+    0,
+    -19.78
+   ],
+   "max": [
+    -1.83,
+    2.34,
+    -19.34
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.2,
+   "min": [
+    0.88,
+    0,
+    -19.78
+   ],
+   "max": [
+    1.32,
+    2.34,
+    -19.34
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.2,
+   "min": [
+    4.03,
+    0,
+    -19.78
+   ],
+   "max": [
+    4.47,
+    2.34,
+    -19.34
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.2,
+   "min": [
+    7.18,
+    0,
+    -19.78
+   ],
+   "max": [
+    7.62,
+    2.34,
+    -19.34
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 13,
+   "min": [
+    0.65,
+    0.12,
+    -18.89
+   ],
+   "max": [
+    12.35,
+    0.17,
+    -18.79
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 16,
+   "min": [
+    -0.7,
+    0.09,
+    -21.54
+   ],
+   "max": [
+    13.7,
+    2.61,
+    -21.18
+   ],
+   "color": "0a1220"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 15.4,
+   "min": [
+    -0.43,
+    0.26,
+    -19.71
+   ],
+   "max": [
+    13.43,
+    0.31,
+    -19.59
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 30,
+   "min": [
+    3.5,
+    0,
+    -4.35
+   ],
+   "max": [
+    33.5,
+    0.34,
+    -2.65
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 16,
+   "min": [
+    15,
+    0.03,
+    -2.66
+   ],
+   "max": [
+    31,
+    0.07,
+    -2.58
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 29.3,
+   "min": [
+    3.85,
+    0.34,
+    -6.05
+   ],
+   "max": [
+    33.15,
+    0.68,
+    -4.35
+   ],
+   "color": "1c2130"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 15.3,
+   "min": [
+    15.35,
+    0.37,
+    -4.36
+   ],
+   "max": [
+    30.65,
+    0.41,
+    -4.28
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 28.6,
+   "min": [
+    4.2,
+    0.68,
+    -7.75
+   ],
+   "max": [
+    32.8,
+    1.02,
+    -6.05
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 14.6,
+   "min": [
+    15.7,
+    0.71,
+    -6.06
+   ],
+   "max": [
+    30.3,
+    0.75,
+    -5.98
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 27.9,
+   "min": [
+    4.55,
+    1.02,
+    -9.45
+   ],
+   "max": [
+    32.45,
+    1.36,
+    -7.75
+   ],
+   "color": "1c2130"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 13.9,
+   "min": [
+    16.05,
+    1.05,
+    -7.76
+   ],
+   "max": [
+    29.95,
+    1.09,
+    -7.68
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 27.2,
+   "min": [
+    4.9,
+    1.36,
+    -11.15
+   ],
+   "max": [
+    32.1,
+    1.7,
+    -9.45
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 13.2,
+   "min": [
+    16.4,
+    1.39,
+    -9.46
+   ],
+   "max": [
+    29.6,
+    1.43,
+    -9.38
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 26.5,
+   "min": [
+    5.25,
+    1.7,
+    -12.85
+   ],
+   "max": [
+    31.75,
+    2.04,
+    -11.15
+   ],
+   "color": "1c2130"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 12.5,
+   "min": [
+    16.75,
+    1.73,
+    -11.16
+   ],
+   "max": [
+    29.25,
+    1.77,
+    -11.08
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 25.8,
+   "min": [
+    5.6,
+    2.04,
+    -14.55
+   ],
+   "max": [
+    31.4,
+    2.38,
+    -12.85
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 11.8,
+   "min": [
+    17.1,
+    2.07,
+    -12.86
+   ],
+   "max": [
+    28.9,
+    2.11,
+    -12.78
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 25.1,
+   "min": [
+    5.95,
+    2.38,
+    -16.25
+   ],
+   "max": [
+    31.05,
+    2.72,
+    -14.55
+   ],
+   "color": "1c2130"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 11.100000000000001,
+   "min": [
+    17.45,
+    2.41,
+    -14.56
+   ],
+   "max": [
+    28.55,
+    2.45,
+    -14.48
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 22,
+   "min": [
+    7.5,
+    2.65,
+    -18.5
+   ],
+   "max": [
+    29.5,
+    3.15,
+    -14.5
+   ],
+   "color": "454d5f"
+  },
+  {
+   "type": "PlaneGeometry",
+   "name": "",
+   "params": 220,
+   "min": [
+    -110,
+    0,
+    -83
+   ],
+   "max": [
+    110,
+    0,
+    67
+   ],
+   "color": "141b2b"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 26,
+   "min": [
+    -13,
+    0,
+    3.37
+   ],
+   "max": [
+    13,
+    0.02,
+    3.43
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 20,
+   "min": [
+    -10,
+    0,
+    -12.43
+   ],
+   "max": [
+    10,
+    0.02,
+    -12.37
+   ],
+   "color": "40260f"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -23.81,
+    0,
+    0.52
+   ],
+   "max": [
+    -22.18,
+    0.12,
+    1.92
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    21.08,
+    0,
+    -5.5
+   ],
+   "max": [
+    22.22,
+    0.12,
+    -4.52
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -2.8,
+    0,
+    -11.99
+   ],
+   "max": [
+    -1.66,
+    0.12,
+    -11.09
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    11.7,
+    0,
+    4.52
+   ],
+   "max": [
+    12.9,
+    0.12,
+    5.39
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    11.2,
+    0,
+    0.81
+   ],
+   "max": [
+    12.47,
+    0.12,
+    1.78
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    10.67,
+    0,
+    -15.91
+   ],
+   "max": [
+    11.63,
+    0.12,
+    -15.13
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -14.75,
+    0,
+    -16.81
+   ],
+   "max": [
+    -13.5,
+    0.12,
+    -15.9
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    20.4,
+    0,
+    -12.46
+   ],
+   "max": [
+    21.38,
+    0.12,
+    -11.61
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -13.56,
+    0,
+    -16.6
+   ],
+   "max": [
+    -11.89,
+    0.12,
+    -15.23
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    6.31,
+    0,
+    -12.37
+   ],
+   "max": [
+    7.88,
+    0.12,
+    -11.24
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    17.94,
+    0,
+    -2.06
+   ],
+   "max": [
+    18.71,
+    0.12,
+    -1.51
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -0.71,
+    0,
+    -4.38
+   ],
+   "max": [
+    0.58,
+    0.12,
+    -3.31
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -17.34,
+    0,
+    -8.8
+   ],
+   "max": [
+    -15.6,
+    0.12,
+    -7.31
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -3.12,
+    0,
+    -4.73
+   ],
+   "max": [
+    -1.87,
+    0.12,
+    -3.83
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -0.48,
+    0,
+    -6.53
+   ],
+   "max": [
+    1.07,
+    0.12,
+    -5.25
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -15.62,
+    0,
+    -6.95
+   ],
+   "max": [
+    -13.82,
+    0.12,
+    -5.42
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -3.1,
+    0,
+    1.99
+   ],
+   "max": [
+    -1.47,
+    0.12,
+    3.34
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    6.66,
+    0,
+    -11.15
+   ],
+   "max": [
+    8.6,
+    0.12,
+    -9.41
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -18.92,
+    0,
+    -14.03
+   ],
+   "max": [
+    -18,
+    0.12,
+    -13.33
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    4.55,
+    0,
+    -12.93
+   ],
+   "max": [
+    5.93,
+    0.12,
+    -11.92
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    14.95,
+    0,
+    0.14
+   ],
+   "max": [
+    15.94,
+    0.12,
+    0.88
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -16.94,
+    0,
+    -0.27
+   ],
+   "max": [
+    -15.73,
+    0.12,
+    0.74
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    3.8,
+    0,
+    -13.74
+   ],
+   "max": [
+    5.24,
+    0.12,
+    -12.46
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    3.24,
+    0,
+    -5.65
+   ],
+   "max": [
+    3.97,
+    0.12,
+    -5.12
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    14.24,
+    0,
+    -6.6
+   ],
+   "max": [
+    15.1,
+    0.12,
+    -5.91
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -5.92,
+    0,
+    -6.06
+   ],
+   "max": [
+    -4.35,
+    0.12,
+    -4.87
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    21.61,
+    0,
+    -17.1
+   ],
+   "max": [
+    22.82,
+    0.12,
+    -16.07
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -1.14,
+    0,
+    -7.46
+   ],
+   "max": [
+    0.18,
+    0.12,
+    -6.41
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -9.49,
+    0,
+    -10.18
+   ],
+   "max": [
+    -7.9,
+    0.12,
+    -8.95
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    7.7,
+    0,
+    -1.61
+   ],
+   "max": [
+    8.76,
+    0.12,
+    -0.76
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -15.74,
+    0,
+    -11.6
+   ],
+   "max": [
+    -14.04,
+    0.12,
+    -10.19
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    7.12,
+    0,
+    2.05
+   ],
+   "max": [
+    7.92,
+    0.12,
+    2.65
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -12.85,
+    0,
+    -1.87
+   ],
+   "max": [
+    -11.94,
+    0.12,
+    -1.1
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -18.35,
+    0,
+    -16.26
+   ],
+   "max": [
+    -17.06,
+    0.12,
+    -15.34
+   ],
+   "color": "161b28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    -11.58,
+    0,
+    1.12
+   ],
+   "max": [
+    -11.42,
+    4.2,
+    1.28
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    -11.66,
+    4.08,
+    1.04
+   ],
+   "max": [
+    -11.34,
+    4.4,
+    1.36
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    9.52,
+    0,
+    -0.68
+   ],
+   "max": [
+    9.68,
+    4.2,
+    -0.52
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    9.44,
+    4.08,
+    -0.76
+   ],
+   "max": [
+    9.76,
+    4.4,
+    -0.44
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    -17.58,
+    0,
+    -10.48
+   ],
+   "max": [
+    -17.42,
+    4.2,
+    -10.32
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    -17.66,
+    4.08,
+    -10.56
+   ],
+   "max": [
+    -17.34,
+    4.4,
+    -10.24
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    13.52,
+    0,
+    -16.28
+   ],
+   "max": [
+    13.68,
+    4.2,
+    -16.12
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    13.44,
+    4.08,
+    -16.36
+   ],
+   "max": [
+    13.76,
+    4.4,
+    -16.04
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    -7.48,
+    0,
+    -16.68
+   ],
+   "max": [
+    -7.32,
+    4.2,
+    -16.52
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    -7.56,
+    4.08,
+    -16.76
+   ],
+   "max": [
+    -7.24,
+    4.4,
+    -16.44
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    21.92,
+    0,
+    0.72
+   ],
+   "max": [
+    22.08,
+    4.2,
+    0.88
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.16,
+   "min": [
+    21.84,
+    4.08,
+    0.64
+   ],
+   "max": [
+    22.16,
+    4.4,
+    0.96
+   ],
+   "color": "2a1c0d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -13.75,
+    0,
+    2.55
+   ],
+   "max": [
+    -8.25,
+    0.9,
+    3.85
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -23,
+    0,
+    -7.15
+   ],
+   "max": [
+    -14,
+    0.9,
+    -5.85
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    8.5,
+    0,
+    3.95
+   ],
+   "max": [
+    14.5,
+    0.9,
+    5.25
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    18,
+    0,
+    -4.15
+   ],
+   "max": [
+    30,
+    0.9,
+    -2.85
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -27.5,
+    0,
+    0.85
+   ],
+   "max": [
+    -20.5,
+    0.9,
+    2.15
+   ],
+   "color": "16291d"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -15.72,
+    -0.1,
+    -4.81
+   ],
+   "max": [
+    -15.28,
+    3.14,
+    -4.37
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.915650720164609,
+   "min": [
+    -16.09,
+    2.28,
+    -5.02
+   ],
+   "max": [
+    -13.67,
+    4.37,
+    -2.64
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.065352794924554,
+   "min": [
+    -17.52,
+    1.65,
+    -5.94
+   ],
+   "max": [
+    -14.79,
+    4.55,
+    -3.43
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9510373799725651,
+   "min": [
+    -17.19,
+    2.96,
+    -5.23
+   ],
+   "max": [
+    -14.81,
+    5.41,
+    -2.63
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8520254629629629,
+   "min": [
+    -15.52,
+    2.41,
+    -5.62
+   ],
+   "max": [
+    -13.55,
+    4.55,
+    -3.53
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8624528463648834,
+   "min": [
+    -17.28,
+    3.18,
+    -5.84
+   ],
+   "max": [
+    -15.21,
+    5.43,
+    -3.62
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6134923696844993,
+   "min": [
+    -15.5,
+    2.52,
+    -5.36
+   ],
+   "max": [
+    -13.98,
+    4.07,
+    -3.7
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8289094650205762,
+   "min": [
+    -15.86,
+    2.78,
+    -6.04
+   ],
+   "max": [
+    -13.93,
+    4.88,
+    -3.99
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7139510459533608,
+   "min": [
+    -15.58,
+    2.59,
+    -5.77
+   ],
+   "max": [
+    -13.66,
+    4.16,
+    -3.94
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6775677297668038,
+   "min": [
+    -15.39,
+    3.81,
+    -5.34
+   ],
+   "max": [
+    -13.84,
+    5.34,
+    -3.68
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    10.39,
+    -0.09,
+    -1.59
+   ],
+   "max": [
+    10.81,
+    2.97,
+    -1.18
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8350244341563786,
+   "min": [
+    9.52,
+    2.76,
+    -2.2
+   ],
+   "max": [
+    11.35,
+    4.58,
+    -0.23
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0383530521262003,
+   "min": [
+    9.95,
+    2.66,
+    -1.84
+   ],
+   "max": [
+    11.94,
+    4.79,
+    0.22
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.000812328532236,
+   "min": [
+    9.14,
+    2.53,
+    -3.09
+   ],
+   "max": [
+    11.28,
+    4.65,
+    -0.78
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7239454732510288,
+   "min": [
+    9.3,
+    3.17,
+    -3.1
+   ],
+   "max": [
+    11.22,
+    4.95,
+    -1.44
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8574438443072703,
+   "min": [
+    9.99,
+    2.49,
+    -3.08
+   ],
+   "max": [
+    11.97,
+    4.52,
+    -0.92
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9213691700960219,
+   "min": [
+    9.14,
+    3.09,
+    -3.58
+   ],
+   "max": [
+    11.32,
+    5.44,
+    -1.23
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8617091049382716,
+   "min": [
+    9.56,
+    3.19,
+    -2.86
+   ],
+   "max": [
+    10.88,
+    4.51,
+    -1.54
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9392661179698216,
+   "min": [
+    10.13,
+    1.99,
+    -1.66
+   ],
+   "max": [
+    12.39,
+    4.35,
+    0.8
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9518797153635117,
+   "min": [
+    8.56,
+    2.42,
+    -2.29
+   ],
+   "max": [
+    11.06,
+    4.62,
+    -0.05
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    21.27,
+    -0.1,
+    -7.62
+   ],
+   "max": [
+    21.73,
+    3.3,
+    -7.16
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7543981481481481,
+   "min": [
+    21.19,
+    2.09,
+    -8.86
+   ],
+   "max": [
+    23.16,
+    4.23,
+    -6.73
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0113533093278464,
+   "min": [
+    19.8,
+    2.15,
+    -9.27
+   ],
+   "max": [
+    22.46,
+    4.89,
+    -6.37
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0505872770919067,
+   "min": [
+    20.14,
+    2.58,
+    -8.4
+   ],
+   "max": [
+    22.17,
+    4.56,
+    -6.3
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0958654835390946,
+   "min": [
+    20.35,
+    2.31,
+    -8.86
+   ],
+   "max": [
+    23.26,
+    5.43,
+    -5.71
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.852434842249657,
+   "min": [
+    20.19,
+    4.02,
+    -7.14
+   ],
+   "max": [
+    21.66,
+    5.49,
+    -5.66
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7292459705075446,
+   "min": [
+    21.41,
+    3.66,
+    -8.21
+   ],
+   "max": [
+    23,
+    5.37,
+    -6.56
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.894508744855967,
+   "min": [
+    21.34,
+    3.32,
+    -7.37
+   ],
+   "max": [
+    23.6,
+    5.75,
+    -5.21
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6645811899862826,
+   "min": [
+    21.41,
+    2.84,
+    -8.17
+   ],
+   "max": [
+    22.66,
+    4.14,
+    -6.91
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7261917009602195,
+   "min": [
+    20.65,
+    3.57,
+    -7.83
+   ],
+   "max": [
+    22.36,
+    5.42,
+    -6.15
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -24.25,
+    -0.11,
+    -11.23
+   ],
+   "max": [
+    -23.75,
+    3.47,
+    -10.75
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6200210048010973,
+   "min": [
+    -25.54,
+    2.43,
+    -12.05
+   ],
+   "max": [
+    -23.96,
+    4.13,
+    -10.51
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9663537379972564,
+   "min": [
+    -24.36,
+    2.99,
+    -12.71
+   ],
+   "max": [
+    -21.94,
+    5.38,
+    -10.11
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8002121913580247,
+   "min": [
+    -25.02,
+    2.7,
+    -12.68
+   ],
+   "max": [
+    -23.39,
+    4.39,
+    -11.04
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0490655006858711,
+   "min": [
+    -24.73,
+    2.91,
+    -12.53
+   ],
+   "max": [
+    -21.68,
+    6.11,
+    -9.79
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6774198388203018,
+   "min": [
+    -25.69,
+    3.44,
+    -11.05
+   ],
+   "max": [
+    -23.92,
+    5.37,
+    -9.16
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7423739711934156,
+   "min": [
+    -24.72,
+    3.83,
+    -11.56
+   ],
+   "max": [
+    -22.79,
+    5.91,
+    -9.7
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7825081447187928,
+   "min": [
+    -24.21,
+    3.02,
+    -10.96
+   ],
+   "max": [
+    -22.03,
+    5.29,
+    -8.57
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0401063100137173,
+   "min": [
+    -25.83,
+    3.53,
+    -12.7
+   ],
+   "max": [
+    -23.51,
+    5.79,
+    -10.26
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0167116769547324,
+   "min": [
+    -26.83,
+    2.82,
+    -13.58
+   ],
+   "max": [
+    -23.72,
+    5.53,
+    -10.78
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    29.74,
+    -0.11,
+    -20.24
+   ],
+   "max": [
+    30.26,
+    3.63,
+    -19.74
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9050175754458162,
+   "min": [
+    29.26,
+    2.81,
+    -22.15
+   ],
+   "max": [
+    31.73,
+    5.27,
+    -19.48
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8943544238683128,
+   "min": [
+    27.91,
+    2.79,
+    -20.77
+   ],
+   "max": [
+    30.78,
+    5.64,
+    -18.38
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0996120541838135,
+   "min": [
+    28.48,
+    3.14,
+    -20.7
+   ],
+   "max": [
+    31.62,
+    6.24,
+    -17.31
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8741855281207133,
+   "min": [
+    28.71,
+    3.32,
+    -20.35
+   ],
+   "max": [
+    30.88,
+    5.64,
+    -18.2
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9973958333333333,
+   "min": [
+    29.18,
+    3.79,
+    -20.91
+   ],
+   "max": [
+    31.37,
+    6.1,
+    -18.7
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0633787722908092,
+   "min": [
+    29.43,
+    3.5,
+    -22.18
+   ],
+   "max": [
+    32.51,
+    6.47,
+    -18.92
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7033071844993141,
+   "min": [
+    28.53,
+    3.09,
+    -20.17
+   ],
+   "max": [
+    30.71,
+    4.9,
+    -18.08
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6409465020576132,
+   "min": [
+    29.6,
+    3.38,
+    -20.3
+   ],
+   "max": [
+    31.64,
+    5.11,
+    -18.44
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0815436385459534,
+   "min": [
+    29.54,
+    2.96,
+    -21.34
+   ],
+   "max": [
+    33,
+    5.95,
+    -18.22
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -33.27,
+    -0.12,
+    -24.25
+   ],
+   "max": [
+    -32.73,
+    3.8,
+    -23.72
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0556370027434843,
+   "min": [
+    -34.37,
+    3.3,
+    -24.98
+   ],
+   "max": [
+    -31.11,
+    6.33,
+    -21.62
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7773555384087791,
+   "min": [
+    -35.05,
+    3.56,
+    -25.9
+   ],
+   "max": [
+    -32.84,
+    5.97,
+    -23.55
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6486368312757201,
+   "min": [
+    -33.52,
+    3.06,
+    -25.24
+   ],
+   "max": [
+    -31.47,
+    4.87,
+    -23.2
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6525055727023319,
+   "min": [
+    -34.85,
+    4.05,
+    -26
+   ],
+   "max": [
+    -32.72,
+    5.77,
+    -23.99
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6423568244170096,
+   "min": [
+    -32.66,
+    3.98,
+    -25.72
+   ],
+   "max": [
+    -30.87,
+    5.75,
+    -23.79
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.897511574074074,
+   "min": [
+    -32.67,
+    4.34,
+    -26.06
+   ],
+   "max": [
+    -30.9,
+    6.12,
+    -24.29
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0121056241426611,
+   "min": [
+    -33.63,
+    3.3,
+    -25.11
+   ],
+   "max": [
+    -30.58,
+    6.43,
+    -21.79
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6173118141289438,
+   "min": [
+    -33.28,
+    3.87,
+    -23.56
+   ],
+   "max": [
+    -31.38,
+    5.86,
+    -21.49
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9368955761316873,
+   "min": [
+    -34.79,
+    2.82,
+    -25.45
+   ],
+   "max": [
+    -32.14,
+    5.46,
+    -22.58
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    18.75,
+    -0.11,
+    -26.23
+   ],
+   "max": [
+    19.25,
+    3.47,
+    -25.75
+   ],
+   "color": "12161f"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7868827160493828,
+   "min": [
+    18.96,
+    3.35,
+    -27.79
+   ],
+   "max": [
+    20.79,
+    5.3,
+    -25.97
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6873563957475994,
+   "min": [
+    17.75,
+    2.77,
+    -27.64
+   ],
+   "max": [
+    19.65,
+    4.74,
+    -25.56
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.6478866598079561,
+   "min": [
+    18.9,
+    3.91,
+    -26.94
+   ],
+   "max": [
+    20.65,
+    5.66,
+    -25.03
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0589056069958849,
+   "min": [
+    17.62,
+    2.18,
+    -26.65
+   ],
+   "max": [
+    20.83,
+    5.42,
+    -23.94
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.792326817558299,
+   "min": [
+    18.51,
+    3.76,
+    -28.08
+   ],
+   "max": [
+    20.94,
+    5.91,
+    -25.92
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.9237675754458161,
+   "min": [
+    17.77,
+    3.89,
+    -27.68
+   ],
+   "max": [
+    20.49,
+    6.17,
+    -25.05
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.7881044238683127,
+   "min": [
+    18.46,
+    3.64,
+    -26.52
+   ],
+   "max": [
+    20.62,
+    5.97,
+    -24.19
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 0.8683620541838134,
+   "min": [
+    18.62,
+    3.56,
+    -26.65
+   ],
+   "max": [
+    21.06,
+    6.16,
+    -24
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "IcosahedronGeometry",
+   "name": "",
+   "params": 1.0179355281207134,
+   "min": [
+    17.54,
+    2.86,
+    -27.68
+   ],
+   "max": [
+    20.16,
+    5.68,
+    -25.13
+   ],
+   "color": "1d3a28"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 4.1,
+   "min": [
+    -17.64,
+    0.19,
+    -6.76
+   ],
+   "max": [
+    -13.16,
+    1.05,
+    -3.64
+   ],
+   "color": "0f1524"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 2.3,
+   "min": [
+    -16.96,
+    0.93,
+    -6.32
+   ],
+   "max": [
+    -14.22,
+    1.55,
+    -3.95
+   ],
+   "color": "0a1220"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.35,
+   "min": [
+    -17.46,
+    0,
+    -6.27
+   ],
+   "max": [
+    -16.73,
+    0.7,
+    -5.8
+   ],
+   "color": "0a0a0c"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.35,
+   "min": [
+    -14.97,
+    0,
+    -7.15
+   ],
+   "max": [
+    -14.24,
+    0.7,
+    -6.68
+   ],
+   "color": "0a0a0c"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.35,
+   "min": [
+    -16.56,
+    0,
+    -3.72
+   ],
+   "max": [
+    -15.83,
+    0.7,
+    -3.25
+   ],
+   "color": "0a0a0c"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.35,
+   "min": [
+    -14.07,
+    0,
+    -4.6
+   ],
+   "max": [
+    -13.34,
+    0.7,
+    -4.13
+   ],
+   "color": "0a0a0c"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    8.7,
+    0,
+    -5.82
+   ],
+   "max": [
+    10.1,
+    0.82,
+    -4.58
+   ],
+   "color": "7a5230"
+  },
+  {
+   "type": "PlaneGeometry",
+   "name": "",
+   "params": 0.22,
+   "min": [
+    9.13,
+    0.04,
+    -4.85
+   ],
+   "max": [
+    9.33,
+    0.84,
+    -4.76
+   ],
+   "color": "1f6fe0"
+  },
+  {
+   "type": "PlaneGeometry",
+   "name": "",
+   "params": 1.15,
+   "min": [
+    8.83,
+    0.83,
+    -5.53
+   ],
+   "max": [
+    9.97,
+    0.83,
+    -4.87
+   ],
+   "color": "1f6fe0"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    9.65,
+    0,
+    -5.02
+   ],
+   "max": [
+    10.32,
+    0.44,
+    -4.46
+   ],
+   "color": "2b3141"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 1.78,
+   "min": [
+    -1.86,
+    0,
+    -1.86
+   ],
+   "max": [
+    1.86,
+    0.18,
+    1.86
+   ],
+   "color": "141821"
+  },
+  {
+   "type": "RingGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -2.02,
+    0.01,
+    -2.02
+   ],
+   "max": [
+    2.02,
+    0.01,
+    2.02
+   ],
+   "color": "04122b"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 1.68,
+   "min": [
+    -1.76,
+    0.18,
+    -1.76
+   ],
+   "max": [
+    1.76,
+    0.7,
+    1.76
+   ],
+   "color": "191f2b"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 1.62,
+   "min": [
+    -1.7,
+    0.68,
+    -1.7
+   ],
+   "max": [
+    1.7,
+    0.88,
+    1.7
+   ],
+   "color": "2c3446"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 1.6,
+   "min": [
+    -1.6,
+    0.87,
+    -1.6
+   ],
+   "max": [
+    1.6,
+    0.93,
+    1.6
+   ],
+   "color": "2c3446"
+  },
+  {
+   "type": "RingGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -1.79,
+    0.7,
+    -1.79
+   ],
+   "max": [
+    1.79,
+    0.7,
+    1.79
+   ],
+   "color": "42260e"
+  },
+  {
+   "type": "RingGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -1.4,
+    -1.03,
+    -1.86
+   ],
+   "max": [
+    1.4,
+    1.41,
+    1.5
+   ],
+   "color": "061428"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 1.775,
+   "min": [
+    -0.89,
+    0.22,
+    1.54
+   ],
+   "max": [
+    0.89,
+    0.66,
+    1.78
+   ],
+   "color": "ffffff"
+  },
+  {
+   "type": "PlaneGeometry",
+   "name": "",
+   "params": 8.5,
+   "min": [
+    -4.25,
+    0.02,
+    -4.25
+   ],
+   "max": [
+    4.25,
+    0.02,
+    4.25
+   ],
+   "color": "ffffff"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -1.01,
+    1.61,
+    -0.77
+   ],
+   "max": [
+    1.36,
+    3.58,
+    1.27
+   ],
+   "color": "2580f0"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.045,
+   "min": [
+    -0.57,
+    2.05,
+    0.58
+   ],
+   "max": [
+    -0.28,
+    3.34,
+    0.67
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.045,
+   "min": [
+    -0.25,
+    1.99,
+    0.81
+   ],
+   "max": [
+    0.04,
+    3.27,
+    0.9
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.045,
+   "min": [
+    0.06,
+    1.93,
+    1.05
+   ],
+   "max": [
+    0.36,
+    3.21,
+    1.14
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.504,
+   "min": [
+    -0.87,
+    2.27,
+    0.31
+   ],
+   "max": [
+    0.36,
+    2.55,
+    1.24
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.504,
+   "min": [
+    -0.78,
+    2.76,
+    0.32
+   ],
+   "max": [
+    0.45,
+    3.04,
+    1.25
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    0.81,
+    1.8,
+    0.53
+   ],
+   "max": [
+    1.11,
+    3.09,
+    0.62
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.055,
+   "min": [
+    0.57,
+    1.84,
+    0.86
+   ],
+   "max": [
+    0.87,
+    3.12,
+    0.95
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.568,
+   "min": [
+    -0.74,
+    3.17,
+    0.31
+   ],
+   "max": [
+    0.56,
+    3.49,
+    1.29
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.568,
+   "min": [
+    -0.99,
+    1.82,
+    0.29
+   ],
+   "max": [
+    0.31,
+    2.14,
+    1.27
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.075,
+   "min": [
+    -0.97,
+    2.06,
+    0.3
+   ],
+   "max": [
+    -0.62,
+    3.47,
+    0.42
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.075,
+   "min": [
+    0.19,
+    1.84,
+    1.15
+   ],
+   "max": [
+    0.54,
+    3.25,
+    1.28
+   ],
+   "color": "e4edfa"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.3,
+   "min": [
+    -0.51,
+    3,
+    -0.5
+   ],
+   "max": [
+    1.07,
+    3.38,
+    1.01
+   ],
+   "color": "071c3c"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.6800000000000002,
+   "min": [
+    -0.74,
+    3.11,
+    -0.76
+   ],
+   "max": [
+    1.36,
+    3.58,
+    1.28
+   ],
+   "color": "2580f0"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.1400000000000001,
+   "min": [
+    -0.64,
+    1.74,
+    -0.42
+   ],
+   "max": [
+    0.74,
+    2.07,
+    0.89
+   ],
+   "color": "071c3c"
+  },
+  {
+   "type": "TubeGeometry",
+   "name": "",
+   "params": 0.185,
+   "min": [
+    -1.53,
+    1.48,
+    -0.78
+   ],
+   "max": [
+    0.83,
+    2.96,
+    1.26
+   ],
+   "color": "2580f0"
+  },
+  {
+   "type": "TubeGeometry",
+   "name": "",
+   "params": 0.17,
+   "min": [
+    -1.61,
+    2.05,
+    -0.94
+   ],
+   "max": [
+    -0.96,
+    2.76,
+    -0.3
+   ],
+   "color": "2580f0"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.18,
+   "min": [
+    0.13,
+    2.1,
+    0.71
+   ],
+   "max": [
+    0.8,
+    2.68,
+    1.34
+   ],
+   "color": "2580f0"
+  },
+  {
+   "type": "TorusGeometry",
+   "name": "",
+   "params": 0.31,
+   "min": [
+    -1.36,
+    0.86,
+    -0.14
+   ],
+   "max": [
+    -0.44,
+    1.88,
+    0.69
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.29,
+   "min": [
+    -1.31,
+    1.22,
+    -0.13
+   ],
+   "max": [
+    -0.49,
+    1.52,
+    0.69
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.1,
+   "min": [
+    -1.04,
+    1.25,
+    0.13
+   ],
+   "max": [
+    -0.75,
+    1.49,
+    0.43
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -1.11,
+    1.31,
+    0.12
+   ],
+   "max": [
+    -0.69,
+    1.43,
+    0.44
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -1.09,
+    1.24,
+    0.12
+   ],
+   "max": [
+    -0.71,
+    1.5,
+    0.43
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -1,
+    1.14,
+    0.18
+   ],
+   "max": [
+    -0.79,
+    1.6,
+    0.38
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.96,
+    1.12,
+    0.25
+   ],
+   "max": [
+    -0.84,
+    1.62,
+    0.31
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -1.06,
+    1.18,
+    0.16
+   ],
+   "max": [
+    -0.74,
+    1.56,
+    0.39
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "TorusGeometry",
+   "name": "",
+   "params": 0.31,
+   "min": [
+    -0.47,
+    0.94,
+    -1.32
+   ],
+   "max": [
+    0.46,
+    1.96,
+    -0.48
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.29,
+   "min": [
+    -0.42,
+    1.3,
+    -1.31
+   ],
+   "max": [
+    0.4,
+    1.6,
+    -0.49
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.1,
+   "min": [
+    -0.15,
+    1.33,
+    -1.05
+   ],
+   "max": [
+    0.14,
+    1.57,
+    -0.75
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.21,
+    1.39,
+    -1.06
+   ],
+   "max": [
+    0.2,
+    1.51,
+    -0.74
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.2,
+    1.33,
+    -1.05
+   ],
+   "max": [
+    0.18,
+    1.58,
+    -0.75
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.11,
+    1.22,
+    -1
+   ],
+   "max": [
+    0.1,
+    1.68,
+    -0.8
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.06,
+    1.2,
+    -0.93
+   ],
+   "max": [
+    0.05,
+    1.7,
+    -0.87
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.17,
+    1.26,
+    -1.02
+   ],
+   "max": [
+    0.16,
+    1.64,
+    -0.78
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "TorusGeometry",
+   "name": "",
+   "params": 0.31,
+   "min": [
+    -0.3,
+    0.68,
+    0.61
+   ],
+   "max": [
+    0.57,
+    1.63,
+    1.39
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.29,
+   "min": [
+    -0.25,
+    1.01,
+    0.61
+   ],
+   "max": [
+    0.52,
+    1.29,
+    1.39
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.1,
+   "min": [
+    0,
+    1.04,
+    0.86
+   ],
+   "max": [
+    0.27,
+    1.27,
+    1.14
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.06,
+    1.1,
+    0.85
+   ],
+   "max": [
+    0.33,
+    1.21,
+    1.15
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.04,
+    1.03,
+    0.85
+   ],
+   "max": [
+    0.32,
+    1.27,
+    1.14
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.04,
+    0.94,
+    0.9
+   ],
+   "max": [
+    0.24,
+    1.37,
+    1.09
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.08,
+    0.92,
+    0.97
+   ],
+   "max": [
+    0.19,
+    1.39,
+    1.03
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    -0.01,
+    0.97,
+    0.89
+   ],
+   "max": [
+    0.29,
+    1.33,
+    1.11
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "TorusGeometry",
+   "name": "",
+   "params": 0.31,
+   "min": [
+    0.55,
+    0.75,
+    -0.51
+   ],
+   "max": [
+    1.42,
+    1.71,
+    0.27
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.29,
+   "min": [
+    0.59,
+    1.09,
+    -0.5
+   ],
+   "max": [
+    1.37,
+    1.37,
+    0.27
+   ],
+   "color": "3d434f"
+  },
+  {
+   "type": "CylinderGeometry",
+   "name": "",
+   "params": 0.1,
+   "min": [
+    0.85,
+    1.12,
+    -0.26
+   ],
+   "max": [
+    1.12,
+    1.34,
+    0.02
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.79,
+    1.17,
+    -0.27
+   ],
+   "max": [
+    1.18,
+    1.29,
+    0.03
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.8,
+    1.11,
+    -0.26
+   ],
+   "max": [
+    1.16,
+    1.35,
+    0.03
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.88,
+    1.01,
+    -0.21
+   ],
+   "max": [
+    1.08,
+    1.44,
+    -0.02
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.93,
+    0.99,
+    -0.15
+   ],
+   "max": [
+    1.04,
+    1.46,
+    -0.09
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.5,
+   "min": [
+    0.83,
+    1.05,
+    -0.22
+   ],
+   "max": [
+    1.13,
+    1.41,
+    -0.01
+   ],
+   "color": "dae2ee"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.3,
+   "min": [
+    -0.72,
+    1.42,
+    -0.66
+   ],
+   "max": [
+    0.9,
+    1.85,
+    0.89
+   ],
+   "color": "0d448f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    -0.65,
+    1.68,
+    -0.59
+   ],
+   "max": [
+    0.01,
+    2.09,
+    0.23
+   ],
+   "color": "0d448f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 0.14,
+   "min": [
+    0.21,
+    1.49,
+    0.05
+   ],
+   "max": [
+    0.87,
+    1.9,
+    0.87
+   ],
+   "color": "0d448f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.34,
+   "min": [
+    -0.83,
+    1.15,
+    0.08
+   ],
+   "max": [
+    0.28,
+    1.47,
+    0.94
+   ],
+   "color": "0d448f"
+  },
+  {
+   "type": "BoxGeometry",
+   "name": "",
+   "params": 1.34,
+   "min": [
+    -0.17,
+    1.21,
+    -0.8
+   ],
+   "max": [
+    0.95,
+    1.53,
+    0.06
+   ],
+   "color": "0d448f"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.36,
+   "min": [
+    -0.65,
+    3.16,
+    -0.35
+   ],
+   "max": [
+    0.43,
+    4.03,
+    0.75
+   ],
+   "color": "dd3327"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    -0.22,
+    3.17,
+    0.31
+   ],
+   "max": [
+    0.47,
+    3.66,
+    1.07
+   ],
+   "color": "f97c1c"
+  },
+  {
+   "type": "ExtrudeGeometry",
+   "name": "",
+   "params": null,
+   "min": [
+    0.47,
+    3.13,
+    0.33
+   ],
+   "max": [
+    1.13,
+    3.73,
+    1.02
+   ],
+   "color": "2fbf58"
+  },
+  {
+   "type": "SphereGeometry",
+   "name": "",
+   "params": 0.17,
+   "min": [
+    0.19,
+    3.58,
+    0.45
+   ],
+   "max": [
+    0.7,
+    3.99,
+    0.97
+   ],
+   "color": "4aa4ff"
+  }
+ ]
+}

@@ -1,8 +1,19 @@
 "use client";
 
-import { useEffect, useId, useRef, type MouseEvent } from "react";
-import { PULSE_NODES, type NodeKind, type ServiceId, SERVICE_META } from "@/lib/data";
+import { useCallback, useId, useMemo, type MouseEvent } from "react";
+import { PULSE_NODES, type NodeKind, type ServiceId } from "@/lib/data";
 import { useReducedMotion } from "@/lib/store";
+
+/* --------------------------------------------------------------------------
+   CAMPUS BLUEPRINT
+   The campus drawn as an interface, not as a diagram. Everything is sized for
+   the hero HUD, where the SVG renders at roughly half these units — so the type
+   is deliberately large and the vocabulary is deliberately small: five named
+   places, three service routes, one road spine, and junction dots that carry
+   the pulse. The earlier version drew rotated hexagons and triangles whose
+   labels rendered at ~6px; nothing in it was readable, which is why it read as
+   noise rather than as a map.
+--------------------------------------------------------------------------- */
 
 type Props = {
   mode?: ServiceId | "all";
@@ -16,11 +27,58 @@ type Props = {
   focus?: string | null;
 };
 
-const ROUTES: Record<ServiceId, string> = {
-  rides: "M320,375 H400 V87",
-  food: "M320,375 H400 V285 H436",
-  essentials: "M480,375 H400 V175 H572",
+type Chip = {
+  id: string;
+  label: string;
+  sub: string;
+  kind: NodeKind;
+  service: ServiceId | null;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 };
+
+/* The plan. Fixed geometry, hand-set so no two elements ever collide: a road
+   spine at x=400, service chips hung off it, hostels on a cross road at y=373. */
+const SPINE_X = 400;
+const SPINE_TOP = 116;
+const SPINE_BOTTOM = 400;
+const CROSS_Y = 373;
+
+const CHIPS: Chip[] = [
+  { id: "gate", label: "OUTSIDE GATE", sub: "CAMPUS ENTRY & EXIT", kind: "rides", service: "rides", x: 244, y: 50, w: 312, h: 72 },
+  { id: "blockF", label: "BLOCK F", sub: "UNIVERSITY", kind: "campus", service: null, x: 566, y: 137, w: 208, h: 72 },
+  { id: "blockE", label: "BLOCK E", sub: "UNIVERSITY", kind: "campus", service: null, x: 566, y: 249, w: 208, h: 72 },
+  { id: "hostel1", label: "HOSTEL 1", sub: "RESIDENTIAL", kind: "food", service: "food", x: 80, y: 337, w: 214, h: 72 },
+  { id: "hostel2", label: "HOSTEL 2", sub: "RESIDENTIAL", kind: "essentials", service: "essentials", x: 506, y: 337, w: 214, h: 72 },
+];
+
+/* building footprints, drawn as blueprint outlines so they read as surveyed
+   massing rather than as filled widgets — and never overlapping a chip */
+const MASSING: [number, number, number, number][] = [
+  [104, 128, 152, 92],
+  [56, 258, 118, 86],
+  [202, 168, 118, 74],
+  [288, 250, 78, 66],
+  [306, 186, 70, 118],
+  [600, 400, 156, 72],
+  [104, 428, 148, 50],
+];
+
+const ROUTES: Record<ServiceId, string> = {
+  /* the gate road: the whole spine lights up when rides are in focus */
+  rides: `M${SPINE_X},${SPINE_TOP} V${CROSS_Y}`,
+  food: `M${SPINE_X},283 V${CROSS_Y} H302`,
+  essentials: `M${SPINE_X},283 V${CROSS_Y} H498`,
+};
+
+const JUNCTIONS: [number, number][] = [
+  [SPINE_X, SPINE_TOP],
+  [SPINE_X, 173],
+  [SPINE_X, 283],
+  [SPINE_X, CROSS_Y],
+];
 
 export default function CampusScene({
   mode = "all",
@@ -35,22 +93,48 @@ export default function CampusScene({
 }: Props) {
   const uid = useId().replace(/:/g, "");
   const reduced = useReducedMotion();
-  const wrap = useRef<SVGSVGElement | null>(null);
-  const grid = useRef<SVGGElement | null>(null);
-  const blocksRef = useRef<SVGGElement | null>(null);
-  const routesRef = useRef<SVGGElement | null>(null);
 
   const serviceKeys: ServiceId[] = ["food", "rides", "essentials"];
 
-  useEffect(() => {
-    // Map stays firmly anchored in a clean fixed position
+  const accentOf = useCallback((kind: NodeKind) => {
+    if (kind === "food") return "var(--food)";
+    if (kind === "rides") return "var(--rides)";
+    if (kind === "essentials") return "var(--essentials)";
+    return "var(--chip-neutral)";
   }, []);
 
-  const dim = (k: ServiceId) => {
-    if (mode === "all") return 1;
-    if (focus) return k === focus ? 1 : 0.12;
-    return k === mode ? 1 : 0.14;
-  };
+  /* How loudly each chip and route speaks. One focus at a time, always: a map
+     where everything is highlighted is a map where nothing is. */
+  const weight = useCallback(
+    (service: ServiceId | null, isActive: boolean) => {
+      /* Even the quiet places stay readable: a plan you cannot read is not a
+         plan. Focus is carried by the accent, the halo and the route, not by
+         dimming everything else into the background. */
+      if (focus) return isActive ? 1 : 0.42;
+      if (mode === "all") return isActive ? 1 : 0.9;
+      return isActive ? 1 : 0.72;
+    },
+    [focus, mode],
+  );
+
+  const routeOpacity = useCallback(
+    (k: ServiceId) => {
+      if (focus) return k === focus ? 1 : 0.07;
+      if (mode === "all") return 0.5;
+      return k === mode ? 1 : 0.07;
+    },
+    [focus, mode],
+  );
+
+  const chipIsActive = useCallback(
+    (c: Chip) => {
+      if (activeNode) return activeNode === c.id;
+      if (focus) return c.id === focus;
+      if (mode === "all") return false;
+      return c.service === mode;
+    },
+    [activeNode, focus, mode],
+  );
 
   const handleMove = (e: MouseEvent<SVGSVGElement>) => {
     if (!interactive || !onHover) return;
@@ -58,272 +142,121 @@ export default function CampusScene({
     onHover(target ? (target.getAttribute("data-kind") as NodeKind) : null);
   };
 
+  const gridId = `${uid}-grid`;
+  const chipFill = `${uid}-chip`;
+
+  const chips = useMemo(() => CHIPS, []);
+
   return (
     <svg
-      ref={wrap}
       viewBox="0 0 800 500"
       className={className}
       role="img"
-      aria-label="Chandigarh University Unnao Campus architectural blueprint"
+      aria-label="Chandigarh University Unnao campus network plan"
       onMouseMove={handleMove}
       onMouseLeave={() => onHover?.(null)}
       style={{ overflow: "visible" }}
     >
       <defs>
-        <pattern id={`${uid}-grid`} width="24" height="24" patternUnits="userSpaceOnUse">
-          <path d="M0 0 H24 M0 0 V24" stroke="var(--border)" strokeWidth="0.4" fill="none" opacity="0.25" />
+        <pattern id={gridId} width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M0 0 H20 M0 0 V20" stroke="var(--border)" strokeWidth="0.4" fill="none" opacity="0.16" />
         </pattern>
+        <linearGradient id={chipFill} x1="0" y1="0" x2="0.35" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.1" />
+          <stop offset="100%" stopColor="#000000" stopOpacity="0.2" />
+        </linearGradient>
       </defs>
 
-      {/* ---------------------------------------------------- grid background */}
-      <g ref={grid} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
-        <rect x="0" y="0" width="800" height="500" fill={`url(#${uid}-grid)`} opacity="0.8" />
-        <text x="24" y="24" className="micro" fill="var(--muted)" fontSize="10" letterSpacing="1.8">
-          CHANDIGARH UNIVERSITY (UNNAO, UP)
+      {/* --------------------------------------------------------- paper */}
+      {/* a settled ground under the drawing: silhouettes of the lit facades
+          behind the glass were washing every line out */}
+      <rect x="0" y="0" width="800" height="500" fill="#05080f" opacity="0.55" />
+      <rect x="0" y="0" width="800" height="500" fill={`url(#${gridId})`} />
+
+      {/* survey frame: the plan is a drawing, and drawings have edges */}
+      <rect x="30" y="52" width="740" height="410" rx="16" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="11 9" opacity="0.34" />
+      <g stroke="var(--border)" strokeWidth="0.9" opacity="0.28">
+        {Array.from({ length: 13 }).map((_, i) => (
+          <path key={`tx${i}`} d={`M${30 + i * (740 / 12)},52 v6`} />
+        ))}
+        {Array.from({ length: 9 }).map((_, i) => (
+          <path key={`ty${i}`} d={`M30,${52 + i * (410 / 8)} h6`} />
+        ))}
+        {Array.from({ length: 13 }).map((_, i) => (
+          <path key={`bx${i}`} d={`M${30 + i * (740 / 12)},462 v-6`} />
+        ))}
+      </g>
+
+      {/* scale bar, the way any real plan signs itself off */}
+      <g opacity="0.5">
+        <path d="M60,454 h88 M60,448 v12 M104,448 v12 M148,448 v12" stroke="var(--muted)" strokeWidth="1.1" fill="none" />
+        <text x="60" y="441" fontSize="13" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+          0
         </text>
-        <text x="776" y="24" textAnchor="end" className="micro" fill="var(--muted)" fontSize="10" letterSpacing="1.8">
-          ARCHITECTURAL BLUEPRINT · N ↑
+        <text x="148" y="441" textAnchor="end" fontSize="13" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+          200 M
         </text>
       </g>
 
-      {/* ------------------------------------------------------ buildings & roads */}
-      <g ref={blocksRef} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
-        {/* Main Road Spine */}
-        <path d="M400,90 V375" fill="none" stroke="var(--scene-line)" strokeWidth="4" opacity="0.6" />
-        <path d="M400,90 V375" fill="none" stroke="var(--blue)" strokeWidth="1.5" strokeDasharray="6 6" opacity="0.8" />
-
-        {/* Branch Road to Block F */}
-        <path d="M400,165 H570" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
-
-        {/* Branch Road to Block E */}
-        <path d="M400,270 H436" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
-
-        {/* Branch Road to Hostel 1 & 2 */}
-        <path d="M320,375 H480" fill="none" stroke="var(--scene-line)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
-
-        {/* 1. OUTSIDE GATE RECTANGLE (Top) */}
-        <g data-kind="rides" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("rides")}>
-          <rect
-            x="250"
-            y="52"
-            width="300"
-            height="38"
-            rx="6"
-            fill="var(--scene-block)"
-            stroke="var(--blue)"
-            strokeWidth="1.8"
-          />
-          <rect
-            x="254"
-            y="56"
-            width="292"
-            height="30"
-            rx="4"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-            opacity="0.35"
-          />
-          <text
-            x="400"
-            y="75"
-            textAnchor="middle"
-            fontSize="11.5"
-            letterSpacing="1.8"
-            fill="var(--text)"
-            fontWeight="600"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            OUTSIDE GATE (CAMPUS ENTRY & EXIT)
-          </text>
-        </g>
-
-        {/* 2. UNIVERSITY BLOCK F (Top Right Hexagon) */}
-        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
-          <polygon
-            points="660,165 637.5,204 592.5,204 570,165 592.5,126 637.5,126"
-            fill="var(--scene-block)"
-            stroke="var(--blue)"
-            strokeWidth="1.8"
-          />
-          <polygon
-            points="652,165 631.5,198 598.5,198 578,165 598.5,132 631.5,132"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1"
-            opacity="0.4"
-          />
-          <text
-            x="615"
-            y="161"
-            textAnchor="middle"
-            fontSize="11"
-            letterSpacing="1.5"
-            fill="var(--text)"
-            fontWeight="600"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            BLOCK F
-          </text>
-          <text
-            x="615"
-            y="175"
-            textAnchor="middle"
-            fontSize="8.5"
-            letterSpacing="1.2"
-            fill="var(--muted)"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            UNIVERSITY
-          </text>
-        </g>
-
-        {/* 3. UNIVERSITY BLOCK E (Middle Right Hexagon) */}
-        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
-          <polygon
-            points="524,270 502,308 458,308 436,270 458,232 502,232"
-            fill="var(--scene-block)"
-            stroke="var(--scene-line)"
-            strokeWidth="1.8"
-          />
-          <polygon
-            points="516,270 496,302 464,302 444,270 464,238 496,238"
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth="1"
-            opacity="0.4"
-          />
-          <text
-            x="480"
-            y="266"
-            textAnchor="middle"
-            fontSize="10.5"
-            letterSpacing="1.5"
-            fill="var(--text)"
-            fontWeight="600"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            BLOCK E
-          </text>
-          <text
-            x="480"
-            y="280"
-            textAnchor="middle"
-            fontSize="8"
-            letterSpacing="1.2"
-            fill="var(--muted)"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            UNIVERSITY
-          </text>
-        </g>
-
-        {/* 4. HOSTEL 1 (Bottom Left Inverted Triangle) */}
-        <g data-kind="campus" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("campus")}>
-          <polygon
-            points="200,375 320,375 260,475"
-            fill="var(--scene-block)"
-            stroke="var(--food)"
-            strokeWidth="1.8"
-          />
-          <polygon
-            points="212,379 308,379 260,461"
-            fill="none"
-            stroke="var(--food)"
-            strokeWidth="1"
-            opacity="0.35"
-          />
-          <text
-            x="260"
-            y="402"
-            textAnchor="middle"
-            fontSize="11"
-            letterSpacing="1.5"
-            fill="var(--text)"
-            fontWeight="600"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            HOSTEL 1
-          </text>
-          <text
-            x="260"
-            y="416"
-            textAnchor="middle"
-            fontSize="8"
-            letterSpacing="1"
-            fill="var(--muted)"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            RESIDENTIAL
-          </text>
-        </g>
-
-        {/* 5. HOSTEL 2 (Bottom Right Inverted Triangle) */}
-        <g data-kind="essentials" style={{ cursor: interactive ? "pointer" : "auto" }} onMouseEnter={() => onHover?.("essentials")}>
-          <polygon
-            points="480,375 600,375 540,475"
-            fill="var(--scene-block)"
-            stroke="var(--essentials)"
-            strokeWidth="1.8"
-          />
-          <polygon
-            points="492,379 588,379 540,461"
-            fill="none"
-            stroke="var(--essentials)"
-            strokeWidth="1"
-            opacity="0.35"
-          />
-          <text
-            x="540"
-            y="402"
-            textAnchor="middle"
-            fontSize="11"
-            letterSpacing="1.5"
-            fill="var(--text)"
-            fontWeight="600"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            HOSTEL 2
-          </text>
-          <text
-            x="540"
-            y="416"
-            textAnchor="middle"
-            fontSize="8"
-            letterSpacing="1"
-            fill="var(--muted)"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            RESIDENTIAL
-          </text>
-        </g>
+      {/* ------------------------------------------------------- massing */}
+      <g fill="none" stroke="var(--border)" strokeWidth="1.1" strokeDasharray="5 6" opacity="0.55">
+        {MASSING.map(([x, y, w, h], i) => (
+          <rect key={i} x={x} y={y} width={w} height={h} rx="7" />
+        ))}
       </g>
 
-      {/* ---------------------------------------------------- routes */}
-      <g ref={routesRef} style={{ transition: "transform 0.3s ease-out", willChange: "transform" }}>
+      {/* ----------------------------------------------------- plan header */}
+      <text x="30" y="36" fontSize="18" letterSpacing="1.4" fill="var(--muted)" opacity="0.9" style={{ fontFamily: "var(--font-mono)" }}>
+        CHANDIGARH UNIVERSITY (UNNAO, UP)
+      </text>
+      <g opacity="0.8">
+        <text x="700" y="36" textAnchor="end" fontSize="16" letterSpacing="1.3" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+          CAMPUS PLAN
+        </text>
+        <path d="M724 18 v22 M724 18 l-5 8 M724 18 l5 8" stroke="var(--muted)" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        <text x="762" y="36" textAnchor="end" fontSize="16" letterSpacing="1" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+          N
+        </text>
+      </g>
+
+      {/* --------------------------------------------------------- roads */}
+      <g strokeLinecap="round" fill="none">
+        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke="var(--scene-line)" strokeWidth="3" opacity="0.55" />
+        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke="var(--muted)" strokeWidth="0.9" strokeDasharray="7 9" opacity="0.4" />
+        <path d={`M${SPINE_X},173 H578`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
+        <path d={`M${SPINE_X},283 H578`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
+        <path d={`M296,${CROSS_Y} H504`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
+      </g>
+
+
+
+      {/* ------------------------------------------------------ junctions */}
+      <g>
+        {JUNCTIONS.map(([x, y], i) => (
+          <g key={i}>
+            <circle cx={x} cy={y} r="5.6" fill="var(--scene-block)" stroke="var(--border)" strokeWidth="1.2" />
+            <circle cx={x} cy={y} r="2" fill="var(--muted)" opacity="0.9" />
+          </g>
+        ))}
+      </g>
+
+      {/* --------------------------------------------------------- routes */}
+      <g fill="none">
         {serviceKeys.map((k) => (
-          <g key={k} style={{ opacity: dim(k), transition: "opacity .5s ease" }}>
-            <path
-              d={ROUTES[k]}
-              fill="none"
-              stroke={SERVICE_META[k].accent}
-              strokeWidth="5"
-              strokeLinecap="round"
-              opacity="0.18"
-            />
+          <g key={k} style={{ opacity: routeOpacity(k), transition: "opacity .5s ease" }}>
+            <path d={ROUTES[k]} stroke={accentOf(k)} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
             <path
               id={`${uid}-${k}`}
               d={ROUTES[k]}
-              fill="none"
-              stroke={SERVICE_META[k].accent}
-              strokeWidth="2"
+              stroke={accentOf(k)}
+              strokeWidth="3.2"
               strokeLinecap="round"
+              strokeLinejoin="round"
               className={reduced ? "" : "route-dash"}
             />
             {movers && !reduced && (
-              <circle r="4" fill={SERVICE_META[k].accent}>
-                <animateMotion dur={k === "rides" ? "6s" : "8s"} repeatCount="indefinite" rotate="auto">
+              <circle r="4.4" fill={accentOf(k)}>
+                <animateMotion dur={k === "rides" ? "7s" : "9s"} repeatCount="indefinite" rotate="auto">
                   <mpath href={`#${uid}-${k}`} />
                 </animateMotion>
               </circle>
@@ -332,19 +265,76 @@ export default function CampusScene({
         ))}
       </g>
 
-      {/* ----------------------------------------------------- pulse nodes */}
+      {/* ---------------------------------------------------------- places */}
+      <g>
+        {chips.map((c) => {
+          const accent = accentOf(c.kind);
+          const active = chipIsActive(c);
+          const w = weight(c.service, active);
+          return (
+            <g
+              key={c.id}
+              data-kind={c.kind}
+              data-node={c.id}
+              onMouseEnter={() => onHover?.(c.kind)}
+              onClick={() => onNodeClick?.(c.id)}
+              style={{ cursor: interactive ? "pointer" : "auto", opacity: w, transition: "opacity .45s ease" }}
+            >
+              {/* halo under the focused place */}
+              {active && <rect x={c.x} y={c.y} width={c.w} height={c.h} rx="13" fill="none" stroke={accent} strokeWidth="7" opacity="0.16" />}
+              <rect
+                x={c.x}
+                y={c.y}
+                width={c.w}
+                height={c.h}
+                rx="13"
+                fill="#080d18"
+                fillOpacity="0.94"
+                stroke={accent}
+                strokeWidth={active ? 1.8 : 1.3}
+                strokeOpacity={active ? 0.95 : 0.6}
+              />
+              <rect x={c.x} y={c.y} width={c.w} height={c.h} rx="13" fill={`url(#${chipFill})`} />
+              {/* status light, the way the product marks a live point */}
+              <circle cx={c.x + 26} cy={c.y + c.h / 2} r="4.4" fill={accent} />
+              {active && !reduced && (
+                <circle cx={c.x + 26} cy={c.y + c.h / 2} r="10" fill="none" stroke={accent} strokeWidth="1.4" className="pulse-ring" />
+              )}
+              <text
+                x={c.x + 44}
+                y={c.y + 32}
+                fontSize="24"
+                letterSpacing="1.2"
+                fontWeight="600"
+                fill="var(--text)"
+                style={{ fontFamily: "var(--font-mono)" }}
+              >
+                {c.label}
+              </text>
+              <text
+                x={c.x + 44}
+                y={c.y + 56}
+                fontSize="18"
+                letterSpacing="1"
+                fill="var(--muted)"
+                opacity="0.9"
+                style={{ fontFamily: "var(--font-mono)" }}
+              >
+                {c.sub}
+              </text>
+              {showLabels && active && (
+                <rect x={c.x - 12} y={c.y - 14} width={c.w + 24} height={c.h + 28} rx="16" fill="none" stroke={accent} strokeWidth="1" opacity="0.35" />
+              )}
+            </g>
+          );
+        })}
+      </g>
+
+      {/* ------------------------------------------------------ live pings */}
       <g>
         {PULSE_NODES.map((n) => {
-          const accent =
-            n.kind === "food"
-              ? "var(--food)"
-              : n.kind === "rides"
-                ? "var(--rides)"
-                : n.kind === "essentials"
-                  ? "var(--essentials)"
-                  : "var(--text)";
-          const isActive =
-            activeNode === n.id || (mode !== "all" && n.kind === mode);
+          const accent = accentOf(n.kind);
+          const isActive = activeNode === n.id || (mode !== "all" && n.kind === mode && !focus);
           return (
             <g
               key={n.id}
@@ -354,45 +344,11 @@ export default function CampusScene({
               onClick={() => onNodeClick?.(n.id)}
               style={{ cursor: interactive ? "pointer" : "auto" }}
             >
+              <circle cx={n.x} cy={n.y} r="13" fill="transparent" />
               {isActive && !reduced && (
-                <circle cx={n.x} cy={n.y} r="7" fill="none" stroke={accent} strokeWidth="1.4" className="pulse-ring" />
+                <circle cx={n.x} cy={n.y} r="9" fill="none" stroke={accent} strokeWidth="1.4" className="pulse-ring" />
               )}
-              <circle cx={n.x} cy={n.y} r="14" fill="transparent" />
-              <circle
-                cx={n.x}
-                cy={n.y}
-                r={isActive ? 6 : 4.5}
-                fill="var(--bg)"
-                stroke={accent}
-                strokeWidth="2"
-                style={{ transition: "r .35s cubic-bezier(.22,1,.36,1)" }}
-              />
-              <circle cx={n.x} cy={n.y} r="1.8" fill={accent} />
-              
-              {showLabels && isActive && (
-                <g style={{ opacity: 1, transition: "opacity .3s ease" }}>
-                  <rect
-                    x={n.x + 10}
-                    y={n.y - 12}
-                    width={n.label.length * 7.5 + 16}
-                    height="20"
-                    rx="10"
-                    fill="var(--surface)"
-                    stroke="var(--border)"
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={n.x + 18}
-                    y={n.y + 2}
-                    fontSize="10"
-                    fill="var(--text)"
-                    fontWeight="600"
-                    style={{ fontFamily: "var(--font-mono)" }}
-                  >
-                    {n.label}
-                  </text>
-                </g>
-              )}
+              <circle cx={n.x} cy={n.y} r="4.6" fill="#080c16" stroke={accent} strokeWidth="2" />
             </g>
           );
         })}
@@ -400,6 +356,3 @@ export default function CampusScene({
     </svg>
   );
 }
-
-
-

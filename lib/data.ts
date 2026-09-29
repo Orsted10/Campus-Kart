@@ -58,15 +58,17 @@ export type PulseNode = {
   y: number;
 };
 
+/* Coordinates are the junction dots of the plan drawn in CampusScene: the road
+   spine runs down x=400, the hostels sit on a cross road at y=373. */
 export const PULSE_NODES: PulseNode[] = [
-  { id: "n3", label: "Outside Gate", sub: "Cab & Auto Pickup Stand", kind: "rides", x: 400, y: 105 },
-  { id: "n8", label: "Spine Junction", sub: "Ride & Cab Route", kind: "rides", x: 400, y: 175 },
-  { id: "n5", label: "Block F", sub: "University Academic Wing", kind: "campus", x: 572, y: 175 },
-  { id: "n6", label: "Block E Food", sub: "Outside Food Hub", kind: "food", x: 436, y: 285 },
-  { id: "n7", label: "Block E Lab", sub: "Science & Innovation", kind: "campus", x: 400, y: 285 },
-  { id: "n2", label: "Hostel 1 Gate", sub: "Residential Zone 01", kind: "campus", x: 320, y: 375 },
-  { id: "n4", label: "Hostel 2 Store", sub: "Essentials & Stationery", kind: "essentials", x: 480, y: 375 },
-  { id: "n1", label: "Central Mart", sub: "Campus Supply Store", kind: "essentials", x: 400, y: 375 },
+  { id: "n3", label: "Outside Gate", sub: "Cab & Auto Pickup Stand", kind: "rides", x: 400, y: 116 },
+  { id: "n8", label: "Spine Junction", sub: "Ride & Cab Route", kind: "rides", x: 400, y: 173 },
+  { id: "n5", label: "Block F", sub: "University Academic Wing", kind: "campus", x: 578, y: 173 },
+  { id: "n7", label: "Block E Lab", sub: "Science & Innovation", kind: "campus", x: 400, y: 283 },
+  { id: "n6", label: "Block E Food", sub: "Outside Food Hub", kind: "food", x: 578, y: 283 },
+  { id: "n2", label: "Hostel 1 Gate", sub: "Residential Zone 01", kind: "food", x: 296, y: 373 },
+  { id: "n1", label: "Central Mart", sub: "Campus Supply Store", kind: "campus", x: 400, y: 373 },
+  { id: "n4", label: "Hostel 2 Store", sub: "Essentials & Stationery", kind: "essentials", x: 504, y: 373 },
 ];
 
 /* --------------------------------------------------------------- chaos */

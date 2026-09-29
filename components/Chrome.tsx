@@ -7,15 +7,44 @@ import { scrollToId, useApp, useReducedMotion } from "@/lib/store";
 /* ------------------------------------------------------------------ mark */
 
 export function Mark({ size = 32, className = "" }: { size?: number; className?: string }) {
+  /* The cart the sculpture is built from: a lidded trapezoid basket with the
+     crate grid showing through, one handle that stands up off the shoulder and
+     reaches out, two wheels, and the load over the rim. Drawn on a 40-unit grid
+     so it stays crisp from the 20px loader down to the footer lockup. */
+  const id = `mk${size}`;
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
-      <rect width="40" height="40" rx="10" fill="#1e293b" fillOpacity="0.8" />
-      <path d="M8 12h5l3.5 14h16.5l3-10h-21" stroke="#3b82f6" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="18" cy="30" r="2.5" fill="#3b82f6" />
-      <circle cx="28" cy="30" r="2.5" fill="#3b82f6" />
-      <circle cx="20" cy="14" r="2" fill="#ef4444" />
-      <circle cx="26" cy="13" r="2" fill="#f97316" />
-      <circle cx="23" cy="10" r="2" fill="#10b981" />
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id={`${id}-plate`} x1="0" y1="0" x2="0.6" y2="1">
+          <stop offset="0%" stopColor="#182238" />
+          <stop offset="100%" stopColor="#0a0f1c" />
+        </linearGradient>
+        <linearGradient id={`${id}-blue`} x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stopColor="#5aa8ff" />
+          <stop offset="100%" stopColor="#2360db" />
+        </linearGradient>
+      </defs>
+
+      <rect width="40" height="40" rx="11" fill={`url(#${id}-plate)`} />
+      <rect x="0.5" y="0.5" width="39" height="39" rx="10.5" fill="none" stroke="#3b82f6" strokeOpacity="0.28" />
+
+      {/* crate grid, showing through the basket */}
+      <g stroke={`url(#${id}-blue)`} strokeWidth="0.9" opacity="0.5">
+        <path d="M18.6 17.6v9.2M24.2 17.6v9.2M13.6 22.2h15.4" />
+      </g>
+
+      {/* basket, handle, wheels */}
+      <g stroke={`url(#${id}-blue)`} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12.6 18.6V13H6.8" strokeWidth="2.1" />
+        <path d="M12.6 17.4h18.6l-2.5 10H14.7z" strokeWidth="2.1" />
+      </g>
+      <circle cx="17" cy="31.2" r="2.5" fill={`url(#${id}-blue)`} />
+      <circle cx="26.4" cy="31.2" r="2.5" fill={`url(#${id}-blue)`} />
+
+      {/* the load */}
+      <circle cx="17.4" cy="14.4" r="2.6" fill="#ef4444" />
+      <circle cx="22.6" cy="13.4" r="2.6" fill="#f97316" />
+      <circle cx="25.8" cy="15.8" r="2.2" fill="#10b981" />
     </svg>
   );
 }
@@ -132,6 +161,8 @@ export function Loader() {
     const t2 = window.setTimeout(() => {
       setVisible(false);
       sessionStorage.setItem("ck-intro", "1");
+      // hands the load choreography to the hero the moment the curtain clears
+      window.dispatchEvent(new Event("ck:intro"));
     }, seen || reduced ? 320 : 2050);
     return () => {
       window.clearTimeout(t1);
@@ -210,7 +241,9 @@ export function Nav() {
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-[90] flex justify-center px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        className={`fixed inset-x-0 top-0 z-[90] flex justify-center px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          state === "top" ? "nav-at-hero" : ""
+        }`}
         style={{ 
           pointerEvents: overlay === "menu" ? "none" : "auto",
           paddingTop: state === "compact" ? "10px" : "18px"

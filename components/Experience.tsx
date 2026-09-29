@@ -8,6 +8,7 @@ import Overlays from "./Overlays";
 import Hero from "./Hero";
 import Chaos from "./Chaos";
 import Convergence from "./Convergence";
+import HowItWorks from "./HowItWorks";
 import Ecosystem from "./Ecosystem";
 import Scenarios from "./Scenarios";
 import People, { Vendors } from "./People";
@@ -15,7 +16,7 @@ import { TrustLayer, UnderSurface } from "./Trust";
 import Partner from "./Partner";
 import Footer from "./Footer";
 
-const SECTIONS = ["top", "connect", "ecosystem", "stories", "people", "partner"];
+const SECTIONS = ["top", "connect", "how", "ecosystem", "stories", "people", "partner"];
 
 export default function Experience() {
   useSmoothScroll();
@@ -57,6 +58,7 @@ export default function Experience() {
         <Hero />
         <Chaos />
         <Convergence />
+        <HowItWorks />
         <Ecosystem />
         <Scenarios />
         <People />

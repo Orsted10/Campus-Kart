@@ -302,10 +302,10 @@ export default function Convergence() {
                   SYSTEM SYNCHRONIZED
                 </span>
               </div>
-              <h2 className="display text-[clamp(2.6rem,7.5vw,6.4rem)] leading-[1.05] tracking-[-0.035em] pb-3">
+              <h2 className="display text-[clamp(2.5rem,6.6vw,5.6rem)] leading-[1.02] tracking-[-0.035em] pb-3">
                 ONE CAMPUS.
                 <br />
-                ONE <span className="serif-accent text-blue italic inline-block pb-2">ecosystem.</span>
+                EVERYTHING <span className="serif-accent text-blue italic inline-block pb-2">connected.</span>
               </h2>
             </div>
             <p ref={subline} className="micro mx-auto mt-4 max-w-[38ch] text-[1rem] text-[var(--muted)] leading-relaxed font-mono" style={{ opacity: 0 }}>

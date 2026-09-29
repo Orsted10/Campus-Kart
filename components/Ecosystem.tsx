@@ -86,7 +86,7 @@ export default function Ecosystem() {
           </div>
 
           {/* ---------------------------------------------------- stage */}
-          <div id="how" className="scroll-mt-24">
+          <div id="ecosystem-stage" className="scroll-mt-24">
             {/* continuity: one line that changes texture, never disappears */}
             <div className="relative mb-8 flex items-center gap-4">
               <svg

@@ -115,10 +115,10 @@ export default function Footer() {
 
       {/* --------------------------------------------------- statement */}
       <div className="mx-auto mt-[10vh] max-w-[1400px]">
-        <h2 className="display text-[clamp(2.6rem,9vw,8rem)] leading-[0.86]">
+        <h2 className="display text-[clamp(2.5rem,8.2vw,7.2rem)] leading-[0.88]">
           CAMPUS LIFE,
           <br />
-          <span className="serif-accent text-blue">connected.</span>
+          WITHOUT THE <span className="serif-accent text-blue">friction.</span>
         </h2>
         <div className="mt-7 flex flex-wrap items-center gap-4">
           <button type="button" className="btn btn-solid" onClick={(e) => openOverlay("register", { x: e.clientX, y: e.clientY })} data-cursor="cta">
