@@ -44,7 +44,7 @@ export default function Scenarios() {
 
   return (
     <section id="stories" ref={section} className="relative h-[300vh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-5 sm:px-8 lg:px-[4vw]">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-between overflow-hidden px-5 pb-[4vh] pt-[112px] sm:px-8 sm:pt-[120px] lg:px-[4vw] lg:pt-[128px]">
         <div className="mx-auto w-full max-w-[1400px]">
           <div className="flex items-center justify-between border-b border-line pb-4">
             <span className="micro">A day on campus · four moments</span>

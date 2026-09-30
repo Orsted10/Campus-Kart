@@ -173,7 +173,7 @@ export default function Convergence() {
     <section id="connect" ref={section} className="relative h-[320vh] bg-[var(--bg)] text-[var(--text)]">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-5 pt-20 sm:px-8 lg:px-[4vw]">
+        <div className="flex items-center justify-between px-5 pt-[112px] sm:px-8 sm:pt-[120px] lg:px-[4vw] lg:pt-[128px]">
           <span className="micro font-mono text-[11.5px] tracking-wider text-[var(--muted)]">
             connect
           </span>

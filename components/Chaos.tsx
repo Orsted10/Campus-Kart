@@ -54,7 +54,7 @@ export default function Chaos() {
 
   return (
     <section id="chaos" ref={sectionRef} className="relative h-[220vh] border-b border-[var(--border)]/30">
-      <div className="sticky top-0 flex min-h-[100svh] flex-col justify-between overflow-hidden px-5 py-[5vh] sm:px-8 lg:px-[4vw]">
+      <div className="sticky top-0 flex min-h-[100svh] flex-col justify-between overflow-hidden px-5 pb-[4vh] pt-[112px] sm:px-8 sm:pt-[120px] lg:px-[4vw] lg:pt-[128px]">
         {/* Background Constellation Lines */}
         <div className="pointer-events-none absolute inset-0 select-none opacity-30" aria-hidden="true">
           <svg viewBox="0 0 760 460" className="h-full w-full opacity-40" preserveAspectRatio="xMidYMid slice">

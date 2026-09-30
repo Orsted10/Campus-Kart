@@ -207,7 +207,7 @@ export function UnderSurface() {
 
   return (
     <section id="tech" ref={section} className="relative h-[260vh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden px-5 pt-24 sm:px-8 lg:px-[4vw]">
+      <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden px-5 pb-[4vh] pt-[112px] sm:px-8 sm:pt-[120px] lg:px-[4vw] lg:pt-[128px]">
         <div className="mx-auto flex w-full max-w-[1400px] items-start justify-between gap-6">
           <div>
             <span className="micro">Technology · quietly</span>
