@@ -250,10 +250,10 @@ export function Nav() {
         }}
       >
         <nav
-          className={`relative flex w-full items-center justify-between gap-2 sm:gap-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             state === "compact"
-              ? "max-w-[1180px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)] bg-[var(--surface)]/95 backdrop-blur-3xl"
-              : "max-w-[1440px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[var(--surface)]/80 backdrop-blur-xl shadow-md"
+              ? "max-w-[1140px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
+              : "max-w-[1440px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
           }`}
           style={{
             opacity: hidden && overlay === "none" ? 0 : 1,
@@ -262,18 +262,22 @@ export function Nav() {
           }}
           aria-label="Primary"
         >
-          <button
-            type="button"
-            onClick={() => go("#top")}
-            className="flex items-center gap-2.5 relative z-10 shrink-0 transition-transform duration-300 hover:scale-[1.03]"
-            aria-label="CampusKart home"
-            data-cursor="link"
-          >
-            <Mark size={state === "compact" ? 28 : 32} />
-            <Wordmark className="hidden sm:inline text-[15px]" />
-          </button>
+          {/* Left: Logo */}
+          <div className="flex items-center shrink-0">
+            <button
+              type="button"
+              onClick={() => go("#top")}
+              className="flex items-center gap-2.5 relative z-10 transition-transform duration-300 hover:scale-[1.03]"
+              aria-label="CampusKart home"
+              data-cursor="link"
+            >
+              <Mark size={state === "compact" ? 28 : 32} />
+              <Wordmark className="hidden sm:inline text-[15px]" />
+            </button>
+          </div>
 
-          <div className="hidden items-center gap-0.5 xl:gap-1 lg:flex p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10 shrink-0">
+          {/* Center: Links Pill (Shown on XL screens 1280px+ to ensure zero overlap) */}
+          <div className="hidden xl:flex items-center gap-1 p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10 shrink-0">
             {NAV_LINKS.filter((l) =>
               ["Food", "Rides", "Essentials", "How it Works", "For Partners"].includes(l.label),
             ).map((l) => {
@@ -283,7 +287,7 @@ export function Nav() {
                 <button
                   key={l.label}
                   type="button"
-                  className={`relative px-3 xl:px-4 py-1.5 text-[12.5px] xl:text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
+                  className={`relative px-3.5 py-1.5 text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
                     isActive ? "text-[var(--bg)] font-semibold" : "text-[var(--text)] opacity-75 hover:opacity-100 hover:text-[var(--blue)]"
                   }`}
                   onClick={() => go(l.href, l.service)}
@@ -298,6 +302,7 @@ export function Nav() {
             })}
           </div>
 
+          {/* Right: Actions */}
           <div className="flex items-center gap-2 sm:gap-3 relative z-10 shrink-0">
             <button
               type="button"
@@ -337,7 +342,7 @@ export function Nav() {
             </Magnetic>
             <button
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] border border-[var(--border)] lg:hidden transition-transform hover:scale-105 shrink-0"
+              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] border border-[var(--border)] xl:hidden transition-transform hover:scale-105 shrink-0"
               aria-label="Open menu"
               onClick={(e) => openOverlay("menu", { x: e.clientX, y: e.clientY })}
               data-cursor="link"
