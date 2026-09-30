@@ -127,7 +127,7 @@ export default function Chaos() {
         </div>
 
         {/* Unified 24-Hour Timeline Track (Single line with dots directly on the line) */}
-        <div className="relative mx-auto w-full max-w-[1400px] my-6 px-4">
+        <div className="relative mx-auto w-full max-w-[1400px] my-5 px-4">
           <div className="relative flex items-center justify-between">
             {/* Background Connecting Line */}
             <div className="absolute top-[6px] left-0 right-0 h-[2px] bg-[var(--border)]/60 rounded-full z-0" />
@@ -185,7 +185,7 @@ export default function Chaos() {
           </div>
         </div>
 
-        {/* 5-Column Non-Overlapping Grid Matrix */}
+        {/* 5-Column Non-Overlapping Premium Grid Matrix */}
         <div className="relative mx-auto my-auto w-full max-w-[1400px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
             {MOMENTS.map((m, i) => {
@@ -204,13 +204,13 @@ export default function Chaos() {
                   key={m.time}
                   className={`group relative rounded-xl border transition-all duration-500 overflow-hidden flex flex-col justify-between ${
                     isOpen
-                      ? "scale-[1.03] shadow-[0_20px_45px_-12px_rgba(0,0,0,0.6)] z-20 ring-1 ring-white/10"
-                      : "opacity-75 hover:opacity-100 hover:scale-[1.01] z-10"
+                      ? "scale-[1.02] shadow-[0_20px_40px_-12px_rgba(0,0,0,0.6)] z-20 ring-1 ring-white/10"
+                      : "opacity-80 hover:opacity-100 hover:scale-[1.01] z-10"
                   }`}
                   style={{
                     borderColor: isOpen ? accent : "var(--border)",
                     background: isOpen ? "var(--surface-2)" : "var(--surface)",
-                    boxShadow: isOpen ? `0 14px 36px -8px ${accent}40` : "none",
+                    boxShadow: isOpen ? `0 14px 32px -8px ${accent}35` : "none",
                   }}
                 >
                   {/* Top Color Accent Line */}
@@ -230,44 +230,49 @@ export default function Chaos() {
                     }}
                     aria-expanded={isOpen}
                     data-cursor="link"
-                    className="w-full p-4 text-left transition-all duration-300 flex-1 flex flex-col justify-between gap-3"
+                    className="w-full p-3.5 sm:p-4 text-left transition-all duration-300 flex-1 flex flex-col justify-between gap-3"
                   >
-                    {/* Time & Service Header */}
-                    <div>
+                    {/* Header Stack (Service badge & index on top row, Time & title on next row) */}
+                    <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="num text-[clamp(1.7rem,2.4vw,2.2rem)] font-extrabold tracking-[-0.04em] font-mono leading-none">
-                          {m.time}
-                        </span>
-                        <span className="micro text-[9.5px] font-mono font-semibold tracking-widest px-2.5 py-1 rounded-md border border-[var(--border)] bg-[var(--shade)] text-[var(--muted)] shrink-0">
+                        <span className="micro text-[9px] font-mono font-semibold tracking-wider px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--shade)] text-[var(--muted)] shrink-0">
                           {m.service === "none" ? "NO SYSTEM" : SERVICE_META[m.service].label.toUpperCase()}
+                        </span>
+                        <span className="micro font-mono text-[9.5px] text-[var(--muted)]/70">
+                          0{i + 1}/05
                         </span>
                       </div>
 
-                      <p className="mt-2.5 text-[15px] font-bold leading-tight transition-colors group-hover:text-ink text-[var(--text)]">
-                        {m.line}
-                      </p>
+                      <div className="mt-1">
+                        <span className="font-mono text-[1.45rem] sm:text-[1.6rem] font-extrabold tracking-tight text-[var(--text)] leading-none block">
+                          {m.time}
+                        </span>
+                        <p className="mt-1.5 text-[13.5px] font-bold leading-tight transition-colors group-hover:text-ink text-[var(--text)]">
+                          {m.line}
+                        </p>
+                      </div>
                     </div>
 
                     {/* Clean Editorial Telemetry Details */}
-                    <div className="space-y-2 border-t border-[var(--border)]/60 pt-3">
+                    <div className="space-y-2 border-t border-[var(--border)]/60 pt-2.5">
                       <div className="flex items-center gap-2 text-[12px] font-mono text-[var(--text)]/90">
-                        <MapPin size={13} style={{ color: accent }} />
-                        <span className="font-medium">{LOCATIONS[m.time] || "Campus Hub"}</span>
+                        <MapPin size={13} style={{ color: accent }} className="shrink-0" />
+                        <span className="font-medium truncate">{LOCATIONS[m.time] || "Campus Hub"}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-[11.5px] font-mono text-[var(--muted)]">
-                        <Smartphone size={13} className="text-[var(--muted)]/70" />
-                        <span>Disconnected App</span>
+                        <Smartphone size={13} className="text-[var(--muted)]/70 shrink-0" />
+                        <span className="truncate">Disconnected App</span>
                       </div>
                     </div>
 
                     {/* Bottom Status Tag */}
-                    <div className="flex items-center justify-between border-t border-[var(--border)]/40 pt-2.5 mt-1">
-                      <span className="micro font-mono text-[10px] font-semibold tracking-wider" style={{ color: isOpen ? accent : "var(--muted)" }}>
+                    <div className="flex items-center justify-between border-t border-[var(--border)]/40 pt-2 mt-0.5">
+                      <span className="micro font-mono text-[9.5px] font-semibold tracking-wider" style={{ color: isOpen ? accent : "var(--muted)" }}>
                         {isOpen ? "ACTIVE MOMENT" : "MOMENT"}
                       </span>
-                      <span className="micro font-mono text-[10px] text-[var(--muted)] opacity-75">
-                        0{i + 1}/05
+                      <span className="micro font-mono text-[9px] text-[var(--muted)] opacity-75">
+                        {m.service.toUpperCase()}
                       </span>
                     </div>
                   </button>
