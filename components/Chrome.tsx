@@ -216,16 +216,11 @@ export function Loader() {
 export function Nav() {
   const { overlay, openOverlay, closeOverlay, service, setService, activeSection } = useApp();
   const [state, setState] = useState<"top" | "compact">("top");
-  const [hidden, setHidden] = useState(false);
-  const last = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setState(y > 48 ? "compact" : "top");
-      const delta = y - last.current;
-      setHidden(y > 420 && delta > 6);
-      last.current = y;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -255,11 +250,6 @@ export function Nav() {
               ? "max-w-[1140px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
               : "max-w-[1440px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
           }`}
-          style={{
-            opacity: hidden && overlay === "none" ? 0 : 1,
-            transform: hidden && overlay === "none" ? "translateY(-140%) scale(0.96)" : "translateY(0) scale(1)",
-            pointerEvents: hidden ? "none" : "auto",
-          }}
           aria-label="Primary"
         >
           {/* Left: Logo */}
