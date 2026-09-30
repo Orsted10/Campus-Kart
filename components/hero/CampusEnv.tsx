@@ -106,16 +106,16 @@ function useCampusMaterials() {
 
 /* ------------------------------------------------------------------ sky */
 
-function Sky() {
+function Sky({ mode = "dark" }: { mode?: string }) {
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color("#04081a") },
-      uMid: { value: new THREE.Color("#101c46") },
-      uHorizon: { value: new THREE.Color("#ff8f3d") },
-      uGlow: { value: new THREE.Color("#ffdcac") },
-      uSun: { value: new THREE.Vector3(0.33, 0.06, -0.94) },
+      uTop: { value: new THREE.Color(mode === "light" ? "#1e40af" : "#04081a") },
+      uMid: { value: new THREE.Color(mode === "light" ? "#60a5fa" : "#101c46") },
+      uHorizon: { value: new THREE.Color(mode === "light" ? "#e0f2fe" : "#ff8f3d") },
+      uGlow: { value: new THREE.Color(mode === "light" ? "#ffffff" : "#ffdcac") },
+      uSun: { value: new THREE.Vector3(0.33, mode === "light" ? 0.45 : 0.06, -0.94) },
     }),
-    [],
+    [mode],
   );
 
   const material = useMemo(
@@ -827,10 +827,10 @@ function ForegroundBlur({ tier }: { tier: Tier }) {
 
 /* -------------------------------------------------------------- assembly */
 
-export default function CampusEnv({ tier }: { tier: Tier }) {
+export default function CampusEnv({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
   return (
     <group>
-      <Sky />
+      <Sky mode={mode} />
       <CloudBank tier={tier} />
       <SunGlow />
       <AcademicBlock />

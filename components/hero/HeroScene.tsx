@@ -116,10 +116,12 @@ function SceneContent({
   tier,
   reduced,
   accent,
+  mode,
 }: {
   tier: Tier;
   reduced: boolean;
   accent: string;
+  mode?: string;
 }) {
   const size = useThree((s) => s.size);
   const aspect = size.width / Math.max(1, size.height);
@@ -127,9 +129,9 @@ function SceneContent({
   return (
     <>
       <CameraRig tier={tier} reduced={reduced} />
-      <Lights tier={tier} />
+      <Lights tier={tier} mode={mode} />
       <Suspense fallback={null}>
-        <CampusEnv tier={tier} />
+        <CampusEnv tier={tier} mode={mode} />
         <group scale={scale}>
           <Monument accent={{ color: accent }} tier={tier} reduced={reduced} />
         </group>
@@ -138,8 +140,46 @@ function SceneContent({
   );
 }
 
-function Lights({ tier }: { tier: Tier }) {
+function Lights({ tier, mode }: { tier: Tier; mode?: string }) {
   const shadow = tier === "high" ? 2048 : 1024;
+  const isLight = mode === "light";
+
+  if (isLight) {
+    return (
+      <>
+        {/* Daytime sky ambient & hemisphere */}
+        <ambientLight color="#f0f7ff" intensity={0.9} />
+        <hemisphereLight color="#93c5fd" groundColor="#e2e8f0" intensity={0.95} />
+
+        {/* Sun key light — bright, warm daytime sunlight from high right */}
+        <directionalLight
+          color="#fff6e5"
+          intensity={3.8}
+          position={[24, 32, 18]}
+          castShadow
+          shadow-mapSize-width={shadow}
+          shadow-mapSize-height={shadow}
+          shadow-camera-near={1}
+          shadow-camera-far={90}
+          shadow-camera-left={-26}
+          shadow-camera-right={26}
+          shadow-camera-top={22}
+          shadow-camera-bottom={-14}
+          shadow-bias={-0.0004}
+          shadow-normalBias={0.024}
+        />
+        {/* Cool blue sky fill from the left */}
+        <directionalLight color="#60a5fa" intensity={1.5} position={[-20, 16, 14]} />
+        {/* Plaza floor bounce fill */}
+        <directionalLight color="#bae6fd" intensity={0.65} position={[2, -6, 4]} />
+        {/* Soft front fill to keep monument face bright and vibrant */}
+        <directionalLight color="#ffffff" intensity={0.6} position={[-4, 8, 16]} />
+        <pointLight position={[7.5, 3.6, 4]} color="#3b82f6" intensity={12} distance={30} decay={2} />
+        <pointLight position={[-2.4, 4.2, 7.4]} color="#ffffff" intensity={8} distance={20} decay={2} />
+      </>
+    );
+  }
+
   return (
     <>
       <ambientLight color="#16233f" intensity={0.3} />
@@ -202,6 +242,7 @@ export default function HeroScene({
   reduced,
   accent,
   active = true,
+  mode = "dark",
 }: {
   tier: Tier;
   reduced: boolean;
@@ -209,6 +250,7 @@ export default function HeroScene({
   /* false once the hero has scrolled out of view: the world stops rendering
      entirely, so the rest of the page scrolls on a quiet GPU */
   active?: boolean;
+  mode?: string;
 }) {
   const env = useMemo(() => skyEnvironment(), []);
   const params = typeof window === "undefined" ? null : new URLSearchParams(window.location.search);
@@ -225,7 +267,7 @@ export default function HeroScene({
         camera={{ position: [0.7, 2.1, 9.4], fov: 30, near: 0.1, far: 200 }}
         style={{ width: "100%", height: "100%", display: "block" }}
       >
-        <color attach="background" args={["#20242f"]} />
+        <color attach="background" args={[mode === "light" ? "#e0f2fe" : "#20242f"]} />
         <SoloCamera />
         <primitive object={env} attach="environment" />
         <hemisphereLight color="#7fa6ff" groundColor="#241a10" intensity={1.2} />
@@ -235,6 +277,9 @@ export default function HeroScene({
       </Canvas>
     );
   }
+
+  const fogColor = mode === "light" ? "#cce3fd" : "#1a2444";
+  const fogDensity = mode === "light" ? (tier === "high" ? 0.0018 : 0.0028) : (tier === "high" ? 0.003 : 0.0044);
 
   return (
     <Canvas
@@ -251,14 +296,14 @@ export default function HeroScene({
       camera={{ position: [0, 1.0, 17], fov: 28, near: 0.1, far: 900 }}
       onCreated={(state) => {
         state.gl.toneMapping = THREE.ACESFilmicToneMapping;
-        state.gl.toneMappingExposure = flat ? 1.08 : 1.0;
+        state.gl.toneMappingExposure = flat ? 1.08 : mode === "light" ? 1.05 : 1.0;
         (window as unknown as { __ck?: unknown }).__ck = state;
       }}
       style={{ width: "100%", height: "100%", display: "block" }}
     >
-      <fogExp2 attach="fog" args={["#1a2444", tier === "high" ? 0.003 : 0.0044]} />
+      <fogExp2 attach="fog" args={[fogColor, fogDensity]} />
       <primitive object={env} attach="environment" />
-      <SceneContent tier={tier} reduced={reduced} accent={accent} />
+      <SceneContent tier={tier} reduced={reduced} accent={accent} mode={mode} />
       {!noFx && <Effects tier={tier} />}
     </Canvas>
   );

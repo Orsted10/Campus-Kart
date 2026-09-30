@@ -55,7 +55,8 @@ const SERVICE_COPY: { id: ServiceId; title: string; body: string; icon: ReactNod
 ];
 
 export default function Hero() {
-  const { service, setService } = useApp();
+  const { service, setService, theme } = useApp();
+  const isLight = theme === "light";
   const reduced = useReducedMotion();
   const [tier, setTier] = useState<HeroTier>("high");
   const [hoverKind, setHoverKind] = useState<ServiceId | null>(null);
@@ -178,20 +179,43 @@ export default function Hero() {
       ref={root}
       id="top"
       data-play={play ? "1" : "0"}
-      className="ck-hero relative isolate w-full overflow-hidden bg-[#05070d] text-white"
+      className={`ck-hero relative isolate w-full overflow-hidden transition-colors duration-500 ${
+        isLight ? "bg-[#ebf4ff] text-slate-900" : "bg-[#05070d] text-white"
+      }`}
       style={{ "--ck-accent": accent } as React.CSSProperties}
     >
       {/* ---------------------------------------------------------- scene */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 ck-glow" style={{ background: `radial-gradient(120% 90% at 62% 68%, ${accent}22 0%, transparent 55%)` }} />
+        <div
+          className="absolute inset-0 ck-glow"
+          style={{ background: `radial-gradient(120% 90% at 62% 68%, ${accent}${isLight ? "25" : "22"} 0%, transparent 55%)` }}
+        />
         <div className="absolute inset-0 ck-scene" data-play={play ? "1" : "0"}>
-          <HeroScene tier={tier} reduced={reduced} accent={accent} active={inView} />
+          <HeroScene tier={tier} reduced={reduced} accent={accent} active={inView} mode={theme} />
         </div>
         {/* atmospheric scrims: depth, legibility, and the vignette of a lens */}
-        <div className="ck-par pointer-events-none absolute inset-x-0 top-0 h-[26vh] bg-gradient-to-b from-[#04060c]/92 via-[#04060c]/45 to-transparent" data-depth="2" />
-        <div className="ck-par pointer-events-none absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-t from-[#04060c] via-[#04060c]/72 to-transparent" data-depth="9" />
-        <div className="ck-par pointer-events-none absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-[#04060c]/86 via-[#04060c]/38 to-transparent" data-depth="4" />
-        <div className="ck-par pointer-events-none absolute inset-0 ck-vignette" data-depth="3" />
+        <div
+          className={`ck-par pointer-events-none absolute inset-x-0 top-0 h-[26vh] bg-gradient-to-b ${
+            isLight ? "from-[#ebf4ff]/90 via-[#ebf4ff]/40 to-transparent" : "from-[#04060c]/92 via-[#04060c]/45 to-transparent"
+          }`}
+          data-depth="2"
+        />
+        <div
+          className={`ck-par pointer-events-none absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-t ${
+            isLight ? "from-[#ebf4ff] via-[#ebf4ff]/75 to-transparent" : "from-[#04060c] via-[#04060c]/72 to-transparent"
+          }`}
+          data-depth="9"
+        />
+        <div
+          className={`ck-par pointer-events-none absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r ${
+            isLight ? "from-[#ebf4ff]/90 via-[#ebf4ff]/40 to-transparent" : "from-[#04060c]/86 via-[#04060c]/38 to-transparent"
+          }`}
+          data-depth="4"
+        />
+        <div
+          className={`ck-par pointer-events-none absolute inset-0 ck-vignette ${isLight ? "opacity-25" : "opacity-100"}`}
+          data-depth="3"
+        />
       </div>
 
       {/* --------------------------------------------------------- content */}
@@ -362,14 +386,26 @@ function Reveal({ children, delay }: { children: ReactNode; delay: number }) {
 }
 
 function LocationBadge() {
+  const { theme } = useApp();
+  const isLight = theme === "light";
   return (
-    <span className="inline-flex items-center gap-2.5 rounded-xl border border-white/[0.14] bg-[#070b16]/75 px-4 py-2 shadow-[0_10px_30px_-18px_rgba(47,141,255,0.9)] backdrop-blur-xl">
+    <span
+      className={`inline-flex items-center gap-2.5 rounded-xl border px-4 py-2 backdrop-blur-xl transition-colors duration-300 ${
+        isLight
+          ? "border-slate-300/80 bg-white/85 text-slate-800 shadow-[0_10px_30px_-18px_rgba(37,99,235,0.25)]"
+          : "border-white/[0.14] bg-[#070b16]/75 text-slate-100/95 shadow-[0_10px_30px_-18px_rgba(47,141,255,0.9)]"
+      }`}
+    >
       <span className="relative flex h-2 w-2">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3b8dff] opacity-70" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3b8dff] shadow-[0_0_10px_#3b8dff]" />
       </span>
-      <span className="font-mono text-[9.5px] font-medium uppercase tracking-[0.21em] text-slate-100/95 sm:text-[10px]">
-        Chandigarh University <span className="text-slate-500">•</span> Unnao, UP
+      <span
+        className={`font-mono text-[9.5px] font-medium uppercase tracking-[0.21em] sm:text-[10px] ${
+          isLight ? "text-slate-700" : "text-slate-100/95"
+        }`}
+      >
+        Chandigarh University <span className={isLight ? "text-slate-400" : "text-slate-500"}>•</span> Unnao, UP
       </span>
     </span>
   );
@@ -382,7 +418,8 @@ function HudPanel({
   active: ServiceId;
   onHover: (s: ServiceId | null) => void;
 }) {
-  const { setService } = useApp();
+  const { setService, theme } = useApp();
+  const isLight = theme === "light";
   const handleHover = useCallback(
     (kind: NodeKind | null) => {
       const next = kind && kind !== "campus" ? (kind as ServiceId) : null;
@@ -391,14 +428,28 @@ function HudPanel({
     [onHover],
   );
   return (
-    <div className="ck-hud-frame relative rounded-[22px] p-[1px] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85)] border border-white/10">
-      <div className="relative overflow-hidden rounded-[21px] bg-[#060b18]/96 px-4 pb-2.5 pt-3.5 backdrop-blur-[24px]">
+    <div
+      className={`ck-hud-frame relative rounded-[22px] p-[1px] transition-all duration-300 ${
+        isLight
+          ? "border border-slate-300/80 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.12)] bg-gradient-to-br from-white via-white/80 to-blue-50/50"
+          : "border border-white/10 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85)]"
+      }`}
+    >
+      <div
+        className={`relative overflow-hidden rounded-[21px] px-4 pb-2.5 pt-3.5 backdrop-blur-[24px] ${
+          isLight ? "bg-white/90 text-slate-800" : "bg-[#060b18]/96 text-white"
+        }`}
+      >
         {/* glass: top-left specular gradient scrim */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-[#3f8dff]/[0.08]" />
-        <div className="relative mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200/90">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.12] via-transparent to-[#3f8dff]/[0.08]" />
+        <div
+          className={`relative mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.22em] ${
+            isLight ? "text-slate-700" : "text-slate-200/90"
+          }`}
+        >
           <span>Campus network</span>
-          <span className="flex items-center gap-1.5 text-[#5aa2ff]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#5aa2ff] shadow-[0_0_10px_#5aa2ff] animate-pulse" />
+          <span className="flex items-center gap-1.5 text-[#2563eb] dark:text-[#5aa2ff]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2563eb] dark:bg-[#5aa2ff] shadow-[0_0_10px_#2563eb] animate-pulse" />
             Live
           </span>
         </div>
@@ -410,7 +461,11 @@ function HudPanel({
           className="relative h-[302px] w-full"
         />
         {/* the legend */}
-        <div className="relative mt-1.5 flex items-center justify-between gap-2 border-t border-white/[0.09] pt-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-slate-300/85">
+        <div
+          className={`relative mt-1.5 flex items-center justify-between gap-2 border-t pt-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] ${
+            isLight ? "border-slate-200 text-slate-600" : "border-white/[0.09] text-slate-300/85"
+          }`}
+        >
           {(["food", "rides", "essentials"] as ServiceId[]).map((id) => (
             <span key={id} className="flex items-center gap-1.5">
               <span
@@ -420,7 +475,7 @@ function HudPanel({
               {SERVICE_META[id].label}
             </span>
           ))}
-          <span className="text-slate-400/70">5 districts</span>
+          <span className={isLight ? "text-slate-400" : "text-slate-400/70"}>5 districts</span>
         </div>
       </div>
     </div>
@@ -454,6 +509,8 @@ function ServiceCard({
   onActivate: () => void;
   onHover: (v: boolean) => void;
 }) {
+  const { theme } = useApp();
+  const isLight = theme === "light";
   const ref = useRef<HTMLDivElement | null>(null);
   const frame = useRef<number | null>(null);
 
@@ -489,7 +546,8 @@ function ServiceCard({
   return (
     <div
       ref={ref}
-      data-ck={`card-${id}`}          className="ck-in ck-card group relative min-w-[80vw] shrink-0 snap-center overflow-hidden rounded-[18px] sm:min-w-[46vw] lg:min-w-0"
+      data-ck={`card-${id}`}
+      className="ck-in ck-card group relative min-w-[80vw] shrink-0 snap-center overflow-hidden rounded-[18px] sm:min-w-[46vw] lg:min-w-0"
       style={{ animationDelay: `${delay}s` }}
       onMouseMove={onMove}
       onMouseEnter={() => onHover(true)}
@@ -510,7 +568,17 @@ function ServiceCard({
       data-dimmed={dimmed}
       aria-label={`${title} — ${body}`}
     >
-      <div className="ck-card-frame absolute inset-0 rounded-[18px] border border-white/12 bg-[#080c16]/72 backdrop-blur-xl" />
+      <div
+        className={`ck-card-frame absolute inset-0 rounded-[18px] border backdrop-blur-xl transition-all duration-300 ${
+          isLight
+            ? active
+              ? "border-blue-400/60 bg-white/95 shadow-[0_16px_40px_-15px_rgba(37,99,235,0.25)]"
+              : "border-slate-200/90 bg-white/85 shadow-md hover:bg-white"
+            : active
+              ? "border-white/20 bg-[#080c16]/90 shadow-xl"
+              : "border-white/12 bg-[#080c16]/72"
+        }`}
+      />
 
       <div className="relative flex items-stretch gap-2 p-3 lg:p-3.5">
         <div className="flex flex-1 flex-col">
@@ -518,10 +586,16 @@ function ServiceCard({
             <span className="ck-card-icon grid h-8 w-8 shrink-0 place-items-center rounded-[10px]">
               {icon}
             </span>
-            <span className="text-[16px] font-bold tracking-tight text-white">{title}</span>
+            <span className={`text-[16px] font-bold tracking-tight ${isLight ? "text-slate-900" : "text-white"}`}>{title}</span>
           </div>
-          <p className="mt-2 max-w-[26ch] text-[11.5px] leading-snug text-slate-300/85">{body}</p>
-          <span className="ck-card-arrow mt-auto grid h-7 w-7 place-items-center rounded-full border border-white/15 bg-white/5 text-white transition-all duration-300 group-hover:border-transparent group-hover:bg-white group-hover:text-[#070a12]">
+          <p className={`mt-2 max-w-[26ch] text-[11.5px] leading-snug ${isLight ? "text-slate-600" : "text-slate-300/85"}`}>{body}</p>
+          <span
+            className={`ck-card-arrow mt-auto grid h-7 w-7 place-items-center rounded-full border transition-all duration-300 ${
+              isLight
+                ? "border-slate-300 bg-slate-100 text-slate-800 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900"
+                : "border-white/15 bg-white/5 text-white group-hover:border-transparent group-hover:bg-white group-hover:text-[#070a12]"
+            }`}
+          >
             <Arrow />
           </span>
         </div>
