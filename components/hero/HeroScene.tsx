@@ -148,7 +148,7 @@ function Lights({ tier }: { tier: Tier }) {
       {/* sunset key — low, warm, from behind the academic block */}
       <directionalLight
         color="#ffa860"
-        intensity={3.15}
+        intensity={2.1}
         position={[30, 12, -22]}
         castShadow
         shadow-mapSize-width={shadow}
@@ -163,18 +163,18 @@ function Lights({ tier }: { tier: Tier }) {
         shadow-normalBias={0.024}
       />
       {/* cool sky fill so the blue paint keeps its edge on the shadow side */}
-      <directionalLight color="#4a86ff" intensity={1.35} position={[-18, 9, 13]} />
+      <directionalLight color="#4a86ff" intensity={1.1} position={[-18, 9, 13]} />
       {/* bounce off the wet plaza */}
-      <directionalLight color="#2e5cae" intensity={0.4} position={[2, -6, 4]} />
+      <directionalLight color="#2e5cae" intensity={0.3} position={[2, -6, 4]} />
       {/* the campus itself is a light source at blue hour: warm wash off the
           lit facades so the architecture reads warm against the cold sky */}
-      <directionalLight color="#ffb479" intensity={0.85} position={[12, 5, -30]} />
-      <pointLight position={[7.5, 3.6, 4]} color="#ffab5e" intensity={70} distance={34} decay={2} />
+      <directionalLight color="#ffb479" intensity={0.65} position={[12, 5, -30]} />
+      <pointLight position={[7.5, 3.6, 4]} color="#ffab5e" intensity={22} distance={34} decay={2} />
       {/* Front fill. A wide directional reads as bounce light and keeps the
           mark's front face an even blue; a close point light blows a hotspot
           straight through the clearcoat and turns the paint pale lavender. */}
-      <directionalLight color="#dfe6f5" intensity={0.42} position={[-6, 4, 14]} />
-      <pointLight position={[-2.4, 4.2, 7.4]} color="#e6dcd2" intensity={16} distance={22} decay={2} />
+      <directionalLight color="#dfe6f5" intensity={0.32} position={[-6, 4, 14]} />
+      <pointLight position={[-2.4, 4.2, 7.4]} color="#e6dcd2" intensity={10} distance={22} decay={2} />
     </>
   );
 }
@@ -183,7 +183,7 @@ function Effects({ tier }: { tier: Tier }) {
   if (tier === "low") {
     return (
       <EffectComposer multisampling={0} enableNormalPass={false}>
-        <Bloom intensity={0.5} luminanceThreshold={0.78} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
+        <Bloom intensity={0.22} luminanceThreshold={0.85} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
         <Vignette offset={0.3} darkness={0.6} />
       </EffectComposer>
     );
@@ -191,7 +191,7 @@ function Effects({ tier }: { tier: Tier }) {
   return (
     <EffectComposer multisampling={4} enableNormalPass={false}>
       <DepthOfField focusDistance={15} focusRange={23} bokehScale={1.15} height={520} />
-      <Bloom intensity={0.4} luminanceThreshold={0.85} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
+      <Bloom intensity={0.2} luminanceThreshold={0.88} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
       <Vignette offset={0.3} darkness={0.55} />
     </EffectComposer>
   );

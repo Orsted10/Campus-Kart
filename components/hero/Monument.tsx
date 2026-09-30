@@ -399,7 +399,7 @@ function Pedestal() {
         <meshStandardMaterial
           color="#04122b"
           emissive={new THREE.Color("#2f8dff")}
-          emissiveIntensity={2.6}
+          emissiveIntensity={0.8}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -420,7 +420,7 @@ function Pedestal() {
         <meshStandardMaterial
           color="#42260e"
           emissive={new THREE.Color("#ffb066")}
-          emissiveIntensity={2.8}
+          emissiveIntensity={0.9}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -432,7 +432,7 @@ function Pedestal() {
           <meshStandardMaterial
             color="#061428"
             emissive={new THREE.Color("#2f8dff")}
-            emissiveIntensity={2.4}
+            emissiveIntensity={0.75}
             toneMapped={false}
             side={THREE.DoubleSide}
           />
@@ -445,7 +445,7 @@ function Pedestal() {
           map={label}
           emissiveMap={label}
           emissive={new THREE.Color("#e8f2ff")}
-          emissiveIntensity={1.25}
+          emissiveIntensity={0.6}
           transparent
           alphaTest={0.02}
           side={THREE.DoubleSide}
@@ -456,9 +456,9 @@ function Pedestal() {
           toneMapped={false}
         />
       </mesh>
-      <pointLight color="#ffc78c" intensity={35} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
-      <pointLight color="#9fc6ff" intensity={26} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
-      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={14} distance={11} decay={2} />
+      <pointLight color="#ffc78c" intensity={10} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
+      <pointLight color="#9fc6ff" intensity={8} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
+      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={4} distance={11} decay={2} />
       <PedestalGlow />
       <ContactShadow />
     </group>
@@ -473,7 +473,7 @@ function PedestalGlow() {
         <spriteMaterial
           map={warm}
           transparent
-          opacity={0.34}
+          opacity={0.12}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -484,7 +484,7 @@ function PedestalGlow() {
           map={warm}
           color="#5ea8ff"
           transparent
-          opacity={0.26}
+          opacity={0.09}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -554,8 +554,8 @@ export default function Monument({
 
   return (
     <group>
-      <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={28} distance={16} decay={2} />
-      <pointLight ref={rimLight} position={[3.8, 2.6, -3.2]} color={accent.color} intensity={22} distance={17} decay={2} />
+      <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={12} distance={16} decay={2} />
+      <pointLight ref={rimLight} position={[3.8, 2.6, -3.2]} color={accent.color} intensity={9} distance={17} decay={2} />
 
       <Pedestal />
 
