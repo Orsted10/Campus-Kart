@@ -252,8 +252,8 @@ export function pedestalLabel() {
   ctx.font = font;
   const spacing = 16;
   const parts = [
-    { text: "CAMPUS", face: "#f4f8ff", edge: "#0b2a4d" },
-    { text: "KART", face: "#2f8dff", edge: "#062a52" },
+    { text: "CAMPUS", face: "#ffffff", edge: "#0e3a6c" },
+    { text: "KART", face: "#4da6ff", edge: "#093870" },
   ];
   const widths = parts.map((p) =>
     [...p.text].reduce((s, ch) => s + ctx.measureText(ch).width + spacing, 0) - spacing,
@@ -282,14 +282,14 @@ export function pedestalLabel() {
       }
       ctx.restore();
     };
-    // soft glow that bloom can pick up
-    drawRun(0, 0, p.face, 16, 0.5);
-    // extrusion body
+    // intense soft glow for bloom pickup
+    drawRun(0, 0, p.face, 22, 0.75);
+    // extrusion body depth
     for (let d = 10; d >= 1; d -= 2) drawRun(d * 0.6, d, p.edge, 0, 0.95);
-    // face
+    // crisp bright face
     drawRun(0, 0, p.face, 0, 1);
-    // top highlight
-    drawRun(0, -3, "rgba(255,255,255,0.5)", 0, 0.55);
+    // bright top rim highlight
+    drawRun(0, -3, "rgba(255,255,255,0.85)", 0, 0.75);
     x += widths[i];
   }
 

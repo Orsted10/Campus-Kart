@@ -398,8 +398,8 @@ function Pedestal() {
         <ringGeometry args={[2.42, 2.62, 72]} />
         <meshStandardMaterial
           color="#04122b"
-          emissive={new THREE.Color("#2f8dff")}
-          emissiveIntensity={2.6}
+          emissive={new THREE.Color("#3b9bff")}
+          emissiveIntensity={4.2}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -418,9 +418,9 @@ function Pedestal() {
       <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.22, 2.32, 72]} />
         <meshStandardMaterial
-          color="#42260e"
-          emissive={new THREE.Color("#ffb066")}
-          emissiveIntensity={2.8}
+          color="#5a3814"
+          emissive={new THREE.Color("#ffc27d")}
+          emissiveIntensity={4.6}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -431,8 +431,8 @@ function Pedestal() {
           <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
           <meshStandardMaterial
             color="#061428"
-            emissive={new THREE.Color("#2f8dff")}
-            emissiveIntensity={2.4}
+            emissive={new THREE.Color("#3b9bff")}
+            emissiveIntensity={4.0}
             toneMapped={false}
             side={THREE.DoubleSide}
           />
@@ -444,21 +444,22 @@ function Pedestal() {
         <meshStandardMaterial
           map={label}
           emissiveMap={label}
-          emissive={new THREE.Color("#e8f2ff")}
-          emissiveIntensity={1.25}
+          emissive={new THREE.Color("#ffffff")}
+          emissiveIntensity={3.2}
           transparent
           alphaTest={0.02}
           side={THREE.DoubleSide}
           metalness={0.15}
-          roughness={0.34}
+          roughness={0.3}
           polygonOffset
           polygonOffsetFactor={-2}
           toneMapped={false}
         />
       </mesh>
-      <pointLight color="#ffc78c" intensity={35} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
-      <pointLight color="#9fc6ff" intensity={26} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
-      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={14} distance={11} decay={2} />
+      <pointLight color="#ffc78c" intensity={42} distance={16} decay={2} position={[3.2, 1.5, 3.2]} />
+      <pointLight color="#9fc6ff" intensity={32} distance={16} decay={2} position={[-3.5, 1.2, 2.8]} />
+      <pointLight position={[0, 0.5, 3.4]} color="#f0f6ff" intensity={30} distance={14} decay={2} />
+      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={18} distance={12} decay={2} />
       <PedestalGlow />
       <ContactShadow />
     </group>
