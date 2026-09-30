@@ -391,16 +391,14 @@ function HudPanel({
     [onHover],
   );
   return (
-    <div className="ck-hud-frame relative rounded-[22px] p-[1px]">
-      <div className="relative overflow-hidden rounded-[21px] bg-[#050a14]/84 px-4 pb-2.5 pt-3.5 backdrop-blur-[16px]">
-        {/* glass: a raking top-left highlight over a settled dark ground. The map
-            is a drawing, so it needs a surface — read through a light scrim over
-            a lit facade, every line and label washed out. */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-[#3f8dff]/[0.06]" />
-        <div className="relative mb-2 flex items-center justify-between text-[9.5px] font-medium uppercase tracking-[0.24em] text-slate-300/70">
+    <div className="ck-hud-frame relative rounded-[22px] p-[1px] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85)] border border-white/10">
+      <div className="relative overflow-hidden rounded-[21px] bg-[#060b18]/96 px-4 pb-2.5 pt-3.5 backdrop-blur-[24px]">
+        {/* glass: top-left specular gradient scrim */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-[#3f8dff]/[0.08]" />
+        <div className="relative mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200/90">
           <span>Campus network</span>
-          <span className="flex items-center gap-1.5 text-[#6fb0ff]">
-            <span className="h-1 w-1 rounded-full bg-[#6fb0ff] shadow-[0_0_8px_#6fb0ff]" />
+          <span className="flex items-center gap-1.5 text-[#5aa2ff]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#5aa2ff] shadow-[0_0_10px_#5aa2ff] animate-pulse" />
             Live
           </span>
         </div>
@@ -411,8 +409,8 @@ function HudPanel({
           onNodeClick={() => setService(active)}
           className="relative h-[302px] w-full"
         />
-        {/* the legend: which colour is which service, and how big the network is */}
-        <div className="relative mt-1.5 flex items-center justify-between gap-2 border-t border-white/[0.07] pt-2 text-[9px] font-medium uppercase tracking-[0.2em] text-slate-400/80">
+        {/* the legend */}
+        <div className="relative mt-1.5 flex items-center justify-between gap-2 border-t border-white/[0.09] pt-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-slate-300/85">
           {(["food", "rides", "essentials"] as ServiceId[]).map((id) => (
             <span key={id} className="flex items-center gap-1.5">
               <span
@@ -422,7 +420,7 @@ function HudPanel({
               {SERVICE_META[id].label}
             </span>
           ))}
-          <span className="text-slate-500/75">5 districts</span>
+          <span className="text-slate-400/70">5 districts</span>
         </div>
       </div>
     </div>
