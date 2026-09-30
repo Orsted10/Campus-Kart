@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MOMENTS, SERVICE_META } from "@/lib/data";
-import { useReveal } from "@/lib/motion";
 import { MapPin, Smartphone } from "lucide-react";
 
 const FRAG_PATHS = [
@@ -26,7 +25,6 @@ const LOCATIONS: Record<string, string> = {
 
 export default function Chaos() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headRef = useReveal<HTMLDivElement>(24);
   const [open, setOpen] = useState<string | null>("17:47");
   const [isManual, setIsManual] = useState(false);
 
@@ -102,8 +100,8 @@ export default function Chaos() {
           </svg>
         </div>
 
-        {/* Header Section */}
-        <div ref={headRef} className="relative mx-auto w-full max-w-[1400px]">
+        {/* Permanently Visible Ultra-Premium Header Section */}
+        <div className="relative mx-auto w-full max-w-[1400px]">
           <div className="inline-flex items-center gap-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/80 px-3.5 py-1.5 backdrop-blur-md shadow-sm">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: activeAccent }} />
@@ -232,7 +230,7 @@ export default function Chaos() {
                     data-cursor="link"
                     className="w-full p-3.5 sm:p-4 text-left transition-all duration-300 flex-1 flex flex-col justify-between gap-3"
                   >
-                    {/* Header Stack (Service badge & index on top row, Time & title on next row) */}
+                    {/* Header Stack */}
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between gap-2">
                         <span className="micro text-[9px] font-mono font-semibold tracking-wider px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--shade)] text-[var(--muted)] shrink-0">
