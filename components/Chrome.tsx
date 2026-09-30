@@ -241,7 +241,7 @@ export function Nav() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[90] flex justify-center px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed inset-x-0 top-0 z-[100] flex justify-center px-3 sm:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           state === "top" ? "nav-at-hero" : ""
         }`}
         style={{ 
@@ -250,10 +250,10 @@ export function Nav() {
         }}
       >
         <nav
-          className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`relative flex w-full items-center justify-between gap-2 sm:gap-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             state === "compact"
-              ? "max-w-[1040px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.25)] bg-[var(--nav-bg)] backdrop-blur-2xl"
-              : "max-w-[1400px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[var(--nav-bg)]/60 backdrop-blur-md shadow-sm"
+              ? "max-w-[1180px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)] bg-[var(--surface)]/95 backdrop-blur-3xl"
+              : "max-w-[1440px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[var(--surface)]/80 backdrop-blur-xl shadow-md"
           }`}
           style={{
             opacity: hidden && overlay === "none" ? 0 : 1,
@@ -265,15 +265,15 @@ export function Nav() {
           <button
             type="button"
             onClick={() => go("#top")}
-            className="flex items-center gap-3 relative z-10 shrink-0 transition-transform duration-300 hover:scale-[1.03]"
+            className="flex items-center gap-2.5 relative z-10 shrink-0 transition-transform duration-300 hover:scale-[1.03]"
             aria-label="CampusKart home"
             data-cursor="link"
           >
             <Mark size={state === "compact" ? 28 : 32} />
-            <Wordmark className="hidden sm:inline" />
+            <Wordmark className="hidden sm:inline text-[15px]" />
           </button>
 
-          <div className="hidden items-center gap-1 lg:flex p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10">
+          <div className="hidden items-center gap-0.5 xl:gap-1 lg:flex p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10 shrink-0">
             {NAV_LINKS.filter((l) =>
               ["Food", "Rides", "Essentials", "How it Works", "For Partners"].includes(l.label),
             ).map((l) => {
@@ -283,7 +283,7 @@ export function Nav() {
                 <button
                   key={l.label}
                   type="button"
-                  className={`relative px-4 py-1.5 text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
+                  className={`relative px-3 xl:px-4 py-1.5 text-[12.5px] xl:text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
                     isActive ? "text-[var(--bg)] font-semibold" : "text-[var(--text)] opacity-75 hover:opacity-100 hover:text-[var(--blue)]"
                   }`}
                   onClick={() => go(l.href, l.service)}
@@ -316,7 +316,7 @@ export function Nav() {
             </div>
             <button
               type="button"
-              className="px-3.5 py-1.5 text-[14px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)] whitespace-nowrap"
+              className="px-3 py-1.5 text-[13.5px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)] whitespace-nowrap"
               onClick={(e) =>
                 openOverlay("login", { x: e.clientX, y: e.clientY })
               }
@@ -327,7 +327,7 @@ export function Nav() {
             <Magnetic strength={0.22}>
               <button
                 type="button"
-                className="btn btn-solid !h-9 !px-5 text-[13.5px] !rounded-full shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
+                className="btn btn-solid !h-9 !px-4 sm:!px-5 text-[13px] sm:text-[13.5px] !rounded-full shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
                 onClick={(e) => openOverlay("register", { x: e.clientX, y: e.clientY })}
                 data-cursor="cta"
               >
