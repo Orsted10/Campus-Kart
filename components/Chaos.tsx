@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MOMENTS, SERVICE_META } from "@/lib/data";
 import { useReveal } from "@/lib/motion";
+import { MapPin, Smartphone } from "lucide-react";
 
 const FRAG_PATHS = [
   { d: "M40,90 C 90,70 120,110 170,90", color: "var(--food)", rot: -6 },
@@ -14,6 +15,14 @@ const FRAG_PATHS = [
   { d: "M30,300 C 80,330 110,290 160,320", color: "var(--muted)", rot: 8 },
   { d: "M300,40 C 350,70 390,30 440,60", color: "var(--muted)", rot: -3 },
 ];
+
+const LOCATIONS: Record<string, string> = {
+  "08:12": "Outside Gate",
+  "13:18": "Hostel Block",
+  "17:47": "Market Road",
+  "21:09": "Downstairs Store",
+  "23:14": "Night Canteen",
+};
 
 export default function Chaos() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -40,7 +49,6 @@ export default function Chaos() {
         onUpdate: (self) => {
           if (isManual) return;
           const p = self.progress;
-          // Clean discrete step snapping (0..4)
           const idx = Math.min(4, Math.floor(p * 5));
           const targetTime = MOMENTS[idx]?.time;
           if (targetTime) {
@@ -66,7 +74,7 @@ export default function Chaos() {
           ? "var(--essentials)"
           : "var(--text)";
 
-  // Snapped progress line percentage (0%, 25%, 50%, 75%, 100%)
+  // Snapped progress percentage across ticks (0%, 25%, 50%, 75%, 100%)
   const snapProgressPercent = (validIndex / 4) * 100;
 
   return (
@@ -96,13 +104,13 @@ export default function Chaos() {
 
         {/* Header Section */}
         <div ref={headRef} className="relative mx-auto w-full max-w-[1400px]">
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-3.5 py-1.5 backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/80 px-3.5 py-1.5 backdrop-blur-md shadow-sm">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: activeAccent }} />
               <span className="relative inline-flex rounded-full h-2 w-2 shadow-[0_0_8px_currentColor]" style={{ background: activeAccent, color: activeAccent }} />
             </span>
             <span className="micro font-mono text-[11px] tracking-[0.18em] text-[var(--text)] font-medium">
-              RECOGNIZE THE FRAGMENTATION · POINT 0{validIndex + 1}/05
+              RECOGNIZE THE FRAGMENTATION · MOMENT 0{validIndex + 1}/05
             </span>
           </div>
 
@@ -113,37 +121,28 @@ export default function Chaos() {
               THIS <span className="serif-accent italic transition-colors duration-500" style={{ color: activeAccent }}>chaos.</span>
             </h2>
             <p className="lede lg:justify-self-end lg:text-right text-[var(--muted)] text-[1.02rem] leading-relaxed max-w-[38ch]">
-              Five ordinary minutes of campus life. Discrete apps, zero synergy — scroll or click to inspect each point.
+              Five ordinary minutes of campus life. Disconnected apps with zero synergy — scroll or click to inspect each moment.
             </p>
           </div>
         </div>
 
-        {/* 24-Hour Snapping Point Scrubber Track */}
-        <div className="relative mx-auto w-full max-w-[1400px] my-5 px-3">
-          {/* Base Track */}
-          <div className="relative h-1 w-full rounded-full bg-[var(--border)]/50">
-            {/* Snapped Progress Bar */}
+        {/* Unified 24-Hour Timeline Track (Single line with dots directly on the line) */}
+        <div className="relative mx-auto w-full max-w-[1400px] my-6 px-4">
+          <div className="relative flex items-center justify-between">
+            {/* Background Connecting Line */}
+            <div className="absolute top-[6px] left-0 right-0 h-[2px] bg-[var(--border)]/60 rounded-full z-0" />
+            
+            {/* Active Progress Line */}
             <div
-              className="absolute left-0 top-0 bottom-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full"
+              className="absolute top-[6px] left-0 h-[2px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full z-0"
               style={{
                 width: `${snapProgressPercent}%`,
                 background: activeAccent,
-                boxShadow: `0 0 14px ${activeAccent}`,
+                boxShadow: `0 0 10px ${activeAccent}`,
               }}
             />
 
-            {/* Glowing Snap Knob */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10"
-              style={{
-                left: `${snapProgressPercent}%`,
-                background: activeAccent,
-              }}
-            />
-          </div>
-
-          {/* Point Ticks */}
-          <div className="mt-4 flex items-center justify-between">
+            {/* Timeline Tick Buttons (Dots sit directly ON the line) */}
             {MOMENTS.map((m, i) => {
               const isActive = open === m.time;
               const accent =
@@ -163,21 +162,21 @@ export default function Chaos() {
                     setIsManual(true);
                     setOpen(m.time);
                   }}
-                  className={`group flex flex-col items-center gap-1.5 transition-all duration-300 ${
-                    isActive ? "scale-110 opacity-100" : "opacity-50 hover:opacity-100"
+                  className={`group relative z-10 flex flex-col items-center gap-2 transition-all duration-300 ${
+                    isActive ? "scale-110 opacity-100" : "opacity-60 hover:opacity-100"
                   }`}
                 >
                   <span
-                    className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
-                      isActive ? "scale-125 ring-4 ring-white/20" : ""
+                    className={`h-3.5 w-3.5 rounded-full transition-all duration-300 border-2 bg-[var(--bg)] ${
+                      isActive ? "scale-125 ring-4 ring-white/20 shadow-lg" : ""
                     }`}
                     style={{
-                      background: isActive ? accent : "transparent",
-                      border: `2px solid ${accent}`,
-                      boxShadow: isActive ? `0 0 10px ${accent}` : "none",
+                      borderColor: accent,
+                      background: isActive ? accent : "var(--bg)",
+                      boxShadow: isActive ? `0 0 12px ${accent}` : "none",
                     }}
                   />
-                  <span className="font-mono text-[12px] font-bold tracking-wider text-[var(--text)]">
+                  <span className="font-mono text-[12px] font-bold tracking-wider text-[var(--text)] select-none">
                     {m.time}
                   </span>
                 </button>
@@ -186,7 +185,7 @@ export default function Chaos() {
           </div>
         </div>
 
-        {/* 5-Column Punchy Point-Based Grid Matrix */}
+        {/* 5-Column Non-Overlapping Grid Matrix */}
         <div className="relative mx-auto my-auto w-full max-w-[1400px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
             {MOMENTS.map((m, i) => {
@@ -200,19 +199,10 @@ export default function Chaos() {
                       ? "var(--essentials)"
                       : "var(--text)";
 
-              // Clean point-based summary bullet points
-              const pointLocations: Record<string, string> = {
-                "08:12": "Outside Gate",
-                "13:18": "Hostel Block",
-                "17:47": "Market Road",
-                "21:09": "Downstairs Store",
-                "23:14": "Night Canteen",
-              };
-
               return (
                 <div
                   key={m.time}
-                  className={`group relative rounded-2xl border transition-all duration-500 overflow-hidden flex flex-col justify-between ${
+                  className={`group relative rounded-xl border transition-all duration-500 overflow-hidden flex flex-col justify-between ${
                     isOpen
                       ? "scale-[1.03] shadow-[0_20px_45px_-12px_rgba(0,0,0,0.6)] z-20 ring-1 ring-white/10"
                       : "opacity-75 hover:opacity-100 hover:scale-[1.01] z-10"
@@ -223,7 +213,7 @@ export default function Chaos() {
                     boxShadow: isOpen ? `0 14px 36px -8px ${accent}40` : "none",
                   }}
                 >
-                  {/* Top Color Accent Bar */}
+                  {/* Top Color Accent Line */}
                   <div
                     className="h-1.5 w-full transition-all duration-300"
                     style={{
@@ -248,7 +238,7 @@ export default function Chaos() {
                         <span className="num text-[clamp(1.7rem,2.4vw,2.2rem)] font-extrabold tracking-[-0.04em] font-mono leading-none">
                           {m.time}
                         </span>
-                        <span className="micro text-[9.5px] font-mono font-semibold tracking-widest px-2.5 py-1 rounded-full border border-[var(--border)] bg-[var(--shade)] text-[var(--muted)] shrink-0">
+                        <span className="micro text-[9.5px] font-mono font-semibold tracking-widest px-2.5 py-1 rounded-md border border-[var(--border)] bg-[var(--shade)] text-[var(--muted)] shrink-0">
                           {m.service === "none" ? "NO SYSTEM" : SERVICE_META[m.service].label.toUpperCase()}
                         </span>
                       </div>
@@ -258,23 +248,23 @@ export default function Chaos() {
                       </p>
                     </div>
 
-                    {/* Punchy Point-Based Details */}
+                    {/* Clean Editorial Telemetry Details */}
                     <div className="space-y-2 border-t border-[var(--border)]/60 pt-3">
                       <div className="flex items-center gap-2 text-[12px] font-mono text-[var(--text)]/90">
-                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-                        <span>📍 {pointLocations[m.time] || "Campus Hub"}</span>
+                        <MapPin size={13} style={{ color: accent }} />
+                        <span className="font-medium">{LOCATIONS[m.time] || "Campus Hub"}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-[11.5px] font-mono text-[var(--muted)]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--muted)]/50" />
-                        <span>⚡ Isolated App</span>
+                        <Smartphone size={13} className="text-[var(--muted)]/70" />
+                        <span>Disconnected App</span>
                       </div>
                     </div>
 
                     {/* Bottom Status Tag */}
                     <div className="flex items-center justify-between border-t border-[var(--border)]/40 pt-2.5 mt-1">
                       <span className="micro font-mono text-[10px] font-semibold tracking-wider" style={{ color: isOpen ? accent : "var(--muted)" }}>
-                        {isOpen ? "ACTIVE POINT" : "POINT"}
+                        {isOpen ? "ACTIVE MOMENT" : "MOMENT"}
                       </span>
                       <span className="micro font-mono text-[10px] text-[var(--muted)] opacity-75">
                         0{i + 1}/05
