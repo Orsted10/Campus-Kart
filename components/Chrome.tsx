@@ -104,8 +104,8 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       }}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       data-cursor="theme"
-      className={`group relative grid place-items-center overflow-hidden rounded-full border border-line transition-colors duration-500 hover:border-ink ${
-        compact ? "h-8 w-8" : "h-9 w-9"
+      className={`group relative grid place-items-center overflow-hidden rounded-xl border border-line transition-colors duration-500 hover:border-ink ${
+        compact ? "h-8 w-8" : "h-9.5 w-9.5"
       }`}
     >
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -247,8 +247,8 @@ export function Nav() {
         <nav
           className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             state === "compact"
-              ? "max-w-[1140px] rounded-full border border-[var(--border)] py-2 px-4 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
-              : "max-w-[1440px] rounded-full border border-[var(--border)]/30 py-2.5 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
+              ? "max-w-[1140px] rounded-2xl border border-[var(--border)] py-2.5 px-4.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
+              : "max-w-[1440px] rounded-2xl border border-[var(--border)]/30 py-3 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
           }`}
           aria-label="Primary"
         >
@@ -267,7 +267,7 @@ export function Nav() {
           </div>
 
           {/* Center: Links Pill (Shown on XL screens 1280px+ to ensure zero overlap) */}
-          <div className="hidden xl:flex items-center gap-1 p-1 rounded-full bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10 shrink-0">
+          <div className="hidden xl:flex items-center gap-1.5 p-1.5 rounded-xl bg-[var(--shade)] border border-[var(--border)]/40 backdrop-blur-md relative z-10 shrink-0">
             {NAV_LINKS.filter((l) =>
               ["Food", "Rides", "Essentials", "How it Works", "For Partners"].includes(l.label),
             ).map((l) => {
@@ -277,14 +277,14 @@ export function Nav() {
                 <button
                   key={l.label}
                   type="button"
-                  className={`relative px-3.5 py-1.5 text-[13px] tracking-tight font-medium transition-all duration-300 rounded-full whitespace-nowrap ${
+                  className={`relative px-4 py-1.5 text-[13px] tracking-tight font-medium transition-all duration-300 rounded-lg whitespace-nowrap ${
                     isActive ? "text-[var(--bg)] font-semibold" : "text-[var(--text)] opacity-75 hover:opacity-100 hover:text-[var(--blue)]"
                   }`}
                   onClick={() => go(l.href, l.service)}
                   data-cursor="link"
                 >
                   {isActive && (
-                    <span className="absolute inset-0 bg-[var(--text)] rounded-full -z-10 shadow-sm" style={{ willChange: "transform" }} />
+                    <span className="absolute inset-0 bg-[var(--text)] rounded-lg -z-10 shadow-sm" style={{ willChange: "transform" }} />
                   )}
                   {l.label}
                 </button>
@@ -293,13 +293,13 @@ export function Nav() {
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-2 sm:gap-3 relative z-10 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 relative z-10 shrink-0">
             <button
               type="button"
               onClick={() => openOverlay("search")}
               aria-label="Search CampusKart"
               data-cursor="link"
-              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] text-muted transition-all duration-300 hover:bg-[var(--text)] hover:text-[var(--bg)] hover:scale-105"
+              className="grid h-9.5 w-9.5 place-items-center rounded-xl bg-[var(--shade)] text-muted transition-all duration-300 hover:bg-[var(--text)] hover:text-[var(--bg)] hover:scale-105 border border-[var(--border)]/40"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.6" />
@@ -311,7 +311,7 @@ export function Nav() {
             </div>
             <button
               type="button"
-              className="px-3 py-1.5 text-[13.5px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)] whitespace-nowrap"
+              className="px-3.5 py-1.5 text-[13.5px] font-medium transition-colors hidden sm:block hover:text-[var(--blue)] whitespace-nowrap"
               onClick={(e) =>
                 openOverlay("login", { x: e.clientX, y: e.clientY })
               }
@@ -322,7 +322,7 @@ export function Nav() {
             <Magnetic strength={0.22}>
               <button
                 type="button"
-                className="btn btn-solid !h-9 !px-4 sm:!px-5 text-[13px] sm:text-[13.5px] !rounded-full shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
+                className="btn btn-solid !h-9.5 !px-4.5 sm:!px-5.5 text-[13px] sm:text-[13.5px] !rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
                 onClick={(e) => openOverlay("register", { x: e.clientX, y: e.clientY })}
                 data-cursor="cta"
               >
@@ -332,7 +332,7 @@ export function Nav() {
             </Magnetic>
             <button
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-full bg-[var(--shade)] border border-[var(--border)] xl:hidden transition-transform hover:scale-105 shrink-0"
+              className="grid h-9.5 w-9.5 place-items-center rounded-xl bg-[var(--shade)] border border-[var(--border)] xl:hidden transition-transform hover:scale-105 shrink-0"
               aria-label="Open menu"
               onClick={(e) => openOverlay("menu", { x: e.clientX, y: e.clientY })}
               data-cursor="link"

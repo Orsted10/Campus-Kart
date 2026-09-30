@@ -244,7 +244,7 @@ export default function Hero() {
                 <ArrowRight size={16} strokeWidth={2.4} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
               <button type="button" onClick={() => scrollToId("how")} data-cursor="link" className="ck-btn ck-btn-ghost group">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 transition-colors duration-300 group-hover:bg-white/20">
+                <span className="grid h-6 w-6 place-items-center rounded-lg bg-white/10 transition-colors duration-300 group-hover:bg-white/20">
                   <Play size={10} fill="currentColor" strokeWidth={0} />
                 </span>
                 See How It Works
@@ -363,7 +363,7 @@ function Reveal({ children, delay }: { children: ReactNode; delay: number }) {
 
 function LocationBadge() {
   return (
-    <span className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.1] bg-[#070b16]/60 px-3.5 py-1.5 shadow-[0_10px_30px_-18px_rgba(47,141,255,0.9)] backdrop-blur-xl">
+    <span className="inline-flex items-center gap-2.5 rounded-xl border border-white/[0.14] bg-[#070b16]/75 px-4 py-2 shadow-[0_10px_30px_-18px_rgba(47,141,255,0.9)] backdrop-blur-xl">
       <span className="relative flex h-2 w-2">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3b8dff] opacity-70" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3b8dff] shadow-[0_0_10px_#3b8dff]" />
