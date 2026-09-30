@@ -412,9 +412,8 @@ a {
   opacity: 0;
   transition: opacity 0.7s ease-out;
   pointer-events: none;
-  transform: scale(calc(1 - var(--ck-scroll) * 0.04));
   filter: blur(calc(var(--ck-scroll) * 2px));
-  will-change: transform, filter;
+  will-change: filter;
 }
 
 .ck-hero .ck-scene[data-play="1"] {
@@ -452,7 +451,7 @@ a {
 .ck-exit {
   /* A small, exact move. Anything larger reads as the layout sliding around
      under the reader rather than as the camera leaving the plaza. */
-  transform: translate3d(0, calc(var(--ck-scroll) * -24px), 0) scale(calc(1 - var(--ck-scroll) * 0.02));
+  transform: translate3d(0, calc(var(--ck-scroll) * -24px), 0);
   opacity: calc(1 - var(--ck-scroll) * 0.9);
   transform-origin: 50% 30%;
 }
