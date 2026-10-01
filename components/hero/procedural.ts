@@ -240,7 +240,8 @@ export function textPanel(opts: {
 /* ------------------------------------------------- pedestal lettering ----
    "CAMPUSKART" — white CAMPUS, electric blue KART — drawn with an extrusion
    shadow and a top highlight so it reads as dimensional letters on the drum. */
-export function pedestalLabel() {
+export function pedestalLabel(mode: string = "dark") {
+  const isLight = mode === "light";
   const W = 2048;
   const H = 512;
   const { c, ctx } = canvas(W, H);
@@ -252,8 +253,8 @@ export function pedestalLabel() {
   ctx.font = font;
   const spacing = 16;
   const parts = [
-    { text: "CAMPUS", face: "#f4f8ff", edge: "#0b2a4d" },
-    { text: "KART", face: "#2f8dff", edge: "#062a52" },
+    { text: "CAMPUS", face: isLight ? "#0f172a" : "#f4f8ff", edge: isLight ? "#cbd5e1" : "#0b2a4d" },
+    { text: "KART", face: isLight ? "#1d4ed8" : "#2f8dff", edge: isLight ? "#93c5fd" : "#062a52" },
   ];
   const widths = parts.map((p) =>
     [...p.text].reduce((s, ch) => s + ctx.measureText(ch).width + spacing, 0) - spacing,

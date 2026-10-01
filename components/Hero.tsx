@@ -229,14 +229,14 @@ export default function Hero() {
 
             <h1 className="ck-display mt-4 text-[clamp(2.8rem,12.5vw,4.4rem)] font-black leading-[0.91] tracking-[-0.045em] sm:text-[clamp(2.95rem,7.8vw,5.35rem)] lg:mt-7 lg:text-[clamp(3.2rem,5.1vw,6.85rem)]">
               <Reveal delay={0.5}>
-                <span className="text-white">EVERYTHING</span>
+                <span className={isLight ? "text-slate-950" : "text-white"}>EVERYTHING</span>
               </Reveal>
               <Reveal delay={0.6}>
-                <span className="text-white">CAMPUS.</span>
+                <span className={isLight ? "text-slate-950" : "text-white"}>CAMPUS.</span>
               </Reveal>
               <Reveal delay={0.7}>
-                <span className="text-white">
-                  <span className="ck-serif mr-[0.06em] text-[1.06em] text-[#2f8dff]">One</span>
+                <span className={isLight ? "text-slate-950" : "text-white"}>
+                  <span className={`ck-serif mr-[0.06em] text-[1.06em] ${isLight ? "text-[#1d4ed8]" : "text-[#2f8dff]"}`}>One</span>
                   <span>KART.</span>
                 </span>
               </Reveal>
@@ -245,11 +245,13 @@ export default function Hero() {
             <p
               data-ck="desc"
               style={{ animationDelay: "0.86s" }}
-              className="ck-in mt-5 max-w-[44ch] text-[15px] leading-relaxed text-slate-200/85 sm:mt-8 sm:text-[16px] lg:text-[16.5px]"
+              className={`ck-in mt-5 max-w-[44ch] text-[15px] leading-relaxed sm:mt-8 sm:text-[16px] lg:text-[16.5px] ${
+                isLight ? "text-slate-600 font-medium" : "text-slate-200/85"
+              }`}
             >
-              <span className="font-bold text-[#ff8a3d]">Food.</span>{" "}
-              <span className="font-bold text-[#5aa2ff]">Rides.</span>{" "}
-              <span className="font-bold text-[#35d07f]">Essentials.</span> Campus life — one place,
+              <span className={`font-bold ${isLight ? "text-[#ea580c]" : "text-[#ff8a3d]"}`}>Food.</span>{" "}
+              <span className={`font-bold ${isLight ? "text-[#2563eb]" : "text-[#5aa2ff]"}`}>Rides.</span>{" "}
+              <span className={`font-bold ${isLight ? "text-[#16a34a]" : "text-[#35d07f]"}`}>Essentials.</span> Campus life — one place,
               moving with the way you already live.
             </p>
 
@@ -262,13 +264,30 @@ export default function Hero() {
                 type="button"
                 onClick={() => scrollToId("ecosystem")}
                 data-cursor="cta"
-                className="ck-btn ck-btn-primary group"
+                className={`ck-btn group ${
+                  isLight
+                    ? "bg-[#2563eb] text-white shadow-md hover:bg-[#1d4ed8]"
+                    : "ck-btn-primary"
+                }`}
               >
                 Explore CampusKart
                 <ArrowRight size={16} strokeWidth={2.4} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
-              <button type="button" onClick={() => scrollToId("how")} data-cursor="link" className="ck-btn ck-btn-ghost group">
-                <span className="grid h-6 w-6 place-items-center rounded-lg bg-white/10 transition-colors duration-300 group-hover:bg-white/20">
+              <button
+                type="button"
+                onClick={() => scrollToId("how")}
+                data-cursor="link"
+                className={`ck-btn group ${
+                  isLight
+                    ? "bg-white/95 text-slate-900 border border-slate-300/80 shadow-sm hover:bg-white"
+                    : "ck-btn-ghost"
+                }`}
+              >
+                <span
+                  className={`grid h-6 w-6 place-items-center rounded-lg transition-colors duration-300 ${
+                    isLight ? "bg-slate-100 text-slate-800 group-hover:bg-slate-200" : "bg-white/10 group-hover:bg-white/20"
+                  }`}
+                >
                   <Play size={10} fill="currentColor" strokeWidth={0} />
                 </span>
                 See How It Works

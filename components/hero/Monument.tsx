@@ -29,7 +29,8 @@ const CART = {
   rim: 0.09,
 };
 
-function useKartMaterials() {
+function useKartMaterials(mode: string = "dark") {
+  const isLight = mode === "light";
   return useMemo(() => {
     /* Brand paint: saturated electric blue that survives a cool sky reflection. */
     const blue = new THREE.MeshPhysicalMaterial({
@@ -49,7 +50,7 @@ function useKartMaterials() {
       envMapIntensity: 0.45,
     });
     const blueInner = new THREE.MeshStandardMaterial({
-      color: "#051229",
+      color: isLight ? "#1e3a8a" : "#051229",
       metalness: 0.4,
       roughness: 0.55,
       envMapIntensity: 0.6,
@@ -83,13 +84,13 @@ function useKartMaterials() {
         envMapIntensity: 1.45,
       });
     const plinth = new THREE.MeshStandardMaterial({
-      color: "#141821",
+      color: isLight ? "#cbd5e1" : "#141821",
       roughness: 0.42,
       metalness: 0.6,
       envMapIntensity: 0.85,
     });
     const plinthFace = new THREE.MeshPhysicalMaterial({
-      color: "#14181f",
+      color: isLight ? "#e2e8f0" : "#14181f",
       roughness: 0.34,
       metalness: 0.55,
       clearcoat: 0.8,
@@ -97,7 +98,7 @@ function useKartMaterials() {
       envMapIntensity: 0.7,
     });
     const plinthTop = new THREE.MeshPhysicalMaterial({
-      color: "#2a3346",
+      color: isLight ? "#ffffff" : "#2a3346",
       roughness: 0.26,
       metalness: 0.7,
       clearcoat: 1,
@@ -121,7 +122,7 @@ function useKartMaterials() {
         blue: cargo("#4aa4ff", 0.2),
       },
     };
-  }, []);
+  }, [isLight]);
 }
 
 /* ----------------------------------------------------------------- basket */
@@ -379,9 +380,10 @@ function Cargo() {
 
 /* -------------------------------------------------------------- pedestal */
 
-function Pedestal() {
-  const { plinth, plinthFace, plinthTop } = useKartMaterials();
-  const label = useMemo(() => pedestalLabel(), []);
+function Pedestal({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
+  const { plinth, plinthFace, plinthTop } = useKartMaterials(mode);
+  const label = useMemo(() => pedestalLabel(mode), [mode]);
   const spin = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -397,9 +399,9 @@ function Pedestal() {
       <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.42, 2.62, 72]} />
         <meshStandardMaterial
-          color="#04122b"
-          emissive={new THREE.Color("#2f8dff")}
-          emissiveIntensity={0.8}
+          color={isLight ? "#e2e8f0" : "#04122b"}
+          emissive={new THREE.Color(isLight ? "#000000" : "#2f8dff")}
+          emissiveIntensity={isLight ? 0 : 0.8}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -418,9 +420,9 @@ function Pedestal() {
       <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.22, 2.32, 72]} />
         <meshStandardMaterial
-          color="#42260e"
-          emissive={new THREE.Color("#ffb066")}
-          emissiveIntensity={0.9}
+          color={isLight ? "#cbd5e1" : "#42260e"}
+          emissive={new THREE.Color(isLight ? "#000000" : "#ffb066")}
+          emissiveIntensity={isLight ? 0 : 0.9}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -430,9 +432,9 @@ function Pedestal() {
         <mesh>
           <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
           <meshStandardMaterial
-            color="#061428"
-            emissive={new THREE.Color("#2f8dff")}
-            emissiveIntensity={0.75}
+            color={isLight ? "#cbd5e1" : "#061428"}
+            emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
+            emissiveIntensity={isLight ? 0.3 : 0.75}
             toneMapped={false}
             side={THREE.DoubleSide}
           />
@@ -443,9 +445,9 @@ function Pedestal() {
         <cylinderGeometry args={[2.305, 2.315, 0.44, 96, 1, true, -0.52, 1.04]} />
         <meshStandardMaterial
           map={label}
-          emissiveMap={label}
-          emissive={new THREE.Color("#e8f2ff")}
-          emissiveIntensity={0.6}
+          emissiveMap={isLight ? undefined : label}
+          emissive={new THREE.Color(isLight ? "#000000" : "#e8f2ff")}
+          emissiveIntensity={isLight ? 0 : 0.6}
           transparent
           alphaTest={0.02}
           side={THREE.DoubleSide}
@@ -456,10 +458,14 @@ function Pedestal() {
           toneMapped={false}
         />
       </mesh>
-      <pointLight color="#ffc78c" intensity={10} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
-      <pointLight color="#9fc6ff" intensity={8} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
-      <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={4} distance={11} decay={2} />
-      <PedestalGlow />
+      {!isLight && (
+        <>
+          <pointLight color="#ffc78c" intensity={10} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
+          <pointLight color="#9fc6ff" intensity={8} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
+          <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={4} distance={11} decay={2} />
+          <PedestalGlow />
+        </>
+      )}
       <ContactShadow />
     </group>
   );
@@ -510,12 +516,15 @@ export default function Monument({
   accent,
   tier,
   reduced = false,
+  mode = "dark",
 }: {
   accent: Accent;
   tier: Tier;
   reduced?: boolean;
+  mode?: string;
 }) {
-  const { blueDeep } = useKartMaterials();
+  const isLight = mode === "light";
+  const { blueDeep } = useKartMaterials(mode);
   const group = useRef<THREE.Group>(null);
   const started = useRef<number | null>(null);
   const accentLight = useRef<THREE.PointLight>(null);
@@ -557,7 +566,7 @@ export default function Monument({
       <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={12} distance={16} decay={2} />
       <pointLight ref={rimLight} position={[3.8, 2.6, -3.2]} color={accent.color} intensity={9} distance={17} decay={2} />
 
-      <Pedestal />
+      <Pedestal mode={mode} />
 
       <group ref={group} position={[0, DECK_Y, 0]}>
         <group rotation={[0.03, -0.5, -0.055]} scale={tier === "low" ? 1.0 : 1.05}>

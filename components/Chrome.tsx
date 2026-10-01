@@ -50,9 +50,11 @@ export function Mark({ size = 32, className = "" }: { size?: number; className?:
 }
 
 export function Wordmark({ className = "" }: { className?: string }) {
+  const { theme } = useApp();
+  const isLight = theme === "light";
   return (
-    <span className={`text-[16px] font-extrabold tracking-tight text-white ${className}`}>
-      CAMPUS<span className="text-[#3b82f6]">KART</span>
+    <span className={`text-[16px] font-extrabold tracking-tight ${isLight ? "text-slate-900" : "text-white"} ${className}`}>
+      CAMPUS<span className="text-[#2563eb] dark:text-[#3b82f6]">KART</span>
     </span>
   );
 }
@@ -214,7 +216,8 @@ export function Loader() {
 /* ------------------------------------------------------------------ nav */
 
 export function Nav() {
-  const { overlay, openOverlay, closeOverlay, service, setService, activeSection } = useApp();
+  const { overlay, openOverlay, closeOverlay, service, setService, activeSection, theme } = useApp();
+  const isLight = theme === "light";
   const [state, setState] = useState<"top" | "compact">("top");
 
   useEffect(() => {
@@ -246,9 +249,11 @@ export function Nav() {
       >
         <nav
           className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            state === "compact"
-              ? "max-w-[1140px] rounded-2xl border border-[var(--border)] py-2.5 px-4.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
-              : "max-w-[1440px] rounded-2xl border border-[var(--border)]/30 py-3 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
+            isLight
+              ? "max-w-[1440px] rounded-2xl border border-slate-200/80 py-3 px-5 sm:px-6 bg-white/90 backdrop-blur-xl shadow-sm text-slate-900"
+              : state === "compact"
+                ? "max-w-[1140px] rounded-2xl border border-[var(--border)] py-2.5 px-4.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
+                : "max-w-[1440px] rounded-2xl border border-[var(--border)]/30 py-3 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
           }`}
           aria-label="Primary"
         >
@@ -322,7 +327,7 @@ export function Nav() {
             <Magnetic strength={0.22}>
               <button
                 type="button"
-                className="btn btn-solid !h-9.5 !px-4.5 sm:!px-5.5 text-[13px] sm:text-[13.5px] !rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border border-[var(--text)]/10 shrink-0"
+                className="btn !bg-[#2563eb] !text-white hover:!bg-[#1d4ed8] !h-9.5 !px-4.5 sm:!px-5.5 text-[13px] sm:text-[13.5px] !rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden group border-none shrink-0"
                 onClick={(e) => openOverlay("register", { x: e.clientX, y: e.clientY })}
                 data-cursor="cta"
               >

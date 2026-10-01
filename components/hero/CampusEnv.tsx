@@ -19,69 +19,70 @@ export type Tier = "high" | "low";
 
 /* ------------------------------------------------------------- materials */
 
-function useCampusMaterials() {
+function useCampusMaterials(mode: string = "dark") {
+  const isLight = mode === "light";
   return useMemo(() => {
     const concrete = new THREE.MeshStandardMaterial({
-      color: "#2b3141",
+      color: isLight ? "#e2e8f0" : "#2b3141",
       roughness: 0.86,
       metalness: 0.06,
     });
     const concreteDark = new THREE.MeshStandardMaterial({
-      color: "#1c2130",
+      color: isLight ? "#cbd5e1" : "#1c2130",
       roughness: 0.92,
       metalness: 0.05,
     });
     const stone = new THREE.MeshStandardMaterial({
-      color: "#454d5f",
+      color: isLight ? "#cbd5e1" : "#454d5f",
       roughness: 0.58,
       metalness: 0.14,
     });
     const metal = new THREE.MeshStandardMaterial({
-      color: "#12161f",
+      color: isLight ? "#475569" : "#12161f",
       roughness: 0.42,
       metalness: 0.85,
     });
     const foliage = new THREE.MeshStandardMaterial({
-      color: "#1d3a28",
+      color: isLight ? "#15803d" : "#1d3a28",
       roughness: 0.95,
       metalness: 0,
       flatShading: true,
-      emissive: new THREE.Color("#0a1710"),
-      emissiveIntensity: 0.9,
+      emissive: new THREE.Color(isLight ? "#000000" : "#0a1710"),
+      emissiveIntensity: isLight ? 0 : 0.9,
     });
     const hedge = new THREE.MeshStandardMaterial({
-      color: "#16291d",
+      color: isLight ? "#166534" : "#16291d",
       roughness: 0.98,
       metalness: 0,
       flatShading: true,
-      emissive: new THREE.Color("#08130c"),
-      emissiveIntensity: 0.8,
+      emissive: new THREE.Color(isLight ? "#000000" : "#08130c"),
+      emissiveIntensity: isLight ? 0 : 0.8,
     });
     const warmStrip = new THREE.MeshStandardMaterial({
-      color: "#40260f",
-      emissive: new THREE.Color("#ffae63"),
-      emissiveIntensity: 2.6,
+      color: isLight ? "#94a3b8" : "#40260f",
+      emissive: new THREE.Color(isLight ? "#000000" : "#ffae63"),
+      emissiveIntensity: isLight ? 0 : 2.6,
       roughness: 0.4,
       metalness: 0.2,
       toneMapped: false,
     });
     const lampGlass = new THREE.MeshStandardMaterial({
-      color: "#2a1c0d",
-      emissive: new THREE.Color("#ffc98a"),
-      emissiveIntensity: 3.4,
+      color: isLight ? "#cbd5e1" : "#2a1c0d",
+      emissive: new THREE.Color(isLight ? "#000000" : "#ffc98a"),
+      emissiveIntensity: isLight ? 0 : 3.4,
       toneMapped: false,
     });
     const glass = new THREE.MeshStandardMaterial({
-      color: "#0a1220",
+      color: isLight ? "#bae6fd" : "#0a1220",
       roughness: 0.14,
       metalness: 0.4,
-      emissive: new THREE.Color("#3d5f96"),
-      emissiveIntensity: 0.28,
+      emissive: new THREE.Color(isLight ? "#000000" : "#3d5f96"),
+      emissiveIntensity: isLight ? 0 : 0.28,
       transparent: true,
       opacity: 0.86,
     });
     const carBody = new THREE.MeshPhysicalMaterial({
-      color: "#0f1524",
+      color: isLight ? "#2563eb" : "#0f1524",
       roughness: 0.28,
       metalness: 0.7,
       clearcoat: 1,
@@ -101,21 +102,23 @@ function useCampusMaterials() {
       carBody,
       tyre,
     };
-  }, []);
+  }, [isLight]);
 }
 
 /* ------------------------------------------------------------------ sky */
 
 function Sky({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color(mode === "light" ? "#1e40af" : "#04081a") },
-      uMid: { value: new THREE.Color(mode === "light" ? "#60a5fa" : "#101c46") },
-      uHorizon: { value: new THREE.Color(mode === "light" ? "#e0f2fe" : "#ff8f3d") },
-      uGlow: { value: new THREE.Color(mode === "light" ? "#ffffff" : "#ffdcac") },
-      uSun: { value: new THREE.Vector3(0.33, mode === "light" ? 0.45 : 0.06, -0.94) },
+      uTop: { value: new THREE.Color(isLight ? "#1d4ed8" : "#04081a") },
+      uMid: { value: new THREE.Color(isLight ? "#60a5fa" : "#101c46") },
+      uHorizon: { value: new THREE.Color(isLight ? "#bae6fd" : "#ff8f3d") },
+      uGlow: { value: new THREE.Color(isLight ? "#ffffff" : "#ffdcac") },
+      uSun: { value: new THREE.Vector3(0.25, isLight ? 0.75 : 0.06, -0.94) },
+      uIsLight: { value: isLight ? 1.0 : 0.0 },
     }),
-    [mode],
+    [isLight],
   );
 
   const material = useMemo(
@@ -181,11 +184,9 @@ function Sky({ mode = "dark" }: { mode?: string }) {
 
 /* ---------------------------------------------------------------- clouds */
 
-function CloudBank({ tier }: { tier: Tier }) {
+function CloudBank({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
+  const isLight = mode === "light";
   const sprites = useMemo(() => {
-    /* Cloud at blue hour is a DARK mass with a warm rim, not a glowing blob.
-       Additive sprites here were blanketing the whole sky in lavender and were
-       the single biggest reason the hero read as CGI. */
     const list: { pos: [number, number, number]; scale: number; opacity: number; tint: string }[] = [];
     const seedBase = [1, 2, 3, 4, 5, 6];
     seedBase.forEach((s, i) => {
@@ -193,12 +194,12 @@ function CloudBank({ tier }: { tier: Tier }) {
       list.push({
         pos: [-190 + t * 430, 26 + (i % 3) * 14, -175 - (i % 2) * 70],
         scale: 200 + (i % 4) * 70,
-        opacity: 0.3 - (i % 3) * 0.06,
-        tint: i % 2 === 0 ? "#3a3550" : "#2e2c48",
+        opacity: isLight ? 0.45 : 0.3 - (i % 3) * 0.06,
+        tint: isLight ? "#ffffff" : i % 2 === 0 ? "#3a3550" : "#2e2c48",
       });
     });
     return list;
-  }, []);
+  }, [isLight]);
 
   const texture = useMemo(() => cloudSprite(5), []);
   const rim = useMemo(() => cloudSprite(5), []);
@@ -218,50 +219,49 @@ function CloudBank({ tier }: { tier: Tier }) {
           />
         </sprite>
       ))}
-      {/* a warm edge on the sunward side, low and thin, so the deck has structure */}
-      {[0, 1, 2].map((i) => (
-        <sprite
-          key={`r${i}`}
-          position={[60 + i * 74, 20 + i * 6, -168 - i * 26]}
-          scale={[150 + i * 26, 24 + i * 4, 1]}
-        >
-          <spriteMaterial
-            map={rim}
-            color="#ffb377"
-            transparent
-            opacity={0.26 - i * 0.05}
-            depthWrite={false}
-            blending={THREE.AdditiveBlending}
-            fog={false}
-          />
-        </sprite>
-      ))}
+      {!isLight &&
+        [0, 1, 2].map((i) => (
+          <sprite
+            key={`r${i}`}
+            position={[60 + i * 74, 20 + i * 6, -168 - i * 26]}
+            scale={[150 + i * 26, 24 + i * 4, 1]}
+          >
+            <spriteMaterial
+              map={rim}
+              color="#ffb377"
+              transparent
+              opacity={0.26 - i * 0.05}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              fog={false}
+            />
+          </sprite>
+        ))}
     </group>
   );
 }
 
-function SunGlow() {
-  const texture = useMemo(() => glowSprite("255,205,150"), []);
-  /* A sunset core, not a sky-wide gradient. At 250 units across this sprite
-     spanned ~40 degrees and, once bloomed, washed the entire sky to pale grey. */
+function SunGlow({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
+  const texture = useMemo(() => glowSprite(isLight ? "255,255,255" : "255,205,150"), [isLight]);
   return (
     <group renderOrder={-8}>
-      <sprite position={[104, 9, -300]} scale={[104, 86, 1]}>
+      <sprite position={[104, isLight ? 40 : 9, -300]} scale={[isLight ? 160 : 104, isLight ? 140 : 86, 1]}>
         <spriteMaterial
           map={texture}
           transparent
-          opacity={0.66}
+          opacity={isLight ? 0.35 : 0.66}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
         />
       </sprite>
-      <sprite position={[92, 4, -290]} scale={[34, 30, 1]}>
+      <sprite position={[92, isLight ? 36 : 4, -290]} scale={[isLight ? 48 : 34, isLight ? 44 : 30, 1]}>
         <spriteMaterial
           map={texture}
-          color="#fff0d2"
+          color={isLight ? "#ffffff" : "#fff0d2"}
           transparent
-          opacity={0.5}
+          opacity={isLight ? 0.7 : 0.5}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -283,6 +283,7 @@ function Block({
   cols = 26,
   rows = 13,
   sign,
+  mode = "dark",
 }: {
   position: [number, number, number];
   size: [number, number, number];
@@ -293,39 +294,44 @@ function Block({
   cols?: number;
   rows?: number;
   sign?: ReactNode;
+  mode?: string;
 }) {
+  const isLight = mode === "light";
+  const actualWall = isLight ? "#cbd5e1" : wall;
+  const actualLit = isLight ? 0 : lit;
   const tex = useMemo(
-    () => facadeTextures({ seed, wall, lit, warm, cols, rows }),
-    [seed, wall, lit, warm, cols, rows],
+    () => facadeTextures({ seed, wall: actualWall, lit: actualLit, warm, cols, rows }),
+    [seed, actualWall, actualLit, warm, cols, rows],
   );
   const face = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         map: tex.map,
-        emissiveMap: tex.emissive,
-        emissive: new THREE.Color("#ffffff"),
-        emissiveIntensity: 1.55,
+        emissiveMap: isLight ? undefined : tex.emissive,
+        emissive: new THREE.Color(isLight ? "#000000" : "#ffffff"),
+        emissiveIntensity: isLight ? 0 : 1.55,
         roughness: 0.82,
         metalness: 0.08,
       }),
-    [tex],
+    [tex, isLight],
   );
   const side = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#232a38",
+        color: isLight ? "#94a3b8" : "#232a38",
         roughness: 0.9,
         metalness: 0.06,
       }),
-    [],
+    [isLight],
   );
   const roof = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: "#11151f", roughness: 0.95 }),
-    [],
+    () => new THREE.MeshStandardMaterial({ color: isLight ? "#cbd5e1" : "#11151f", roughness: 0.95 }),
+    [isLight],
   );
 
   return (
-    <group position={position}>        <mesh material={[side, side, roof, roof, face, face]} castShadow receiveShadow>
+    <group position={position}>
+      <mesh material={[side, side, roof, roof, face, face]} castShadow receiveShadow>
         <boxGeometry args={size} />
       </mesh>
       {sign}
@@ -333,25 +339,24 @@ function Block({
   );
 }
 
-function AcademicBlock() {
-  const { concrete, concreteDark } = useCampusMaterials();
+function AcademicBlock({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
+  const { concrete, concreteDark } = useCampusMaterials(mode);
   const signTexture = useMemo(
     () =>
       textPanel({
         width: 1024,
         height: 320,
         lines: [
-          { text: "CHANDIGARH UNIVERSITY", color: "rgba(226,233,242,0.86)", size: 84, spacing: 5 },
-          { text: "UNNAO, UP", color: "rgba(178,190,206,0.7)", size: 54, spacing: 8 },
+          { text: "CHANDIGARH UNIVERSITY", color: isLight ? "rgba(15,23,42,0.85)" : "rgba(226,233,242,0.86)", size: 84, spacing: 5 },
+          { text: "UNNAO, UP", color: isLight ? "rgba(51,65,85,0.75)" : "rgba(178,190,206,0.7)", size: 54, spacing: 8 },
         ],
       }),
-    [],
+    [isLight],
   );
 
   return (
     <group>
-      {/* main academic mass, right and far behind the monument — it has to
-          leave sky above it for the sunset to read */}
       <Block
         position={[27, 7.4, -72]}
         size={[28, 14.5, 22]}
@@ -361,6 +366,7 @@ function AcademicBlock() {
         warm={0.94}
         cols={18}
         rows={9}
+        mode={mode}
         sign={
           <mesh position={[0, 3.2, 11.05]}>
             <planeGeometry args={[13.5, 4.2]} />
@@ -369,38 +375,28 @@ function AcademicBlock() {
               transparent
               toneMapped={false}
               opacity={0.85}
-              color="#b9c6d8"
+              color={isLight ? "#334155" : "#b9c6d8"}
             />
           </mesh>
         }
       />
-      {/* podium terraces lifting the block out of the ground plane */}
       <mesh position={[24, 1.6, -60]} material={concrete} receiveShadow castShadow>
         <boxGeometry args={[32, 3.2, 22]} />
       </mesh>
       <mesh position={[20, 3.6, -52]} material={concreteDark} receiveShadow>
         <boxGeometry args={[22, 1.4, 10]} />
       </mesh>
-      {/* left academic wing, framing the sky on the other side */}      <Block position={[-30, 6.6, -78]} size={[30, 13, 20]}
-        seed={23}
-        wall="#2d2f40"
-        lit={0.36}
-        warm={0.92}
-        cols={18}
-        rows={9}
-      />
-      {/* far mid-rises: atmospheric depth, not detail */}
-      <Block position={[-4, 8, -112]} size={[26, 16, 18]} seed={31} wall="#2b2e3d" lit={0.32} warm={0.82} cols={16} rows={11} />
-      <Block position={[62, 6.4, -104]} size={[28, 13, 18]} seed={47} wall="#282b39" lit={0.3} warm={0.82} cols={17} rows={9} />
-      <MidGround />
-      {/* gateway colonnade at the plaza edge */}
-      <Colonnade />
+      <Block position={[-30, 6.6, -78]} size={[30, 13, 20]} seed={23} wall="#2d2f40" lit={0.36} warm={0.92} cols={18} rows={9} mode={mode} />
+      <Block position={[-4, 8, -112]} size={[26, 16, 18]} seed={31} wall="#2b2e3d" lit={0.32} warm={0.82} cols={16} rows={11} mode={mode} />
+      <Block position={[62, 6.4, -104]} size={[28, 13, 18]} seed={47} wall="#282b39" lit={0.3} warm={0.82} cols={17} rows={9} mode={mode} />
+      <MidGround mode={mode} />
+      <Colonnade mode={mode} />
     </group>
   );
 }
 
-function Colonnade() {
-  const { stone, glass, warmStrip } = useCampusMaterials();
+function Colonnade({ mode = "dark" }: { mode?: string }) {
+  const { stone, glass, warmStrip } = useCampusMaterials(mode);
   const pillars = [-11, -8, -5, -2, 1, 4];
   return (
     <group position={[9.5, 0, -20]} scale={0.86}>
@@ -412,11 +408,9 @@ function Colonnade() {
           <cylinderGeometry args={[0.2, 0.24, 2.6, 12]} />
         </mesh>
       ))}
-      {/* warm wash on the deck so the arcade does not read as a void */}
       <mesh position={[0, 0.16, 2.4]} material={warmStrip}>
         <boxGeometry args={[13, 0.05, 0.12]} />
       </mesh>
-      {/* the lit rooms behind the arcade read as depth, not a wall */}
       <mesh position={[0, 1.5, -0.4]} material={glass}>
         <boxGeometry args={[16, 2.8, 0.4]} />
       </mesh>
@@ -429,8 +423,8 @@ function Colonnade() {
 
 /* --------------------------------------------------------------- stairs */
 
-function Stairs() {
-  const { stone, concreteDark, warmStrip } = useCampusMaterials();
+function Stairs({ mode = "dark" }: { mode?: string }) {
+  const { stone, concreteDark, warmStrip } = useCampusMaterials(mode);
   const steps = [0, 1, 2, 3, 4, 5, 6, 7];
   return (
     <group position={[7.4, 0, -2.2]}>
@@ -444,7 +438,6 @@ function Stairs() {
           >
             <boxGeometry args={[13 - i * 0.5, 0.34, 1.7]} />
           </mesh>
-          {/* warm riser glow — the detail that makes the terrace feel inhabited */}
           <mesh position={[2.4, i * 0.34 + 0.05, -i * 1.7 + 0.88]} material={warmStrip}>
             <boxGeometry args={[8.6 - i * 0.5, 0.045, 0.07]} />
           </mesh>
@@ -459,8 +452,9 @@ function Stairs() {
 
 /* -------------------------------------------------------- plaza & lights */
 
-function Plaza({ tier }: { tier: Tier }) {
-  const { warmStrip } = useCampusMaterials();
+function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
+  const isLight = mode === "light";
+  const { warmStrip } = useCampusMaterials(mode);
   const random = useMemo(() => {
     const rand = (s: number) => {
       let a = s;
@@ -481,7 +475,6 @@ function Plaza({ tier }: { tier: Tier }) {
 
   return (
     <group>
-      {/* wet stone plaza — reflects the monument, the lamps and the sky */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -8]} receiveShadow>
         <planeGeometry args={[220, 150]} />
         {tier === "high" ? (
@@ -489,21 +482,20 @@ function Plaza({ tier }: { tier: Tier }) {
             resolution={1024}
             blur={[260, 80]}
             mixBlur={1.15}
-            mixStrength={3.1}
+            mixStrength={isLight ? 1.4 : 3.1}
             depthScale={1.1}
             minDepthThreshold={0.3}
             maxDepthThreshold={1.4}
             depthToBlurRatioBias={0.3}
-            color="#141b2b"
-            metalness={0.78}
-            roughness={0.42}
+            color={isLight ? "#e2e8f0" : "#141b2b"}
+            metalness={isLight ? 0.2 : 0.78}
+            roughness={isLight ? 0.6 : 0.42}
           />
         ) : (
-          <meshStandardMaterial color="#131a28" metalness={0.55} roughness={0.5} />
+          <meshStandardMaterial color={isLight ? "#e2e8f0" : "#131a28"} metalness={isLight ? 0.2 : 0.55} roughness={0.5} />
         )}
       </mesh>
 
-      {/* paving joints: quiet emissive inlays that draw the eye inward */}
       {[
         [0, 4.6, 26],
         [-5.5, -3.5, 14],
@@ -515,7 +507,6 @@ function Plaza({ tier }: { tier: Tier }) {
         </mesh>
       ))}
 
-      {/* landscaping stones so the plaza is not a bare plane */}
       {random.map((s, i) => (
         <RoundedBox
           key={i}
@@ -526,15 +517,17 @@ function Plaza({ tier }: { tier: Tier }) {
           rotation={[0, s.ry * 2, 0]}
           receiveShadow
         >
-          <meshStandardMaterial color="#161b28" roughness={0.5} metalness={0.25} />
+          <meshStandardMaterial color={isLight ? "#cbd5e1" : "#161b28"} roughness={0.5} metalness={0.25} />
         </RoundedBox>
       ))}
     </group>
   );
 }
 
-function Lamp({ position, tier, lit = true }: { position: [number, number, number]; tier: Tier; lit?: boolean }) {
-  const { metal, lampGlass } = useCampusMaterials();
+function Lamp({ position, tier, lit = true, mode = "dark" }: { position: [number, number, number]; tier: Tier; lit?: boolean; mode?: string }) {
+  const isLight = mode === "light";
+  const actualLit = isLight ? false : lit;
+  const { metal, lampGlass } = useCampusMaterials(mode);
   const glow = useMemo(() => glowSprite("255,206,150"), []);
   return (
     <group position={position}>
@@ -543,37 +536,41 @@ function Lamp({ position, tier, lit = true }: { position: [number, number, numbe
       </mesh>
       <mesh position={[0, 4.24, 0]} material={lampGlass} castShadow>
         <sphereGeometry args={[0.16, 12, 10]} />
-      </mesh>        <sprite position={[0, 4.24, 0]} scale={[6.4, 6.4, 1]}>
-        <spriteMaterial
-          map={glow}
-          transparent
-          opacity={0.5}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          fog={false}
-        />
-      </sprite>
-      {/* the pool of warm light each lamp throws on the stone for twelve metres
-          around it — the single biggest cue that this campus is lit, not shaded */}
-      <sprite position={[0, 1.5, 0]} scale={[15, 7.5, 1]}>
-        <spriteMaterial
-          map={glow}
-          transparent
-          opacity={0.11}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          fog={false}
-        />
-      </sprite>
-      {tier === "high" && lit && (
+      </mesh>
+      {!isLight && (
+        <>
+          <sprite position={[0, 4.24, 0]} scale={[6.4, 6.4, 1]}>
+            <spriteMaterial
+              map={glow}
+              transparent
+              opacity={0.5}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              fog={false}
+            />
+          </sprite>
+          <sprite position={[0, 1.5, 0]} scale={[15, 7.5, 1]}>
+            <spriteMaterial
+              map={glow}
+              transparent
+              opacity={0.11}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              fog={false}
+            />
+          </sprite>
+        </>
+      )}
+      {tier === "high" && actualLit && (
         <pointLight position={[0, 4.2, 0]} color="#ffbe82" intensity={15} distance={19} decay={2} />
       )}
     </group>
   );
 }
 
-function Lamps({ tier }: { tier: Tier }) {
-  const posts: { p: [number, number, number]; lit: boolean }[] = [        { p: [-11.5, 0, 1.2], lit: true },
+function Lamps({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
+  const posts: { p: [number, number, number]; lit: boolean }[] = [
+    { p: [-11.5, 0, 1.2], lit: true },
     { p: [9.6, 0, -0.6], lit: true },
     { p: [-17.5, 0, -10.4], lit: tier === "high" },
     { p: [-24.5, 0, -4.2], lit: tier === "high" },
@@ -585,7 +582,7 @@ function Lamps({ tier }: { tier: Tier }) {
   return (
     <>
       {posts.map((l, i) => (
-        <Lamp key={i} position={l.p} tier={tier} lit={l.lit} />
+        <Lamp key={i} position={l.p} tier={tier} lit={l.lit} mode={mode} />
       ))}
     </>
   );
@@ -593,10 +590,8 @@ function Lamps({ tier }: { tier: Tier }) {
 
 /* ------------------------------------------------------------ mid ground */
 
-/** The band between the plaza and the academic blocks: trees, hedges, a lit
-    walkway and street lamps, so the campus reads deep rather than two planes. */
-function MidGround() {
-  const { hedge, stone } = useCampusMaterials();
+function MidGround({ mode = "dark" }: { mode?: string }) {
+  const { hedge, stone } = useCampusMaterials(mode);
   const rows: [number, number, number, number][] = [
     [-26, 0.4, -26, 14],
     [26, 0.4, -30, 16],
@@ -605,16 +600,15 @@ function MidGround() {
   ];
   return (
     <group>
-      {/* lit walkway running across the campus */}
       <mesh position={[0, 0.05, -28]} material={stone} receiveShadow>
         <boxGeometry args={[90, 0.1, 5]} />
       </mesh>
       <mesh position={[0, 0.11, -25.6]}>
         <boxGeometry args={[86, 0.035, 0.1]} />
         <meshStandardMaterial
-          color="#3a240f"
-          emissive={new THREE.Color("#ffb066")}
-          emissiveIntensity={1.1}
+          color={mode === "light" ? "#94a3b8" : "#3a240f"}
+          emissive={new THREE.Color(mode === "light" ? "#000000" : "#ffb066")}
+          emissiveIntensity={mode === "light" ? 0 : 1.1}
           toneMapped={false}
         />
       </mesh>
@@ -638,14 +632,14 @@ function MidGround() {
         { p: [30, 0, -38] as [number, number, number], s: 1.1, seed: 65 },
         { p: [-31, 0, -40] as [number, number, number], s: 1.2, seed: 66 },
       ].map((t, i) => (
-        <Tree key={`m${i}`} position={t.p} scale={t.s} seed={t.seed} />
+        <Tree key={`m${i}`} position={t.p} scale={t.s} seed={t.seed} mode={mode} />
       ))}
       {[
         { p: [-16, 0, -21] as [number, number, number], lit: false },
         { p: [8, 0, -22] as [number, number, number], lit: false },
         { p: [27, 0, -24] as [number, number, number], lit: false },
       ].map((l, i) => (
-        <Lamp key={`ml${i}`} position={l.p} tier="low" lit={l.lit} />
+        <Lamp key={`ml${i}`} position={l.p} tier="low" lit={l.lit} mode={mode} />
       ))}
     </group>
   );
@@ -653,8 +647,8 @@ function MidGround() {
 
 /* ------------------------------------------------------------ landscaping */
 
-function Tree({ position, scale = 1, seed = 1 }: { position: [number, number, number]; scale?: number; seed?: number }) {
-  const { metal, foliage } = useCampusMaterials();
+function Tree({ position, scale = 1, seed = 1, mode = "dark" }: { position: [number, number, number]; scale?: number; seed?: number; mode?: string }) {
+  const { metal, foliage } = useCampusMaterials(mode);
   const blobs = useMemo(() => {
     let a = seed * 9301;
     const rand = () => {
@@ -690,8 +684,8 @@ function Tree({ position, scale = 1, seed = 1 }: { position: [number, number, nu
   );
 }
 
-function Hedges() {
-  const { hedge } = useCampusMaterials();
+function Hedges({ mode = "dark" }: { mode?: string }) {
+  const { hedge } = useCampusMaterials(mode);
   const rows: [number, number, number, number][] = [
     [-11, 0.45, 3.2, 5.5],
     [-18.5, 0.45, -6.5, 9],
@@ -717,9 +711,9 @@ function Hedges() {
   );
 }
 
-/** A cab idling at the gate — narrative for the Rides service, alive in 3D. */
-function CampusCab() {
-  const { carBody, tyre, glass } = useCampusMaterials();
+function CampusCab({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
+  const { carBody, tyre, glass } = useCampusMaterials(mode);
   const beams = useMemo(() => glowSprite("255,224,178"), []);
   const cool = useMemo(() => glowSprite("96,166,255"), []);
   return (
@@ -737,23 +731,25 @@ function CampusCab() {
           </mesh>
         )),
       )}
-      {/* warm headlamps, cool registration-plate bounce */}
-      <sprite position={[2.15, 0.62, 0.62]} scale={[2.4, 2.4, 1]}>
-        <spriteMaterial map={beams} transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
-      </sprite>
-      <sprite position={[2.15, 0.62, -0.62]} scale={[2.4, 2.4, 1]}>
-        <spriteMaterial map={beams} transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
-      </sprite>
-      <sprite position={[0, 0.06, 0]} scale={[6, 2.4, 1]}>
-        <spriteMaterial map={cool} transparent opacity={0.34} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
-      </sprite>
+      {!isLight && (
+        <>
+          <sprite position={[2.15, 0.62, 0.62]} scale={[2.4, 2.4, 1]}>
+            <spriteMaterial map={beams} transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+          </sprite>
+          <sprite position={[2.15, 0.62, -0.62]} scale={[2.4, 2.4, 1]}>
+            <spriteMaterial map={beams} transparent opacity={0.55} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+          </sprite>
+          <sprite position={[0, 0.06, 0]} scale={[6, 2.4, 1]}>
+            <spriteMaterial map={cool} transparent opacity={0.34} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+          </sprite>
+        </>
+      )}
     </group>
   );
 }
 
-/** Delivery crate at the steps — narrative for the Essentials service. */
-function DeliveryProps() {
-  const { concrete } = useCampusMaterials();
+function DeliveryProps({ mode = "dark" }: { mode?: string }) {
+  const { concrete } = useCampusMaterials(mode);
   const card = new THREE.MeshStandardMaterial({ color: "#7a5230", roughness: 0.85 });
   const tape = new THREE.MeshStandardMaterial({ color: "#1f6fe0", roughness: 0.6, emissiveIntensity: 0.3 });
   return (
@@ -776,7 +772,8 @@ function DeliveryProps() {
 
 /* ------------------------------------------------------------ foreground */
 
-function ForegroundBlur({ tier }: { tier: Tier }) {
+function ForegroundBlur({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
+  const isLight = mode === "light";
   const leafA = useMemo(() => foliageSprite(3), []);
   const leafB = useMemo(() => foliageSprite(12), []);
   const bokeh = useMemo(() => glowSprite("255,190,140"), []);
@@ -793,15 +790,15 @@ function ForegroundBlur({ tier }: { tier: Tier }) {
   return (
     <group ref={group} position={[0, 0, 4.6]}>
       {[
-        { p: [-3.9, 1.1, -1.6] as [number, number, number], s: 4.6, t: leafA, o: 0.95 },
-        { p: [4.6, 0.7, -1.2] as [number, number, number], s: 3.9, t: leafB, o: 0.9 },
-        { p: [-5.4, 0.5, -2.6] as [number, number, number], s: 3.2, t: leafB, o: 0.7 },
+        { p: [-3.9, 1.1, -1.6] as [number, number, number], s: 4.6, t: leafA, o: isLight ? 0.8 : 0.95 },
+        { p: [4.6, 0.7, -1.2] as [number, number, number], s: 3.9, t: leafB, o: isLight ? 0.75 : 0.9 },
+        { p: [-5.4, 0.5, -2.6] as [number, number, number], s: 3.2, t: leafB, o: isLight ? 0.55 : 0.7 },
       ].map((f, i) => (
         <sprite key={i} position={f.p} scale={[f.s, f.s * 0.72, 1]} renderOrder={6}>
           <spriteMaterial map={f.t} transparent opacity={f.o} depthWrite={false} />
         </sprite>
       ))}
-      {tier === "high" &&
+      {tier === "high" && !isLight &&
         [
           { p: [-2.3, 1.6, -1] as [number, number, number], s: 2.1, t: bokeh, o: 0.24, c: "#ffc98a" },
           { p: [-3.1, 0.7, -0.6] as [number, number, number], s: 1.6, t: bokeh, o: 0.2, c: "#ff9d5c" },
@@ -831,13 +828,13 @@ export default function CampusEnv({ tier, mode = "dark" }: { tier: Tier; mode?: 
   return (
     <group>
       <Sky mode={mode} />
-      <CloudBank tier={tier} />
-      <SunGlow />
-      <AcademicBlock />
-      <Stairs />
-      <Plaza tier={tier} />
-      <Lamps tier={tier} />
-      <Hedges />
+      <CloudBank tier={tier} mode={mode} />
+      <SunGlow mode={mode} />
+      <AcademicBlock mode={mode} />
+      <Stairs mode={mode} />
+      <Plaza tier={tier} mode={mode} />
+      <Lamps tier={tier} mode={mode} />
+      <Hedges mode={mode} />
       {[
         { p: [-15.5, 0, -4.6] as [number, number, number], s: 0.95, seed: 2 },
         { p: [10.6, 0, -1.4] as [number, number, number], s: 0.9, seed: 5 },
@@ -847,11 +844,11 @@ export default function CampusEnv({ tier, mode = "dark" }: { tier: Tier; mode?: 
         { p: [-33, 0, -24] as [number, number, number], s: 1.15, seed: 34 },
         { p: [19, 0, -26] as [number, number, number], s: 1.05, seed: 44 },
       ].map((t, i) => (
-        <Tree key={i} position={t.p} scale={t.s} seed={t.seed} />
+        <Tree key={i} position={t.p} scale={t.s} seed={t.seed} mode={mode} />
       ))}
-      <CampusCab />
-      <DeliveryProps />
-      <ForegroundBlur tier={tier} />
+      <CampusCab mode={mode} />
+      <DeliveryProps mode={mode} />
+      <ForegroundBlur tier={tier} mode={mode} />
     </group>
   );
 }

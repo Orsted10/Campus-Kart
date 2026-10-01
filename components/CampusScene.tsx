@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useMemo, type MouseEvent } from "react";
 import { PULSE_NODES, type NodeKind, type ServiceId } from "@/lib/data";
-import { useReducedMotion } from "@/lib/store";
+import { useApp, useReducedMotion } from "@/lib/store";
 
 /* --------------------------------------------------------------------------
    CAMPUS BLUEPRINT
@@ -90,6 +90,8 @@ export default function CampusScene({
   activeNode = null,
   focus = null,
 }: Props) {
+  const { theme } = useApp();
+  const isLight = theme === "light";
   const uid = useId().replace(/:/g, "");
   const reduced = useReducedMotion();
 
@@ -153,21 +155,21 @@ export default function CampusScene({
     >
       <defs>
         <pattern id={gridId} width="20" height="20" patternUnits="userSpaceOnUse">
-          <path d="M0 0 H20 M0 0 V20" stroke="var(--border)" strokeWidth="0.4" fill="none" opacity="0.16" />
+          <path d="M0 0 H20 M0 0 V20" stroke={isLight ? "#cbd5e1" : "var(--border)"} strokeWidth="0.4" fill="none" opacity={isLight ? "0.4" : "0.16"} />
         </pattern>
         <linearGradient id={chipFill} x1="0" y1="0" x2="0.35" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.08" />
-          <stop offset="100%" stopColor="#000000" stopOpacity="0.25" />
+          <stop offset="0%" stopColor={isLight ? "#ffffff" : "#ffffff"} stopOpacity={isLight ? "0.9" : "0.08"} />
+          <stop offset="100%" stopColor={isLight ? "#f8fafc" : "#000000"} stopOpacity={isLight ? "0.95" : "0.25"} />
         </linearGradient>
       </defs>
 
       {/* --------------------------------------------------------- paper */}
-      <rect x="0" y="0" width="800" height="500" fill="#050812" opacity="0.94" rx="12" />
+      <rect x="0" y="0" width="800" height="500" fill={isLight ? "#f8fafc" : "#050812"} opacity="0.94" rx="12" />
       <rect x="0" y="0" width="800" height="500" fill={`url(#${gridId})`} />
 
       {/* survey frame */}
-      <rect x="24" y="46" width="752" height="422" rx="14" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="11 9" opacity="0.34" />
-      <g stroke="var(--border)" strokeWidth="0.9" opacity="0.28">
+      <rect x="24" y="46" width="752" height="422" rx="14" fill="none" stroke={isLight ? "#cbd5e1" : "var(--border)"} strokeWidth="1" strokeDasharray="11 9" opacity={isLight ? "0.6" : "0.34"} />
+      <g stroke={isLight ? "#cbd5e1" : "var(--border)"} strokeWidth="0.9" opacity={isLight ? "0.5" : "0.28"}>
         {Array.from({ length: 13 }).map((_, i) => (
           <path key={`tx${i}`} d={`M${24 + i * (752 / 12)},46 v6`} />
         ))}
@@ -181,47 +183,47 @@ export default function CampusScene({
 
       {/* scale bar */}
       <g opacity="0.55">
-        <path d="M50,454 h88 M50,448 v12 M94,448 v12 M138,448 v12" stroke="var(--muted)" strokeWidth="1.1" fill="none" />
-        <text x="50" y="441" fontSize="12" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+        <path d="M50,454 h88 M50,448 v12 M94,448 v12 M138,448 v12" stroke={isLight ? "#475569" : "var(--muted)"} strokeWidth="1.1" fill="none" />
+        <text x="50" y="441" fontSize="12" fill={isLight ? "#475569" : "var(--muted)"} style={{ fontFamily: "var(--font-mono)" }}>
           0
         </text>
-        <text x="138" y="441" textAnchor="end" fontSize="12" fill="var(--muted)" style={{ fontFamily: "var(--font-mono)" }}>
+        <text x="138" y="441" textAnchor="end" fontSize="12" fill={isLight ? "#475569" : "var(--muted)"} style={{ fontFamily: "var(--font-mono)" }}>
           200 M
         </text>
       </g>
 
       {/* ------------------------------------------------------- massing */}
-      <g fill="none" stroke="var(--border)" strokeWidth="1.1" strokeDasharray="5 6" opacity="0.45">
+      <g fill="none" stroke={isLight ? "#cbd5e1" : "var(--border)"} strokeWidth="1.1" strokeDasharray="5 6" opacity={isLight ? "0.7" : "0.45"}>
         {MASSING.map(([x, y, w, h], i) => (
           <rect key={i} x={x} y={y} width={w} height={h} rx="7" />
         ))}
       </g>
 
       {/* ----------------------------------------------------- plan header */}
-      <text x="28" y="32" fontSize="13" letterSpacing="1.1" fill="var(--muted)" opacity="0.92" fontWeight="500" style={{ fontFamily: "var(--font-mono)" }}>
+      <text x="28" y="32" fontSize="13" letterSpacing="1.1" fill={isLight ? "#334155" : "var(--muted)"} opacity="0.92" fontWeight="600" style={{ fontFamily: "var(--font-mono)" }}>
         CHANDIGARH UNIV • UNNAO
       </text>
       <g opacity="0.9">
-        <text x="768" y="32" textAnchor="end" fontSize="12" letterSpacing="1.1" fill="var(--muted)" fontWeight="500" style={{ fontFamily: "var(--font-mono)" }}>
+        <text x="768" y="32" textAnchor="end" fontSize="12" letterSpacing="1.1" fill={isLight ? "#334155" : "var(--muted)"} fontWeight="600" style={{ fontFamily: "var(--font-mono)" }}>
           CAMPUS PLAN ↑ N
         </text>
       </g>
 
       {/* --------------------------------------------------------- roads */}
       <g strokeLinecap="round" fill="none">
-        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke="var(--scene-line)" strokeWidth="3" opacity="0.55" />
-        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke="var(--muted)" strokeWidth="0.9" strokeDasharray="7 9" opacity="0.4" />
-        <path d={`M${SPINE_X},173 H556`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
-        <path d={`M${SPINE_X},283 H556`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
-        <path d={`M298,${CROSS_Y} H502`} stroke="var(--scene-line)" strokeWidth="2.4" opacity="0.5" />
+        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke={isLight ? "#cbd5e1" : "var(--scene-line)"} strokeWidth="3" opacity="0.55" />
+        <path d={`M${SPINE_X},${SPINE_TOP} V${SPINE_BOTTOM}`} stroke={isLight ? "#64748b" : "var(--muted)"} strokeWidth="0.9" strokeDasharray="7 9" opacity="0.4" />
+        <path d={`M${SPINE_X},173 H556`} stroke={isLight ? "#cbd5e1" : "var(--scene-line)"} strokeWidth="2.4" opacity="0.5" />
+        <path d={`M${SPINE_X},283 H556`} stroke={isLight ? "#cbd5e1" : "var(--scene-line)"} strokeWidth="2.4" opacity="0.5" />
+        <path d={`M298,${CROSS_Y} H502`} stroke={isLight ? "#cbd5e1" : "var(--scene-line)"} strokeWidth="2.4" opacity="0.5" />
       </g>
 
       {/* ------------------------------------------------------ junctions */}
       <g>
         {JUNCTIONS.map(([x, y], i) => (
           <g key={i}>
-            <circle cx={x} cy={y} r="5.6" fill="var(--scene-block)" stroke="var(--border)" strokeWidth="1.2" />
-            <circle cx={x} cy={y} r="2" fill="var(--muted)" opacity="0.9" />
+            <circle cx={x} cy={y} r="5.6" fill={isLight ? "#e2e8f0" : "var(--scene-block)"} stroke={isLight ? "#cbd5e1" : "var(--border)"} strokeWidth="1.2" />
+            <circle cx={x} cy={y} r="2" fill={isLight ? "#64748b" : "var(--muted)"} opacity="0.9" />
           </g>
         ))}
       </g>
@@ -274,7 +276,7 @@ export default function CampusScene({
                 width={c.w}
                 height={c.h}
                 rx="12"
-                fill="#070c18"
+                fill={isLight ? "#ffffff" : "#070c18"}
                 fillOpacity="0.96"
                 stroke={accent}
                 strokeWidth={active ? 1.8 : 1.3}
@@ -292,7 +294,7 @@ export default function CampusScene({
                 fontSize="17"
                 letterSpacing="0.8"
                 fontWeight="700"
-                fill="var(--text)"
+                fill={isLight ? "#0f172a" : "var(--text)"}
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {c.label}
@@ -302,8 +304,8 @@ export default function CampusScene({
                 y={c.y + 48}
                 fontSize="12"
                 letterSpacing="0.6"
-                fill="var(--muted)"
-                opacity="0.85"
+                fill={isLight ? "#475569" : "var(--muted)"}
+                opacity="0.9"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {c.sub}
@@ -331,7 +333,7 @@ export default function CampusScene({
               {isActive && !reduced && (
                 <circle cx={n.x} cy={n.y} r="9" fill="none" stroke={accent} strokeWidth="1.4" className="pulse-ring" />
               )}
-              <circle cx={n.x} cy={n.y} r="4.6" fill="#080c16" stroke={accent} strokeWidth="2" />
+              <circle cx={n.x} cy={n.y} r="4.6" fill={isLight ? "#ffffff" : "#080c16"} stroke={accent} strokeWidth="2" />
             </g>
           );
         })}
