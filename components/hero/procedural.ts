@@ -378,8 +378,8 @@ export function textPanel(opts: {
 }
 
 /* ------------------------------------------------- pedestal lettering ----
-   "CAMPUSKART" — white CAMPUS, electric blue KART — drawn with an extrusion
-   shadow and a top highlight so it reads as dimensional letters on the drum. */
+   "CAMPUSKART" — dark slate CAMPUS, electric royal blue KART — drawn with deep
+   3D extrusion depth, specular bevel top highlight, and rich drop shadows matching reference. */
 export function pedestalLabel(mode: string = "dark") {
   const isLight = mode === "light";
   const W = 2048;
@@ -388,13 +388,25 @@ export function pedestalLabel(mode: string = "dark") {
   ctx.clearRect(0, 0, W, H);
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
-  const size = 210;
-  const font = `800 ${size}px Inter, 'Helvetica Neue', Arial, sans-serif`;
+  const size = 225;
+  const font = `900 ${size}px Inter, 'Helvetica Neue', Arial, sans-serif`;
   ctx.font = font;
-  const spacing = 16;
+  const spacing = 18;
   const parts = [
-    { text: "CAMPUS", face: isLight ? "#0f172a" : "#f4f8ff", edge: isLight ? "#cbd5e1" : "#0b2a4d" },
-    { text: "KART", face: isLight ? "#1d4ed8" : "#2f8dff", edge: isLight ? "#93c5fd" : "#062a52" },
+    {
+      text: "CAMPUS",
+      face: isLight ? "#0f172a" : "#f8fafc",
+      edge: isLight ? "#020617" : "#081b33",
+      top: isLight ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.85)",
+      shadow: isLight ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.8)",
+    },
+    {
+      text: "KART",
+      face: isLight ? "#1d4ed8" : "#2f8dff",
+      edge: isLight ? "#1e3a8a" : "#041c3e",
+      top: isLight ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.95)",
+      shadow: isLight ? "rgba(29,78,216,0.4)" : "rgba(47,141,255,0.6)",
+    },
   ];
   const widths = parts.map((p) =>
     [...p.text].reduce((s, ch) => s + ctx.measureText(ch).width + spacing, 0) - spacing,
@@ -423,14 +435,16 @@ export function pedestalLabel(mode: string = "dark") {
       }
       ctx.restore();
     };
-    // soft glow that bloom can pick up
-    drawRun(0, 0, p.face, 16, 0.5);
-    // extrusion body
-    for (let d = 10; d >= 1; d -= 2) drawRun(d * 0.6, d, p.edge, 0, 0.95);
-    // face
+    // 1. Soft glow/bloom backing
+    drawRun(0, 0, p.face, 18, 0.45);
+    // 2. Drop shadow under 3D relief
+    drawRun(5, 12, p.shadow, 10, 0.45);
+    // 3. Crisp 3D extrusion body layers
+    for (let d = 14; d >= 1; d -= 1.2) drawRun(d * 0.45, d * 0.75, p.edge, 0, 0.96);
+    // 4. Front face
     drawRun(0, 0, p.face, 0, 1);
-    // top highlight
-    drawRun(0, -3, "rgba(255,255,255,0.5)", 0, 0.55);
+    // 5. Bevel top highlight
+    drawRun(0, -3.5, p.top, 0, 0.7);
     x += widths[i];
   }
 
@@ -438,42 +452,31 @@ export function pedestalLabel(mode: string = "dark") {
 }
 
 /* ------------------------------------------------------ pedestal shell ----
-   The painted shell wrapped around the plinth drum. A flat colour reads as a
-   paper cut-out under daylight: the cylinder has nothing to say about which
-   way it faces. This is the daylight pedestal's surface — bright under the cap,
-   cooling slightly toward the foot, with a faint vertical brush and a speckle
-   so the specular streak breaks up as the camera orbits. */
+   The satin metallic shell wrapped around the plinth drum. */
 export function pedestalSkin() {
   const W = 1024;
   const H = 512;
   const { c, ctx } = canvas(W, H);
 
-  /* Around the drum. A cylinder's texture runs u=0 at the front face (the side
-     the hero camera looks at) and u=0.25 to its right — so the daylight key
-     lands near u≈0.12 and the shadow side of the shell falls around u≈0.6.
-     Baking that falloff into the shell is what keeps the drum from reading as
-     paper under a light rig that has to stay bright enough for the rest of the
-     scene. */
   const around = ctx.createLinearGradient(0, 0, W, 0);
   around.addColorStop(0.0, "#ffffff");
-  around.addColorStop(0.1, "#ffffff");
-  around.addColorStop(0.18, "#eef5ff");
-  around.addColorStop(0.34, "#d9e6f5");
-  around.addColorStop(0.52, "#c3d5e9");
-  around.addColorStop(0.66, "#b4c9e1");
-  around.addColorStop(0.8, "#cbdcee");
-  around.addColorStop(0.92, "#eaf2fb");
+  around.addColorStop(0.12, "#ffffff");
+  around.addColorStop(0.22, "#f1f5f9");
+  around.addColorStop(0.38, "#e2e8f0");
+  around.addColorStop(0.52, "#cbd5e1");
+  around.addColorStop(0.66, "#b0c4de");
+  around.addColorStop(0.8, "#e2e8f0");
+  around.addColorStop(0.92, "#f8fafc");
   around.addColorStop(1.0, "#ffffff");
   ctx.fillStyle = around;
   ctx.fillRect(0, 0, W, H);
 
-  /* And up the shell: brightest just under the cap, cooling into the foot. */
   ctx.globalCompositeOperation = "multiply";
   const up = ctx.createLinearGradient(0, 0, 0, H);
   up.addColorStop(0, "#ffffff");
-  up.addColorStop(0.4, "#f7fafe");
-  up.addColorStop(0.78, "#e4ecf6");
-  up.addColorStop(1, "#d3dfee");
+  up.addColorStop(0.35, "#fafafa");
+  up.addColorStop(0.75, "#edf2f7");
+  up.addColorStop(1, "#e2e8f0");
   ctx.fillStyle = up;
   ctx.fillRect(0, 0, W, H);
   ctx.globalCompositeOperation = "source-over";

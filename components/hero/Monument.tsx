@@ -87,50 +87,44 @@ function useKartMaterials(mode: string = "dark") {
     /* Daylight pedestal. Painted stone, not paper: the plinth is a shade below
        the plaza photo so its foot has an edge, the drum carries the shell
        texture, and the cap is near-white and polished so the sky throws a
-       highlight across it. Under the flat key of a bright day, albedo alone
-       reads as nothing — the light has to have something to catch. */
-    const plinth = new THREE.MeshStandardMaterial({
-      color: isLight ? "#cddcec" : "#141821",
-      roughness: isLight ? 0.52 : 0.28,
-      metalness: isLight ? 0.06 : 0.75,
-      envMapIntensity: isLight ? 0.45 : 1.1,
+    /* Daylight pedestal. Painted satin metallic stone & aluminum: plinth drum has sleek metallic specular,
+       and cap is bright white polished metallic so the sun throws clear highlights. */
+    const plinth = new THREE.MeshPhysicalMaterial({
+      color: isLight ? "#dbeafe" : "#141821",
+      roughness: isLight ? 0.22 : 0.28,
+      metalness: isLight ? 0.38 : 0.75,
+      clearcoat: isLight ? 0.5 : 0,
+      clearcoatRoughness: 0.15,
+      envMapIntensity: isLight ? 0.85 : 1.1,
     });
     const plinthFace = new THREE.MeshPhysicalMaterial({
-      /* not pure white: a shell that starts at 1.0 has nowhere left to go, so
-         every surface of it lands on the same value and the drum reads flat */
-      color: isLight ? "#eef3f8" : "#14181f",
+      color: isLight ? "#f8fafc" : "#14181f",
       map: skin,
-      roughness: isLight ? 0.26 : 0.22,
-      metalness: isLight ? 0.1 : 0.7,
-      clearcoat: isLight ? 0.62 : 0.9,
-      clearcoatRoughness: isLight ? 0.2 : 0.15,
-      /* The day env is a bright white-blue sky dome: at full strength it pours
-         an even wash into every white surface of the shell and the pedestal
-         stops having a lit side and a shaded one. */
-      envMapIntensity: isLight ? 0.55 : 0.9,
+      roughness: isLight ? 0.16 : 0.22,
+      metalness: isLight ? 0.35 : 0.7,
+      clearcoat: isLight ? 0.85 : 0.9,
+      clearcoatRoughness: isLight ? 0.12 : 0.15,
+      envMapIntensity: isLight ? 0.95 : 0.9,
     });
     const plinthTop = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#ffffff" : "#2a3346",
-      roughness: isLight ? 0.12 : 0.16,
-      metalness: isLight ? 0.28 : 0.8,
-      clearcoat: isLight ? 1 : 1,
-      clearcoatRoughness: isLight ? 0.06 : 0.08,
-      envMapIntensity: isLight ? 0.85 : 1.3,
+      roughness: isLight ? 0.08 : 0.16,
+      metalness: isLight ? 0.45 : 0.8,
+      clearcoat: 1,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: isLight ? 1.3 : 1.3,
     });
-    /* Machined seam: the joint lines are what make a plinth read as a built
-       object instead of an extruded shape. */
+    /* Machined seam */
     const plinthSeam = new THREE.MeshStandardMaterial({
-      color: isLight ? "#55657a" : "#33240f",
-      roughness: isLight ? 0.3 : 0.34,
-      metalness: isLight ? 0.82 : 0.86,
-      envMapIntensity: isLight ? 0.95 : 1.05,
+      color: isLight ? "#94a3b8" : "#33240f",
+      roughness: isLight ? 0.18 : 0.34,
+      metalness: isLight ? 0.8 : 0.86,
+      envMapIntensity: isLight ? 1.1 : 1.05,
     });
     const plinthGlow = new THREE.MeshStandardMaterial({
-      color: isLight ? "#8cc2ff" : "#42260e",
-      emissive: new THREE.Color(isLight ? "#3d8dff" : "#ffb066"),
-      /* a glaze, not a neon tube: at daylight brightness a full-strength
-         emissive ring under the shell cuts the base off its own shadow */
-      emissiveIntensity: isLight ? 0.6 : 0.9,
+      color: isLight ? "#38bdf8" : "#42260e",
+      emissive: new THREE.Color(isLight ? "#2563eb" : "#ffb066"),
+      emissiveIntensity: isLight ? 1.3 : 0.9,
       toneMapped: false,
       side: THREE.DoubleSide,
     });
@@ -425,137 +419,154 @@ function Pedestal({ mode = "dark" }: { mode?: string }) {
 
   return (
     <group>
-      {/* No shadow-catcher plane, no pasted-on reflective disc: in daylight the
-         plaza underneath is real geometry that receives the sun key, so the
-         plinth drops its own shadow onto the ground it is actually standing on
-         and the plaza mirrors it back. The only thing left to add is the
-         contact darkening where paint meets paving. */}
-      {/* Where paint meets paving. The shadow the sun would throw is shorter
-         than the base is wide, so the ground shadow of this plinth lives
-         entirely underneath it — the darkening at the foot is therefore not a
-         detail, it is the only thing telling the eye the shell is resting on
-         the deck and not hovering above it. */}
       {isLight && base && (
         <mesh position={[0, 0.014, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
           <circleGeometry args={[3.5, 64]} />
           <meshBasicMaterial map={base} transparent opacity={0.52} depthWrite={false} />
         </mesh>
       )}
-      {/* ground plinth: expanded to 4.7m diameter */}
+
+      {/* ground plinth base */}
       <mesh position={[0, 0.09, 0]} material={plinth} receiveShadow castShadow>
         <cylinderGeometry args={[2.32, 2.42, 0.18, 72]} />
       </mesh>
-      {/* machined foot: a dark, slightly oversailing lip that seats the plinth
-         on the plaza. Without it the base is white on white and dissolves. */}
+
+      {/* machined foot: oversailing lip */}
       <mesh position={[0, 0.033, 0]} material={plinthSeam} receiveShadow castShadow>
         <cylinderGeometry args={[2.41, 2.47, 0.066, 72]} />
       </mesh>
-      <mesh position={[0, 0.185, 0]} material={plinth} receiveShadow castShadow>
-        <cylinderGeometry args={[2.25, 2.33, 0.06, 72]} />
-      </mesh>
-      <mesh position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={isLight ? [2.47, 2.5, 72] : [2.42, 2.62, 72]} />
+
+      {/* illuminated neon blue translucent acrylic base rim (matching reference image 2) */}
+      <mesh position={[0, 0.024, 0]} receiveShadow castShadow>
+        <cylinderGeometry args={[2.46, 2.54, 0.045, 72]} />
         <meshStandardMaterial
-          color={isLight ? "#7fb9ff" : "#04122b"}
-          emissive={new THREE.Color(isLight ? "#368eff" : "#2f8dff")}
-          emissiveIntensity={isLight ? 0.18 : 0.8}
+          color={isLight ? "#38bdf8" : "#061836"}
+          emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
+          emissiveIntensity={isLight ? 1.4 : 0.8}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* ground glowing blue halo ring */}
+      <mesh position={[0, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={isLight ? [2.44, 2.75, 72] : [2.42, 2.62, 72]} />
+        <meshStandardMaterial
+          color={isLight ? "#38bdf8" : "#04122b"}
+          emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
+          emissiveIntensity={isLight ? 1.5 : 0.8}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
       </mesh>
+
+      {/* left side metallic step block accent (matching reference image 2) */}
+      <mesh position={[-2.32, 0.036, 0.42]} rotation={[0, 0.32, 0]} material={plinthTop} receiveShadow castShadow>
+        <boxGeometry args={[0.65, 0.045, 0.28]} />
+      </mesh>
+
+      <mesh position={[0, 0.185, 0]} material={plinth} receiveShadow castShadow>
+        <cylinderGeometry args={[2.25, 2.33, 0.06, 72]} />
+      </mesh>
+
       {/* drum */}
       <mesh position={[0, 0.44, 0]} material={plinthFace} receiveShadow castShadow>
         <cylinderGeometry args={[2.2, 2.3, 0.52, 72]} />
       </mesh>
-      {/* the lit reveal between the plinth and the shell — the blue line the
-         daylight reference reads as its ground glow */}
+
+      {/* reveal glow between plinth and shell */}
       {isLight && (
         <mesh position={[0, 0.196, 0]} rotation={[-Math.PI / 2, 0, 0]} material={plinthGlow}>
           <ringGeometry args={[2.28, 2.37, 72]} />
         </mesh>
       )}
-      {/* shaded joint under the cap */}
-      {isLight && (
-        <mesh position={[0, 0.692, 0]} material={plinthSeam} castShadow receiveShadow>
-          <cylinderGeometry args={[2.2, 2.232, 0.042, 72]} />
-        </mesh>
-      )}
+
+      {/* upper seam LED light strip under cap */}
+      <mesh position={[0, 0.696, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[2.2, 2.25, 72]} />
+        <meshStandardMaterial
+          color={isLight ? "#ffffff" : "#42260e"}
+          emissive={new THREE.Color(isLight ? "#ffffff" : "#ffb066")}
+          emissiveIntensity={isLight ? 1.0 : 0.9}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* top cap flared overhang */}
       <mesh position={[0, 0.78, 0]} material={plinthTop} castShadow receiveShadow>
         <cylinderGeometry args={[2.12, 2.22, 0.2, 72]} />
       </mesh>
       <mesh position={[0, 0.9, 0]} material={plinthTop}>
         <cylinderGeometry args={[2.1, 2.1, 0.05, 72]} />
       </mesh>
+
       {isLight && (
         <mesh position={[0.08, 0.928, 0.08]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={3}>
           <planeGeometry args={[3.82, 2.35]} />
           <meshBasicMaterial map={topContact} transparent opacity={0.15} depthWrite={false} />
         </mesh>
       )}
-      {/* warm light seam under the cap */}
-      {!isLight && (
-        <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[2.22, 2.32, 72]} />
-          <meshStandardMaterial color="#42260e" emissive={new THREE.Color("#ffb066")} emissiveIntensity={0.9} toneMapped={false} side={THREE.DoubleSide} />
-        </mesh>
-      )}
+
       {/* service ring */}
-      {!isLight && <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <mesh>
-          <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
-          <meshStandardMaterial
-            color={isLight ? "#d0e0f0" : "#061428"}
-            emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
-            emissiveIntensity={isLight ? 0.3 : 0.75}
-            toneMapped={false}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      </group>}
-      {/* dimensional CAMPUSKART lettering wrapped on drum */}
+      {!isLight && (
+        <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <mesh>
+            <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
+            <meshStandardMaterial
+              color="#061428"
+              emissive={new THREE.Color("#2f8dff")}
+              emissiveIntensity={0.75}
+              toneMapped={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        </group>
+      )}
+
+      {/* dimensional CAMPUSKART 3D lettering wrapped on drum */}
       <mesh position={[0, 0.44, 0]}>
         <cylinderGeometry args={[2.305, 2.315, 0.44, 96, 1, true, -0.52, 1.04]} />
         <meshStandardMaterial
           map={label}
-          emissiveMap={isLight ? undefined : label}
-          emissive={new THREE.Color(isLight ? "#000000" : "#e8f2ff")}
-          emissiveIntensity={isLight ? 0 : 0.6}
           transparent
           alphaTest={0.02}
           side={THREE.DoubleSide}
-          metalness={0.15}
-          roughness={0.34}
+          metalness={isLight ? 0.35 : 0.15}
+          roughness={isLight ? 0.18 : 0.34}
           polygonOffset
-          polygonOffsetFactor={-2}
+          polygonOffsetFactor={-3}
           toneMapped={false}
         />
       </mesh>
+
+      {/* Pedestal Lights & Glow */}
+      <pointLight position={[0, 0.2, 1.8]} color="#38bdf8" intensity={isLight ? 3.0 : 4} distance={7} decay={2} />
+      <pointLight position={[0, 0.75, 1.4]} color="#ffffff" intensity={isLight ? 2.2 : 0} distance={5} decay={2} />
       {!isLight && (
         <>
           <pointLight color="#ffc78c" intensity={10} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
           <pointLight color="#9fc6ff" intensity={8} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
-          <pointLight position={[0, 0.25, -1.5]} color="#2f8dff" intensity={4} distance={11} decay={2} />
-          <PedestalGlow />
         </>
       )}
-      {/* Two contact shadows, tight inside wide: the tight one is the dark line
-         where the plinth meets the plaza, the wide one the soft canopy of
-         occlusion around it. One gradient alone can only be either. */}
+      <PedestalGlow mode={mode} />
+
+      {/* Contact shadows */}
       <ContactShadow opacity={isLight ? 0.62 : 0.8} size={isLight ? 6.6 : 11.5} />
       {isLight && <ContactShadow opacity={0.3} size={12} />}
     </group>
   );
 }
 
-function PedestalGlow() {
-  const warm = useMemo(() => glowSprite("255,186,120"), []);
+function PedestalGlow({ mode = "dark" }: { mode?: string }) {
+  const isLight = mode === "light";
+  const warm = useMemo(() => glowSprite(isLight ? "56,189,248" : "255,186,120"), [isLight]);
   return (
     <group>
       <sprite position={[0, 1.05, 0.15]} scale={[8.4, 3.2, 1]} renderOrder={5}>
         <spriteMaterial
           map={warm}
           transparent
-          opacity={0.12}
+          opacity={isLight ? 0.08 : 0.12}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -564,9 +575,9 @@ function PedestalGlow() {
       <sprite position={[0, 0.05, 0]} scale={[14.2, 5.0, 1]} renderOrder={4}>
         <spriteMaterial
           map={warm}
-          color="#5ea8ff"
+          color={isLight ? "#38bdf8" : "#5ea8ff"}
           transparent
-          opacity={0.09}
+          opacity={isLight ? 0.15 : 0.09}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
