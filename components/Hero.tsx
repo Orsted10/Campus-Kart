@@ -180,7 +180,7 @@ export default function Hero() {
       id="top"
       data-play={play ? "1" : "0"}
       className={`ck-hero relative isolate w-full overflow-hidden transition-colors duration-500 ${
-        isLight ? "bg-[#ebf4ff] text-slate-900" : "bg-[#05070d] text-white"
+        isLight ? "bg-[#e8f4ff] text-slate-900" : "bg-[#05070d] text-white"
       }`}
       style={{ "--ck-accent": accent } as React.CSSProperties}
     >
@@ -190,36 +190,40 @@ export default function Hero() {
           className="absolute inset-0 ck-glow"
           style={{ background: `radial-gradient(120% 90% at 62% 68%, ${accent}${isLight ? "25" : "22"} 0%, transparent 55%)` }}
         />
-        <div className="absolute inset-0 ck-scene" data-play={play ? "1" : "0"}>
+        <div
+          className="absolute inset-0 ck-scene"
+          data-play={play ? "1" : "0"}
+          data-mode={theme}
+        >
           <HeroScene tier={tier} reduced={reduced} accent={accent} active={inView} mode={theme} />
         </div>
         {/* atmospheric scrims: depth, legibility, and the vignette of a lens */}
         <div
           className={`ck-par pointer-events-none absolute inset-x-0 top-0 h-[26vh] bg-gradient-to-b ${
-            isLight ? "from-[#ebf4ff]/90 via-[#ebf4ff]/40 to-transparent" : "from-[#04060c]/92 via-[#04060c]/45 to-transparent"
+            isLight ? "from-[#eef6ff]/22 via-[#eef6ff]/8 to-transparent" : "from-[#04060c]/92 via-[#04060c]/45 to-transparent"
           }`}
           data-depth="2"
         />
         <div
-          className={`ck-par pointer-events-none absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-t ${
-            isLight ? "from-[#ebf4ff] via-[#ebf4ff]/75 to-transparent" : "from-[#04060c] via-[#04060c]/72 to-transparent"
+          className={`ck-par pointer-events-none absolute inset-x-0 bottom-0 h-[20vh] bg-gradient-to-t ${
+            isLight ? "from-[#f4faff]/45 via-[#f4faff]/12 to-transparent" : "from-[#04060c] via-[#04060c]/72 to-transparent"
           }`}
           data-depth="9"
         />
         <div
-          className={`ck-par pointer-events-none absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r ${
-            isLight ? "from-[#ebf4ff]/90 via-[#ebf4ff]/40 to-transparent" : "from-[#04060c]/86 via-[#04060c]/38 to-transparent"
+          className={`ck-par pointer-events-none absolute inset-y-0 left-0 w-[40%] bg-gradient-to-r ${
+            isLight ? "from-[#f7fbff]/76 via-[#f7fbff]/30 to-transparent" : "from-[#04060c]/86 via-[#04060c]/38 to-transparent"
           }`}
           data-depth="4"
         />
         <div
-          className={`ck-par pointer-events-none absolute inset-0 ck-vignette ${isLight ? "opacity-25" : "opacity-100"}`}
+          className={`ck-par pointer-events-none absolute inset-0 ck-vignette ${isLight ? "opacity-15" : "opacity-100"}`}
           data-depth="3"
         />
       </div>
 
       {/* --------------------------------------------------------- content */}
-      <div className="ck-exit relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1680px] flex-col justify-between px-5 pb-5 pt-[84px] sm:px-8 sm:pb-7 lg:px-[4.2vw] lg:pt-[104px]">
+      <div className="ck-exit relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1680px] flex-col justify-between px-5 pb-5 pt-[84px] sm:px-8 sm:pb-7 lg:px-[4.2vw] lg:pb-5 lg:pt-[104px]">
         {/* upper: copy left, blueprint HUD right */}
         <div className="grid flex-1 grid-cols-1 items-start gap-6 lg:grid-cols-12">
           <div className="order-2 lg:order-1 lg:col-span-5 xl:col-span-5">
@@ -227,17 +231,17 @@ export default function Hero() {
               <LocationBadge />
             </div>
 
-            <h1 className="ck-display mt-4 text-[clamp(2.8rem,12.5vw,4.4rem)] font-black leading-[0.91] tracking-[-0.045em] sm:text-[clamp(2.95rem,7.8vw,5.35rem)] lg:mt-7 lg:text-[clamp(3.2rem,5.1vw,6.85rem)]">
+            <h1 className={`ck-display mt-4 text-[clamp(2.8rem,12.5vw,4.4rem)] font-black leading-[0.91] tracking-[-0.045em] sm:text-[clamp(2.95rem,7.8vw,5.35rem)] lg:mt-7 lg:text-[clamp(3.2rem,5.1vw,6.85rem)] ${isLight ? "lg:!mt-5 lg:origin-top lg:scale-y-[1.03]" : ""}`}>
               <Reveal delay={0.5}>
-                <span className={isLight ? "text-slate-950" : "text-white"}>EVERYTHING</span>
+                <span className={isLight ? "inline-block origin-left scale-x-[1.06] text-slate-950" : "text-white"}>EVERYTHING</span>
               </Reveal>
               <Reveal delay={0.6}>
                 <span className={isLight ? "text-slate-950" : "text-white"}>CAMPUS.</span>
               </Reveal>
               <Reveal delay={0.7}>
                 <span className={isLight ? "text-slate-950" : "text-white"}>
-                  <span className={`ck-serif mr-[0.06em] text-[1.06em] ${isLight ? "text-[#1d4ed8]" : "text-[#2f8dff]"}`}>One</span>
-                  <span>KART.</span>
+                  <span className={`ck-serif relative z-10 inline-block text-[1.06em] ${isLight ? "origin-bottom-left scale-x-[1.04] scale-y-[0.8] mr-[0.04em] text-[#1d4ed8]" : "mr-[0.06em] text-[#2f8dff]"}`}>One</span>
+                  <span className={isLight ? "relative inline-block origin-bottom scale-y-[1.06]" : ""}>KART.</span>
                 </span>
               </Reveal>
             </h1>
@@ -245,8 +249,8 @@ export default function Hero() {
             <p
               data-ck="desc"
               style={{ animationDelay: "0.86s" }}
-              className={`ck-in mt-5 max-w-[44ch] text-[15px] leading-relaxed sm:mt-8 sm:text-[16px] lg:text-[16.5px] ${
-                isLight ? "text-slate-600 font-medium" : "text-slate-200/85"
+              className={`ck-in mt-5 text-[15px] leading-relaxed sm:mt-8 sm:text-[16px] lg:text-[16.5px] ${
+                isLight ? "max-w-[400px] lg:mt-[35px] text-slate-600 font-medium" : "max-w-[44ch] text-slate-200/85"
               }`}
             >
               <span className={`font-bold ${isLight ? "text-[#ea580c]" : "text-[#ff8a3d]"}`}>Food.</span>{" "}
@@ -258,7 +262,7 @@ export default function Hero() {
             <div
               data-ck="cta"
               style={{ animationDelay: "1.02s" }}
-              className="ck-in mt-6 flex flex-wrap items-center gap-3 sm:mt-8 lg:mt-9"
+              className={`ck-in mt-6 flex flex-wrap items-center gap-3 sm:mt-8 lg:mt-9 ${isLight ? "lg:!mt-[34px]" : ""}`}
             >
               <button
                 type="button"
@@ -297,7 +301,7 @@ export default function Hero() {
 
           {/* floating blueprint: the campus, as an interface */}
           <div className="order-1 hidden justify-end lg:order-2 lg:col-span-7 lg:flex xl:col-span-6 xl:col-start-7">
-            <div className="ck-par w-full max-w-[468px]" data-depth="5">
+            <div className={`ck-par w-full max-w-[468px] ${isLight ? "lg:max-w-[480px]" : ""}`} data-depth="5">
               <div data-ck="hud" style={{ animationDelay: "1.2s" }} className="ck-in">
                 <div className="ck-hud">
                   <HudPanel active={active} onHover={setHoverKind} />
@@ -312,7 +316,7 @@ export default function Hero() {
 
         {/* lower: service cards */}
         <div className="mt-6 lg:mt-5">
-          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:px-[8.4vw] xl:px-[10vw] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 lg:grid lg:grid-cols-3 lg:gap-[18px] lg:overflow-visible lg:px-[8.4vw] xl:pl-[10.06vw] xl:pr-[10.2vw] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {SERVICE_COPY.map((s, i) => (
               <ServiceCard
                 key={s.id}
@@ -345,13 +349,13 @@ export default function Hero() {
                 </span>
               ))}
             </div>
-            <div className="text-[11.5px] leading-tight text-slate-300/75">
+            <div className={`text-[11.5px] leading-tight ${isLight ? "text-slate-700" : "text-slate-300/75"}`}>
               <p>
-                <span className="font-semibold text-white/95">5000+</span> students already use CampusKart
+                <span className={`font-semibold ${isLight ? "text-slate-950" : "text-white/95"}`}>5000+</span> students already use CampusKart
               </p>
-              <p className="mt-0.5 hidden text-[10.5px] text-slate-400/80 sm:block">
-                Food <span className="text-slate-600">•</span> Rides <span className="text-slate-600">•</span>{" "}
-                Essentials <span className="text-slate-600">•</span> A Happier Campus Life
+              <p className={`mt-0.5 hidden text-[10.5px] sm:block ${isLight ? "text-slate-600" : "text-slate-400/80"}`}>
+                Food <span className={isLight ? "text-slate-400" : "text-slate-600"}>•</span> Rides <span className={isLight ? "text-slate-400" : "text-slate-600"}>•</span>{" "}
+                Essentials <span className={isLight ? "text-slate-400" : "text-slate-600"}>•</span> A Happier Campus Life
               </p>
             </div>
           </div>
@@ -360,7 +364,7 @@ export default function Hero() {
             type="button"
             onClick={() => scrollToId("connect")}
             data-cursor="link"
-            className="group hidden items-center gap-2 text-[10.5px] uppercase tracking-[0.2em] text-slate-300/80 transition-colors hover:text-white md:flex"
+            className={`group hidden items-center gap-2 text-[10.5px] uppercase tracking-[0.2em] transition-colors md:flex ${isLight ? "relative left-[-18px] text-slate-600 hover:text-blue-700" : "text-slate-300/80 hover:text-white"}`}
           >
             <span className="ck-mouse">
               <span className="ck-mouse-dot" />
@@ -368,7 +372,7 @@ export default function Hero() {
             Scroll to Explore
           </button>
 
-          <div className="ck-switch" role="group" aria-label="Service focus">
+          <div className={`ck-switch ${isLight ? "relative top-[-4px]" : ""}`} role="group" aria-label="Service focus">
             {(["food", "rides", "essentials"] as ServiceId[]).map((id) => (
               <button
                 key={id}
@@ -456,7 +460,7 @@ function HudPanel({
     >
       <div
         className={`relative overflow-hidden rounded-[21px] px-4 pb-2.5 pt-3.5 backdrop-blur-[24px] ${
-          isLight ? "bg-white/90 text-slate-800" : "bg-[#060b18]/96 text-white"
+          isLight ? "bg-white/96 text-slate-800" : "bg-[#060b18]/96 text-white"
         }`}
       >
         {/* glass: top-left specular gradient scrim */}
@@ -467,8 +471,8 @@ function HudPanel({
           }`}
         >
           <span>Campus network</span>
-          <span className="flex items-center gap-1.5 text-[#2563eb] dark:text-[#5aa2ff]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#2563eb] dark:bg-[#5aa2ff] shadow-[0_0_10px_#2563eb] animate-pulse" />
+          <span className={`flex items-center gap-1.5 ${isLight ? "text-[#16a34a]" : "text-[#5aa2ff]"}`}>
+            <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isLight ? "bg-[#16a34a] shadow-[0_0_10px_#16a34a]" : "bg-[#5aa2ff] shadow-[0_0_10px_#2563eb]"}`} />
             Live
           </span>
         </div>
@@ -599,7 +603,7 @@ function ServiceCard({
         }`}
       />
 
-      <div className="relative flex items-stretch gap-2 p-3 lg:p-3.5">
+      <div className={`relative flex items-stretch gap-2 p-3 lg:p-3.5 ${isLight ? "lg:px-[17px] lg:py-[15px]" : ""}`}>
         <div className="flex flex-1 flex-col">
           <div className="flex items-center gap-2.5">
             <span className="ck-card-icon grid h-8 w-8 shrink-0 place-items-center rounded-[10px]">
@@ -620,7 +624,7 @@ function ServiceCard({
         </div>
 
         {/* the artwork bleeds into the card instead of sitting in a hard frame */}
-        <div className="ck-card-photo-wrap relative hidden w-[46%] shrink-0 sm:block">
+        <div className={`ck-card-photo-wrap relative hidden w-[46%] shrink-0 sm:block ${isLight ? "lg:w-[48%] lg:mr-1" : ""}`}>
           <div
             className="absolute inset-0 scale-[1.08] transition-transform duration-700 ease-out group-hover:scale-[1.16]"
             style={{ transform: "translate3d(var(--mx,0), var(--my,0), 0) scale(1.08)" }}

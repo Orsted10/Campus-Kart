@@ -7,6 +7,8 @@ import { scrollToId, useApp, useReducedMotion } from "@/lib/store";
 /* ------------------------------------------------------------------ mark */
 
 export function Mark({ size = 32, className = "" }: { size?: number; className?: string }) {
+  const { theme } = useApp();
+  const isLight = theme === "light";
   /* The cart the sculpture is built from: a lidded trapezoid basket with the
      crate grid showing through, one handle that stands up off the shoulder and
      reaches out, two wheels, and the load over the rim. Drawn on a 40-unit grid
@@ -25,8 +27,8 @@ export function Mark({ size = 32, className = "" }: { size?: number; className?:
         </linearGradient>
       </defs>
 
-      <rect width="40" height="40" rx="11" fill={`url(#${id}-plate)`} />
-      <rect x="0.5" y="0.5" width="39" height="39" rx="10.5" fill="none" stroke="#3b82f6" strokeOpacity="0.28" />
+      <rect width="40" height="40" rx="11" fill={isLight ? "#ffffff" : `url(#${id}-plate)`} />
+      <rect x="0.5" y="0.5" width="39" height="39" rx="10.5" fill="none" stroke={isLight ? "#bfdbfe" : "#3b82f6"} strokeOpacity={isLight ? "0.9" : "0.28"} />
 
       {/* crate grid, showing through the basket */}
       <g stroke={`url(#${id}-blue)`} strokeWidth="0.9" opacity="0.5">
@@ -106,7 +108,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       }}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       data-cursor="theme"
-      className={`group relative grid place-items-center overflow-hidden rounded-xl border border-line transition-colors duration-500 hover:border-ink ${
+      className={`group relative grid place-items-center overflow-hidden rounded-xl border border-line transition-colors duration-500 hover:border-ink ${theme === "light" ? "text-[#f97316]" : ""} ${
         compact ? "h-8 w-8" : "h-9.5 w-9.5"
       }`}
     >
@@ -244,13 +246,13 @@ export function Nav() {
         }`}
         style={{ 
           pointerEvents: overlay === "menu" ? "none" : "auto",
-          paddingTop: state === "compact" ? "10px" : "18px"
+          paddingTop: state === "compact" ? "10px" : isLight ? "16px" : "18px"
         }}
       >
         <nav
           className={`relative flex w-full items-center justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isLight
-              ? "max-w-[1440px] rounded-2xl border border-slate-200/80 py-3 px-5 sm:px-6 bg-white/90 backdrop-blur-xl shadow-sm text-slate-900"
+              ? "max-w-[1440px] rounded-2xl border border-slate-200/80 py-2.5 px-5 sm:px-6 bg-white/90 backdrop-blur-xl shadow-sm text-slate-900"
               : state === "compact"
                 ? "max-w-[1140px] rounded-2xl border border-[var(--border)] py-2.5 px-4.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] bg-[#070b16] sm:bg-[var(--surface)]/95 backdrop-blur-3xl"
                 : "max-w-[1440px] rounded-2xl border border-[var(--border)]/30 py-3 px-5 sm:px-6 bg-[#070b16]/90 sm:bg-[var(--surface)]/85 backdrop-blur-xl shadow-md"
@@ -518,71 +520,5 @@ function MobileMenu({
 /* ---------------------------------------------------------------- cursor */
 
 export function Cursor() {
-  const dot = useRef<HTMLDivElement | null>(null);
-  const ring = useRef<HTMLDivElement | null>(null);
-  const labelRef = useRef<HTMLSpanElement | null>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-    let rx = x;
-    let ry = y;
-    let scale = 1;
-    let targetScale = 1;
-    let raf = 0;
-
-    const move = (e: MouseEvent) => {
-      x = e.clientX;
-      y = e.clientY;
-      const el = (e.target as Element)?.closest?.("[data-cursor], a, button, input, [role=button]");
-      targetScale = el ? 2.1 : 1;
-      const kind = el?.getAttribute("data-cursor");
-      if (labelRef.current) {
-        const text =
-          kind === "cta" ? "open" : kind === "theme" ? "light / dark" : kind === "map" ? "drag" : "";
-        labelRef.current.textContent = text;
-        labelRef.current.style.opacity = text ? "1" : "0";
-      }
-      if (dot.current) dot.current.style.opacity = el ? "0" : "1";
-    };
-
-    const loop = () => {
-      rx += (x - rx) * 0.16;
-      ry += (y - ry) * 0.16;
-      scale += (targetScale - scale) * 0.14;
-      if (ring.current) ring.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) scale(${scale})`;
-      if (dot.current) dot.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      raf = requestAnimationFrame(loop);
-    };
-    window.addEventListener("mousemove", move, { passive: true });
-    raf = requestAnimationFrame(loop);
-    return () => {
-      window.removeEventListener("mousemove", move);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return (
-    <div className="pointer-events-none fixed inset-0 z-[150] hidden md:block" aria-hidden="true">
-      <div
-        ref={ring}
-        className="absolute left-0 top-0 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border"
-        style={{ borderColor: "var(--text)", willChange: "transform" }}
-      >
-        <span
-          ref={labelRef}
-          className="micro whitespace-nowrap text-[8px] opacity-0 transition-opacity duration-300"
-          style={{ color: "var(--text)" }}
-        />
-      </div>
-      <div
-        ref={dot}
-        className="absolute left-0 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-300"
-        style={{ background: "var(--blue)", willChange: "transform" }}
-      />
-    </div>
-  );
+  return null;
 }

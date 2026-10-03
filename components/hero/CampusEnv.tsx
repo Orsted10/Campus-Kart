@@ -4,7 +4,7 @@ import { useMemo, useRef, type ReactNode } from "react";
 import { useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
-import { cloudSprite, facadeTextures, foliageSprite, glowSprite, textPanel } from "./procedural";
+import { cloudSprite, facadeTextures, foliageSprite, glowSprite, plazaTexture, textPanel } from "./procedural";
 import { pointer } from "./heroState";
 
 /* --------------------------------------------------------------------------
@@ -22,44 +22,45 @@ export type Tier = "high" | "low";
 function useCampusMaterials(mode: string = "dark") {
   const isLight = mode === "light";
   return useMemo(() => {
-    const concrete = new THREE.MeshStandardMaterial({
-      color: isLight ? "#e2e8f0" : "#2b3141",
-      roughness: 0.86,
-      metalness: 0.06,
+    /* Daylight palette. Paving stays cool grey-blue, the architecture goes warm
+       limestone, and the planting goes brighter: three temperatures the eye can
+       separate at a glance, so the white plinth has something to stand against
+       instead of a campus that is white on white on white. */
+    const concrete = new THREE.MeshStandardMaterial({        color: isLight ? "#bdb3a2" : "#2b3141",
+      roughness: 0.82,
+      metalness: 0.04,
     });
-    const concreteDark = new THREE.MeshStandardMaterial({
-      color: isLight ? "#cbd5e1" : "#1c2130",
-      roughness: 0.92,
-      metalness: 0.05,
+    const concreteDark = new THREE.MeshStandardMaterial({        color: isLight ? "#a89c8a" : "#1c2130",
+      roughness: 0.88,
+      metalness: 0.03,
     });
-    const stone = new THREE.MeshStandardMaterial({
-      color: isLight ? "#cbd5e1" : "#454d5f",
-      roughness: 0.58,
-      metalness: 0.14,
+    const stone = new THREE.MeshStandardMaterial({        color: isLight ? "#b8afa0" : "#454d5f",
+      roughness: 0.55,
+      metalness: 0.12,
     });
     const metal = new THREE.MeshStandardMaterial({
-      color: isLight ? "#475569" : "#12161f",
-      roughness: 0.42,
-      metalness: 0.85,
+      color: isLight ? "#8aa0b8" : "#12161f",
+      roughness: 0.38,
+      metalness: 0.88,
     });
     const foliage = new THREE.MeshStandardMaterial({
-      color: isLight ? "#15803d" : "#1d3a28",
+      color: isLight ? "#2c8f42" : "#1d3a28",
       roughness: 0.95,
       metalness: 0,
       flatShading: true,
-      emissive: new THREE.Color(isLight ? "#000000" : "#0a1710"),
-      emissiveIntensity: isLight ? 0 : 0.9,
+      emissive: new THREE.Color(isLight ? "#0a2810" : "#0a1710"),
+      emissiveIntensity: isLight ? 0.08 : 0.9,
     });
     const hedge = new THREE.MeshStandardMaterial({
-      color: isLight ? "#166534" : "#16291d",
+      color: isLight ? "#2a8b3d" : "#16291d",
       roughness: 0.98,
       metalness: 0,
       flatShading: true,
-      emissive: new THREE.Color(isLight ? "#000000" : "#08130c"),
-      emissiveIntensity: isLight ? 0 : 0.8,
+      emissive: new THREE.Color(isLight ? "#071e10" : "#08130c"),
+      emissiveIntensity: isLight ? 0.08 : 0.8,
     });
     const warmStrip = new THREE.MeshStandardMaterial({
-      color: isLight ? "#94a3b8" : "#40260f",
+      color: isLight ? "#bdb2a2" : "#40260f",
       emissive: new THREE.Color(isLight ? "#000000" : "#ffae63"),
       emissiveIntensity: isLight ? 0 : 2.6,
       roughness: 0.4,
@@ -67,19 +68,19 @@ function useCampusMaterials(mode: string = "dark") {
       toneMapped: false,
     });
     const lampGlass = new THREE.MeshStandardMaterial({
-      color: isLight ? "#cbd5e1" : "#2a1c0d",
+      color: isLight ? "#dde6ef" : "#2a1c0d",
       emissive: new THREE.Color(isLight ? "#000000" : "#ffc98a"),
       emissiveIntensity: isLight ? 0 : 3.4,
       toneMapped: false,
     });
     const glass = new THREE.MeshStandardMaterial({
-      color: isLight ? "#bae6fd" : "#0a1220",
-      roughness: 0.14,
-      metalness: 0.4,
-      emissive: new THREE.Color(isLight ? "#000000" : "#3d5f96"),
-      emissiveIntensity: isLight ? 0 : 0.28,
+      color: isLight ? "#b8d8f0" : "#0a1220",
+      roughness: 0.1,
+      metalness: 0.35,
+      emissive: new THREE.Color(isLight ? "#c8e8ff" : "#3d5f96"),
+      emissiveIntensity: isLight ? 0.12 : 0.28,
       transparent: true,
-      opacity: 0.86,
+      opacity: 0.88,
     });
     const carBody = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#2563eb" : "#0f1524",
@@ -111,11 +112,11 @@ function Sky({ mode = "dark" }: { mode?: string }) {
   const isLight = mode === "light";
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color(isLight ? "#1d4ed8" : "#04081a") },
-      uMid: { value: new THREE.Color(isLight ? "#60a5fa" : "#101c46") },
-      uHorizon: { value: new THREE.Color(isLight ? "#bae6fd" : "#ff8f3d") },
-      uGlow: { value: new THREE.Color(isLight ? "#ffffff" : "#ffdcac") },
-      uSun: { value: new THREE.Vector3(0.25, isLight ? 0.75 : 0.06, -0.94) },
+      uTop: { value: new THREE.Color(isLight ? "#55a9f5" : "#04081a") },
+      uMid: { value: new THREE.Color(isLight ? "#8bc8f7" : "#101c46") },
+      uHorizon: { value: new THREE.Color(isLight ? "#ffe8c8" : "#ff8f3d") },
+      uGlow: { value: new THREE.Color(isLight ? "#fff8e8" : "#ffdcac") },
+      uSun: { value: new THREE.Vector3(0.25, isLight ? 0.62 : 0.06, -0.94) },
       uIsLight: { value: isLight ? 1.0 : 0.0 },
     }),
     [isLight],
@@ -141,32 +142,35 @@ function Sky({ mode = "dark" }: { mode?: string }) {
           uniform vec3 uHorizon;
           uniform vec3 uGlow;
           uniform vec3 uSun;
+          uniform float uIsLight;
           void main() {
             vec3 d = normalize(vDir);
             float h = d.y;
             vec3 dir = normalize(uSun);
 
-            // The camera sits low, so nearly all of the visible sky is the first
-            // 15 degrees above the horizon. The afterglow has to live in that
-            // band, otherwise the hero sky reads as a flat navy card.
-            vec3 col = mix(uHorizon, uMid, smoothstep(0.0, 0.115, h));
-            col = mix(col, uTop, smoothstep(0.11, 0.44, h));
+            vec3 col = mix(uHorizon, uMid, smoothstep(0.0, 0.12, h));
+            col = mix(col, uTop, smoothstep(0.10, 0.46, h));
 
             float sun = max(dot(d, dir), 0.0);
-            col += uGlow * pow(sun, 150.0) * 3.0;
-            col += uGlow * pow(sun, 9.0) * 0.3;
+            col += uGlow * pow(sun, 180.0) * 4.0;
+            col += uGlow * pow(sun, 10.0) * 0.25;
 
-            // rose layer just above the hot band — sunset, not a colour stripe
-            float band = pow(max(1.0 - abs(h - 0.075) * 11.0, 0.0), 2.0);
-            col += vec3(0.36, 0.11, 0.15) * band * (0.2 + 0.8 * sun);
+            if (uIsLight > 0.5) {
+              // Soft white haze near the horizon. Kept light: a heavy haze band
+              // puts the sky at the value of the buildings, and every roofline
+              // in the campus disappears into it.
+              float haze = pow(max(1.0 - abs(h - 0.03) * 7.0, 0.0), 1.6);
+              col = mix(col, vec3(0.94, 0.96, 0.99), haze * 0.1);
+            } else {
+              float band = pow(max(1.0 - abs(h - 0.075) * 11.0, 0.0), 2.0);
+              col += vec3(0.36, 0.11, 0.15) * band * (0.2 + 0.8 * sun);
+              float low = pow(max(1.0 - abs(h - 0.03) * 9.0, 0.0), 2.4);
+              col += vec3(0.85, 0.36, 0.12) * low * pow(sun, 0.5) * 1.45;
+            }
 
-            // horizon light pools on the sun's side of the sky — strongly biased
-            // to the sun so the far horizon stays cold instead of going pink
-            float low = pow(max(1.0 - abs(h - 0.03) * 9.0, 0.0), 2.4);
-            col += vec3(0.85, 0.36, 0.12) * low * pow(sun, 0.5) * 1.45;
-
-            // ground haze below the horizon line
-            col = mix(col, vec3(0.024, 0.031, 0.055), smoothstep(0.0, -0.2, h));
+            // ground haze
+            vec3 hazeCol = uIsLight > 0.5 ? vec3(0.88, 0.92, 0.97) : vec3(0.024, 0.031, 0.055);
+            col = mix(col, hazeCol, smoothstep(0.0, -0.2, h) * (uIsLight > 0.5 ? 0.32 : 1.0));
 
             gl_FragColor = vec4(col, 1.0);
           }
@@ -243,25 +247,25 @@ function CloudBank({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
 
 function SunGlow({ mode = "dark" }: { mode?: string }) {
   const isLight = mode === "light";
-  const texture = useMemo(() => glowSprite(isLight ? "255,255,255" : "255,205,150"), [isLight]);
+  const texture = useMemo(() => glowSprite(isLight ? "255,231,190" : "255,205,150"), [isLight]);
   return (
     <group renderOrder={-8}>
-      <sprite position={[104, isLight ? 40 : 9, -300]} scale={[isLight ? 160 : 104, isLight ? 140 : 86, 1]}>
+      <sprite position={[104, isLight ? 38 : 9, -300]} scale={[isLight ? 180 : 104, isLight ? 155 : 86, 1]}>
         <spriteMaterial
           map={texture}
           transparent
-          opacity={isLight ? 0.35 : 0.66}
+          opacity={isLight ? 0.42 : 0.66}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
         />
       </sprite>
-      <sprite position={[92, isLight ? 36 : 4, -290]} scale={[isLight ? 48 : 34, isLight ? 44 : 30, 1]}>
+      <sprite position={[92, isLight ? 34 : 4, -290]} scale={[isLight ? 55 : 34, isLight ? 50 : 30, 1]}>
         <spriteMaterial
           map={texture}
-          color={isLight ? "#ffffff" : "#fff0d2"}
+          color={isLight ? "#fff0d2" : "#fff0d2"}
           transparent
-          opacity={isLight ? 0.7 : 0.5}
+          opacity={isLight ? 0.75 : 0.5}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -297,7 +301,7 @@ function Block({
   mode?: string;
 }) {
   const isLight = mode === "light";
-  const actualWall = isLight ? "#cbd5e1" : wall;
+  const actualWall = isLight ? "#bcae92" : wall;
   const actualLit = isLight ? 0 : lit;
   const tex = useMemo(
     () => facadeTextures({ seed, wall: actualWall, lit: actualLit, warm, cols, rows }),
@@ -310,6 +314,10 @@ function Block({
         emissiveMap: isLight ? undefined : tex.emissive,
         emissive: new THREE.Color(isLight ? "#000000" : "#ffffff"),
         emissiveIntensity: isLight ? 0 : 1.55,
+        /* the day sky env is held off the facades: at full strength it washes
+           the glazing back up to the value of the wall and the window grid —
+           the only architecture the hero actually reads — disappears */
+        envMapIntensity: isLight ? 0.35 : 1,
         roughness: 0.82,
         metalness: 0.08,
       }),
@@ -318,14 +326,14 @@ function Block({
   const side = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: isLight ? "#94a3b8" : "#232a38",
-        roughness: 0.9,
+        color: isLight ? "#a99b82" : "#232a38",
+        roughness: 0.85,
         metalness: 0.06,
       }),
     [isLight],
   );
   const roof = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: isLight ? "#cbd5e1" : "#11151f", roughness: 0.95 }),
+    () => new THREE.MeshStandardMaterial({ color: isLight ? "#9c9078" : "#11151f", roughness: 0.9 }),
     [isLight],
   );
 
@@ -455,6 +463,17 @@ function Stairs({ mode = "dark" }: { mode?: string }) {
 function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
   const isLight = mode === "light";
   const { warmStrip } = useCampusMaterials(mode);
+  /* Paving joints. A daylit deck with no joints is a white sheet, and the
+     monument standing on a white sheet is a white shape on nothing. */
+  const paving = useMemo(() => {
+    if (!isLight) return null;
+    const t = plazaTexture();
+    /* ~3.2 m slabs: big enough that the deck reads as paving and not as a
+       bathroom wall, small enough to give the perspective a scale */
+    t.repeat.set(69, 47);
+    t.anisotropy = 8;
+    return t;
+  }, [isLight]);
   const random = useMemo(() => {
     const rand = (s: number) => {
       let a = s;
@@ -470,7 +489,10 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
       rx: (r() - 0.5) * 0.5,
       ry: (r() - 0.5) * 0.5,
       s: 0.5 + r() * 1.1,
-    }));
+    }))
+      /* nothing may sit under the plinth: a paving slab poking out from beneath
+         a 4.9 m base is the fastest way to make it read as dropped in */
+      .filter((s) => Math.hypot(s.x, s.z) > 3.6);
   }, [tier]);
 
   return (
@@ -482,17 +504,28 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
             resolution={1024}
             blur={[260, 80]}
             mixBlur={1.15}
-            mixStrength={isLight ? 1.4 : 3.1}
+            mixStrength={isLight ? 0.18 : 3.1}
             depthScale={1.1}
             minDepthThreshold={0.3}
             maxDepthThreshold={1.4}
             depthToBlurRatioBias={0.3}
-            color={isLight ? "#e2e8f0" : "#141b2b"}
-            metalness={isLight ? 0.2 : 0.78}
-            roughness={isLight ? 0.6 : 0.42}
+            map={paving ?? undefined}
+            color={isLight ? "#a89c8e" : "#141b2b"}
+            metalness={isLight ? 0.06 : 0.78}
+            roughness={isLight ? 0.88 : 0.42}
+            /* The day env is a blue sky, and a plaza with a full-strength IBL
+               on it renders as sky-blue water. The deck has to keep its own
+               value: it is the surface the white plinth is read against. */
+            envMapIntensity={isLight ? 0.3 : 1}
           />
         ) : (
-          <meshStandardMaterial color={isLight ? "#e2e8f0" : "#131a28"} metalness={isLight ? 0.2 : 0.55} roughness={0.5} />
+          <meshStandardMaterial
+            map={paving ?? undefined}
+            color={isLight ? "#a89c8e" : "#131a28"}
+            metalness={isLight ? 0.06 : 0.55}
+            roughness={isLight ? 0.88 : 0.5}
+            envMapIntensity={isLight ? 0.3 : 1}
+          />
         )}
       </mesh>
 
@@ -507,6 +540,10 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
         </mesh>
       ))}
 
+      {/* The loose slabs stay, floor-level clutter is what makes a plaza read as
+         a place rather than as a plane — but they are kept out of the plinth's
+         footprint, because a slab poking out from under a 5 m base gives away
+         that nothing was placed with the ground in mind. */}
       {random.map((s, i) => (
         <RoundedBox
           key={i}
@@ -517,7 +554,12 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
           rotation={[0, s.ry * 2, 0]}
           receiveShadow
         >
-          <meshStandardMaterial color={isLight ? "#cbd5e1" : "#161b28"} roughness={0.5} metalness={0.25} />
+          <meshStandardMaterial
+            color={isLight ? "#9c9082" : "#161b28"}
+            roughness={0.5}
+            metalness={0.22}
+            envMapIntensity={isLight ? 0.4 : 1}
+          />
         </RoundedBox>
       ))}
     </group>
@@ -606,7 +648,7 @@ function MidGround({ mode = "dark" }: { mode?: string }) {
       <mesh position={[0, 0.11, -25.6]}>
         <boxGeometry args={[86, 0.035, 0.1]} />
         <meshStandardMaterial
-          color={mode === "light" ? "#94a3b8" : "#3a240f"}
+          color={mode === "light" ? "#aabcce" : "#3a240f"}
           emissive={new THREE.Color(mode === "light" ? "#000000" : "#ffb066")}
           emissiveIntensity={mode === "light" ? 0 : 1.1}
           toneMapped={false}

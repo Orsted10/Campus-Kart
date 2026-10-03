@@ -35,10 +35,53 @@ function finish(c: HTMLCanvasElement, srgb = true) {
   return t;
 }
 
-/* ------------------------------------------------------------ night sky ---
-   Equirectangular blue-hour gradient used as scene.environment so glowing
-   metal actually reflects a sky: cool zenith, warm sunset band, dark ground. */
-export function skyEnvironment() {
+/* ------------------------------------------------------------------- sky ---
+   Equirectangular gradient used as scene.environment so glossy surfaces
+   actually reflect a sky. It has to match the hour: a pedestal standing in
+   daylight that reflects a blue-hour sunset reads as a white cut-out no matter
+   how the key light is aimed, because every highlight on it is the wrong
+   colour. */
+export function skyEnvironment(mode: string = "dark") {
+  return mode === "light" ? daySkyEnvironment() : duskSkyEnvironment();
+}
+
+function daySkyEnvironment() {
+  const { c, ctx } = canvas(512, 256);
+  const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0.0, "#2f7fdd");
+  g.addColorStop(0.28, "#6fb0ef");
+  g.addColorStop(0.46, "#b6d9f8");
+  g.addColorStop(0.52, "#eaf4ff");
+  g.addColorStop(0.56, "#ffffff");
+  g.addColorStop(0.62, "#dcd6cd");
+  g.addColorStop(0.78, "#b3ada4");
+  g.addColorStop(1.0, "#8d8579");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 512, 256);
+
+  // the sun itself, high and to the right of the monument, so the clearcoat
+  // carries one honest highlight rather than a smear
+  const sun = ctx.createRadialGradient(392, 74, 2, 392, 74, 120);
+  sun.addColorStop(0, "rgba(255,255,255,1)");
+  sun.addColorStop(0.14, "rgba(255,250,238,0.9)");
+  sun.addColorStop(0.45, "rgba(255,240,208,0.32)");
+  sun.addColorStop(1, "rgba(255,240,208,0)");
+  ctx.fillStyle = sun;
+  ctx.fillRect(0, 0, 512, 256);
+
+  // warm ground bounce on the low half: plaza-reading reflections
+  const bounce = ctx.createLinearGradient(0, 150, 0, 256);
+  bounce.addColorStop(0, "rgba(226,214,196,0)");
+  bounce.addColorStop(1, "rgba(222,206,184,0.5)");
+  ctx.fillStyle = bounce;
+  ctx.fillRect(0, 150, 512, 106);
+
+  const t = finish(c);
+  t.mapping = THREE.EquirectangularReflectionMapping;
+  return t;
+}
+
+function duskSkyEnvironment() {
   const { c, ctx } = canvas(512, 256);
   const g = ctx.createLinearGradient(0, 0, 0, 256);
   g.addColorStop(0.0, "#05091a");
@@ -192,6 +235,103 @@ export function facadeTextures(opts: {
   return { map: finish(base.c), emissive: finish(glow.c) };
 }
 
+/* ------------------------------------------------------------ paving ------
+   Daylight reads the ground by its joints. A plain plane under a bright key
+   clips to white, and a white plinth standing on a white plane has no edge to
+   sit on — which is the whole of the "floating" read. Laid over the plaza
+   material at ~2.4 m per slab, this gives the deck its scale, gives the camera
+   something to travel across, and gives the pedestal a surface that is not the
+   same value as the pedestal. */
+export function plazaTexture() {
+  const S = 1024;
+  const { c, ctx } = canvas(S, S);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, S, S);
+  const rand = rng(41);
+  const n = 8; /* one texture tile holds 8x8 slabs */
+  const cell = S / n;
+
+  for (let iy = 0; iy < n; iy++) {
+    for (let ix = 0; ix < n; ix++) {
+      const v = Math.round(255 * (1 - rand() * 0.11));
+      ctx.fillStyle = `rgb(${v},${v},${v})`;
+      ctx.fillRect(ix * cell, iy * cell, cell, cell);
+      /* grain inside the slab so a 92x repeat never reads as flat */
+      for (let k = 0; k < 30; k++) {
+        ctx.fillStyle = `rgba(134,124,110,${rand() * 0.06})`;
+        ctx.fillRect(
+          ix * cell + rand() * cell,
+          iy * cell + rand() * cell,
+          2 + rand() * 6,
+          2 + rand() * 6,
+        );
+      }
+    }
+  }
+
+  /* Wear. A deck that is perfectly even in tone reads as a surface *drop*:
+     a few soft patches of grime are what tell the eye it is being walked on. */
+  for (let i = 0; i < 26; i++) {
+    const x = rand() * S;
+    const y = rand() * S;
+    const r = 40 + rand() * 130;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, `rgba(104,96,84,${0.05 + rand() * 0.07})`);
+    g.addColorStop(1, "rgba(104,96,84,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* The joints themselves. They have to survive being minified to a couple of
+     pixels on screen: at 128 px per slab a 3 px line just mips away to a pale
+     wash, which is what turned the first pass into a white grid on the deck. */
+  for (let i = 0; i <= n; i++) {
+    const p = i * cell;
+    ctx.strokeStyle = "rgba(74,64,52,0.78)";
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(p, 0);
+    ctx.lineTo(p, S);
+    ctx.moveTo(0, p);
+    ctx.lineTo(S, p);
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(255,252,246,0.34)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p + 4, 0);
+    ctx.lineTo(p + 4, S);
+    ctx.moveTo(0, p + 4);
+    ctx.lineTo(S, p + 4);
+    ctx.stroke();
+  }
+
+  const t = finish(c);
+  t.wrapS = THREE.RepeatWrapping;
+  t.wrapT = THREE.RepeatWrapping;
+  return t;
+}
+
+/* --------------------------------------------------------- base shadow ----
+   The dark line where a pedestal meets the paving. A wide contact gradient
+   cannot do this job: by the edge of a 5 m base its alpha has long gone, which
+   is exactly why a bright plinth reads as hovering. Solid under the footprint,
+   gone a metre past it. */
+export function baseShadow() {
+  const S = 256;
+  const { c, ctx } = canvas(S, S);
+  const g = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+  g.addColorStop(0, "rgba(0,0,0,0.9)");
+  g.addColorStop(0.6, "rgba(0,0,0,0.72)");
+  g.addColorStop(0.78, "rgba(0,0,0,0.36)");
+  g.addColorStop(0.9, "rgba(0,0,0,0.1)");
+  g.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, S, S);
+  return finish(c);
+}
+
 /* ---------------------------------------------------------- lettering ---- */
 export function textPanel(opts: {
   lines: { text: string; color: string; size: number; weight?: string; spacing?: number }[];
@@ -297,6 +437,70 @@ export function pedestalLabel(mode: string = "dark") {
   return finish(c);
 }
 
+/* ------------------------------------------------------ pedestal shell ----
+   The painted shell wrapped around the plinth drum. A flat colour reads as a
+   paper cut-out under daylight: the cylinder has nothing to say about which
+   way it faces. This is the daylight pedestal's surface — bright under the cap,
+   cooling slightly toward the foot, with a faint vertical brush and a speckle
+   so the specular streak breaks up as the camera orbits. */
+export function pedestalSkin() {
+  const W = 1024;
+  const H = 512;
+  const { c, ctx } = canvas(W, H);
+
+  /* Around the drum. A cylinder's texture runs u=0 at the front face (the side
+     the hero camera looks at) and u=0.25 to its right — so the daylight key
+     lands near u≈0.12 and the shadow side of the shell falls around u≈0.6.
+     Baking that falloff into the shell is what keeps the drum from reading as
+     paper under a light rig that has to stay bright enough for the rest of the
+     scene. */
+  const around = ctx.createLinearGradient(0, 0, W, 0);
+  around.addColorStop(0.0, "#ffffff");
+  around.addColorStop(0.1, "#ffffff");
+  around.addColorStop(0.18, "#eef5ff");
+  around.addColorStop(0.34, "#d9e6f5");
+  around.addColorStop(0.52, "#c3d5e9");
+  around.addColorStop(0.66, "#b4c9e1");
+  around.addColorStop(0.8, "#cbdcee");
+  around.addColorStop(0.92, "#eaf2fb");
+  around.addColorStop(1.0, "#ffffff");
+  ctx.fillStyle = around;
+  ctx.fillRect(0, 0, W, H);
+
+  /* And up the shell: brightest just under the cap, cooling into the foot. */
+  ctx.globalCompositeOperation = "multiply";
+  const up = ctx.createLinearGradient(0, 0, 0, H);
+  up.addColorStop(0, "#ffffff");
+  up.addColorStop(0.4, "#f7fafe");
+  up.addColorStop(0.78, "#e4ecf6");
+  up.addColorStop(1, "#d3dfee");
+  ctx.fillStyle = up;
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = "source-over";
+
+  const rand = rng(17);
+  // vertical brushing: a cast shell, not a shaded sphere
+  for (let i = 0; i < 300; i++) {
+    const x = rand() * W;
+    ctx.fillStyle = `rgba(122,148,180,${rand() * 0.055})`;
+    ctx.fillRect(x, 0, 1 + rand() * 3, H);
+  }
+  // micro speckle: keeps the clearcoat highlight from reading as plastic
+  for (let i = 0; i < 1100; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${rand() * 0.06})`;
+    ctx.fillRect(rand() * W, rand() * H, 2, 2);
+  }
+  // a whisper of grime where the shell meets the plaza — every real plinth has
+  // it, and it is what stops the foot of the cylinder from floating
+  const grit = ctx.createLinearGradient(0, H * 0.86, 0, H);
+  grit.addColorStop(0, "rgba(88,110,138,0)");
+  grit.addColorStop(1, "rgba(74,96,124,0.22)");
+  ctx.fillStyle = grit;
+  ctx.fillRect(0, H * 0.86, W, H * 0.14);
+
+  return finish(c);
+}
+
 /* ------------------------------------------------------------- sprites ---- */
 export function glowSprite(color = "255,190,120") {
   const S = 256;
@@ -354,6 +558,23 @@ export function cloudSprite(seed = 3) {
     ctx.fill();
   }
   return finish(c);
+}
+
+/** Radial mask for the polished patch of plaza the monument stands on: solid
+    under the plinth, gone by the edge, so a rendered reflective disc can be
+    laid over the photograph without a visible rim. */
+export function reflectionMask() {
+  const S = 256;
+  const { c, ctx } = canvas(S, S);
+  const g = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+  g.addColorStop(0, "rgba(255,255,255,1)");
+  g.addColorStop(0.34, "rgba(255,255,255,0.92)");
+  g.addColorStop(0.62, "rgba(255,255,255,0.5)");
+  g.addColorStop(0.86, "rgba(255,255,255,0.16)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, S, S);
+  return finish(c, false);
 }
 
 /** Radial contact shadow used to seat props on the plaza. */

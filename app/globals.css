@@ -2,42 +2,36 @@
 
 @custom-variant dark (&:where([data-theme="dark"] *));
 
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
-
 
 /* ---------------------------------------------------------------- tokens */
 
 /* ---------------------------------------------------------------- tokens */
 
 :root {
-  --bg: #f8f6f0;
+  --bg: #f4f8ff;
   --surface: #ffffff;
-  --surface-2: #f0ebe1;
-  --text: #0f172a;
-  --muted: #475569;
-  --border: #cbd5e1;
+  --surface-2: #edf3fc;
+  --text: #101828;
+  --muted: #52627a;
+  --border: #d8e1ef;
   --blue: #2563eb;
   --blue-ink: #1d4ed8;
-  --food: #ea580c;
+  --food: #f97316;
   --food-ink: #c2410c;
   --rides: #2563eb;
   --rides-ink: #1d4ed8;
-  --essentials: #059669;
-  --essentials-ink: #047857;
-  --ink: #0f172a;
-  --shade: rgba(15, 23, 42, 0.06);
-  --shade-strong: rgba(15, 23, 42, 0.12);
-  --scene-line: #cbd5e1;
-  --scene-block: #f1f5f9;
-  --scene-block-2: #e2e8f0;
-  --chip-neutral: #475569;
+  --essentials: #16a34a;
+  --essentials-ink: #15803d;
+  --ink: #101828;
+  --shade: rgba(19, 42, 76, 0.045);
+  --shade-strong: rgba(19, 42, 76, 0.1);
+  --scene-line: #d5e0ee;
+  --scene-block: #f4f8fd;
+  --scene-block-2: #e8eff8;
+  --chip-neutral: #52627a;
   --on-accent: #ffffff;
-  --nav-bg: rgba(248, 246, 240, 0.88);
-  --accent-soft: rgba(37, 99, 235, 0.1);
+  --nav-bg: rgba(248, 251, 255, 0.86);
+  --accent-soft: rgba(37, 99, 235, 0.09);
   color-scheme: light;
 }
 
@@ -381,15 +375,6 @@ a {
   writing-mode: vertical-rl;
 }
 
-[data-cursor] {
-  cursor: none;
-}
-
-@media (pointer: coarse) {
-  [data-cursor] {
-    cursor: auto;
-  }
-}
 
 /* ================================================================= HERO */
 /* Cinematic first viewport: glass UI floating over a live 3D campus.       */
@@ -398,6 +383,10 @@ a {
   --ck-accent: #2f8dff;
   min-height: 100svh;
   background: #05070d;
+}
+
+[data-theme="light"] .ck-hero {
+  background: #eaf4ff;
 }
 
 .ck-hero {
@@ -418,6 +407,13 @@ a {
 
 .ck-hero .ck-scene[data-play="1"] {
   opacity: 1;
+}
+
+/* Daylight is drawn, not photographed: the scene builds its own sky sphere and
+   campus on the same lighting rig, so this is only the colour that sits behind
+   the canvas while the world compiles — and the fallback if WebGL never lands. */
+.ck-hero .ck-scene[data-mode="light"] {
+  background: linear-gradient(#a3cff4 0%, #cae2f8 46%, #e8f3fc 100%);
 }
 
 /* Depth layers. Each declares how far in front of the world it sits; the 3D
@@ -467,6 +463,15 @@ a {
     transparent 40%,
     rgba(2, 4, 9, 0.5) 76%,
     rgba(2, 4, 9, 0.9) 100%
+  );
+}
+
+[data-theme="light"] .ck-vignette {
+  background: radial-gradient(
+    118% 96% at 50% 46%,
+    transparent 48%,
+    rgba(42, 80, 133, 0.035) 78%,
+    rgba(42, 80, 133, 0.11) 100%
   );
 }
 
@@ -729,6 +734,18 @@ a {
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+[data-theme="light"] .ck-card[data-active="true"] .ck-card-frame {
+  border-color: color-mix(in srgb, var(--card-accent) 48%, white);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 48px -27px color-mix(in srgb, var(--card-accent) 48%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+[data-theme="light"] .ck-card .ck-card-frame {
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px) saturate(1.08);
+}
+
 .ck-card:hover .ck-card-frame {
   border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
 }
@@ -782,6 +799,36 @@ a {
   mix-blend-mode: soft-light;
 }
 
+[data-theme="light"] .ck-switch {
+  border-color: rgba(155, 175, 204, 0.5);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 28px -18px rgba(34, 67, 115, 0.3);
+}
+
+[data-theme="light"] .ck-hud-frame {
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(244, 248, 255, 0.94) 48%,
+    rgba(255, 255, 255, 0.98)
+  );
+}
+
+[data-theme="light"] .ck-switch-item {
+  color: #53627a;
+  padding: 0.48rem 0.9rem;
+}
+
+[data-theme="light"] .ck-switch-item:hover {
+  color: #111827;
+  background: rgba(231, 239, 250, 0.8);
+}
+
+[data-theme="light"] .ck-switch-item[aria-pressed="true"] {
+  color: #18243a;
+  background: rgba(232, 240, 251, 0.96);
+}
+
 /* ------------------------------------------------------- nav over hero */
 
 .nav-at-hero {
@@ -800,6 +847,14 @@ a {
   --shade: rgba(15, 23, 42, 0.05);
   --nav-bg: rgba(255, 255, 255, 0.9);
   --bg: #ffffff;
+}
+
+[data-theme="light"] .ck-hero [data-ck="foot"] {
+  border-color: rgba(61, 83, 116, 0.16);
+}
+
+[data-theme="light"] .ck-mouse {
+  border-color: rgba(52, 68, 94, 0.55);
 }
 
 /* --------------------------------------------------------------- motion */

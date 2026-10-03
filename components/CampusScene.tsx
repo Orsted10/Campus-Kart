@@ -205,7 +205,7 @@ export default function CampusScene({
       </text>
       <g opacity="0.9">
         <text x="768" y="32" textAnchor="end" fontSize="12" letterSpacing="1.1" fill={isLight ? "#334155" : "var(--muted)"} fontWeight="600" style={{ fontFamily: "var(--font-mono)" }}>
-          CAMPUS PLAN ↑ N
+          CAMPUS PLAN ↗
         </text>
       </g>
 

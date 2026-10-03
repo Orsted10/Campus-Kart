@@ -4,7 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
-import { contactShadow, glowSprite, pedestalLabel } from "./procedural";
+import { baseShadow, contactShadow, glowSprite, pedestalLabel, pedestalSkin } from "./procedural";
 import { pointer } from "./heroState";
 import type { Tier } from "./CampusEnv";
 
@@ -32,9 +32,10 @@ const CART = {
 function useKartMaterials(mode: string = "dark") {
   const isLight = mode === "light";
   return useMemo(() => {
+    const skin = isLight ? pedestalSkin() : null;
     /* Brand paint: saturated electric blue that survives a cool sky reflection. */
     const blue = new THREE.MeshPhysicalMaterial({
-      color: "#0b49d8",
+      color: isLight ? "#0755df" : "#0b49d8",
       metalness: 0.06,
       roughness: 0.34,
       clearcoat: 0.35,
@@ -42,7 +43,7 @@ function useKartMaterials(mode: string = "dark") {
       envMapIntensity: 0.5,
     });
     const blueDeep = new THREE.MeshPhysicalMaterial({
-      color: "#0a3690",
+      color: isLight ? "#093ea7" : "#0a3690",
       metalness: 0.15,
       roughness: 0.38,
       clearcoat: 0.3,
@@ -56,7 +57,7 @@ function useKartMaterials(mode: string = "dark") {
       envMapIntensity: 0.6,
     });
     const lattice = new THREE.MeshPhysicalMaterial({
-      color: "#3f86e0",
+      color: isLight ? "#54a1ff" : "#3f86e0",
       metalness: 0.06,
       roughness: 0.36,
       clearcoat: 0.3,
@@ -83,27 +84,55 @@ function useKartMaterials(mode: string = "dark") {
         clearcoatRoughness: 0.05,
         envMapIntensity: 1.45,
       });
+    /* Daylight pedestal. Painted stone, not paper: the plinth is a shade below
+       the plaza photo so its foot has an edge, the drum carries the shell
+       texture, and the cap is near-white and polished so the sky throws a
+       highlight across it. Under the flat key of a bright day, albedo alone
+       reads as nothing — the light has to have something to catch. */
     const plinth = new THREE.MeshStandardMaterial({
-      color: isLight ? "#cbd5e1" : "#141821",
-      roughness: 0.42,
-      metalness: 0.6,
-      envMapIntensity: 0.85,
+      color: isLight ? "#cddcec" : "#141821",
+      roughness: isLight ? 0.52 : 0.28,
+      metalness: isLight ? 0.06 : 0.75,
+      envMapIntensity: isLight ? 0.45 : 1.1,
     });
     const plinthFace = new THREE.MeshPhysicalMaterial({
-      color: isLight ? "#e2e8f0" : "#14181f",
-      roughness: 0.34,
-      metalness: 0.55,
-      clearcoat: 0.8,
-      clearcoatRoughness: 0.22,
-      envMapIntensity: 0.7,
+      /* not pure white: a shell that starts at 1.0 has nowhere left to go, so
+         every surface of it lands on the same value and the drum reads flat */
+      color: isLight ? "#eef3f8" : "#14181f",
+      map: skin,
+      roughness: isLight ? 0.26 : 0.22,
+      metalness: isLight ? 0.1 : 0.7,
+      clearcoat: isLight ? 0.62 : 0.9,
+      clearcoatRoughness: isLight ? 0.2 : 0.15,
+      /* The day env is a bright white-blue sky dome: at full strength it pours
+         an even wash into every white surface of the shell and the pedestal
+         stops having a lit side and a shaded one. */
+      envMapIntensity: isLight ? 0.55 : 0.9,
     });
     const plinthTop = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#ffffff" : "#2a3346",
-      roughness: 0.26,
-      metalness: 0.7,
-      clearcoat: 1,
-      clearcoatRoughness: 0.12,
-      envMapIntensity: 1.1,
+      roughness: isLight ? 0.12 : 0.16,
+      metalness: isLight ? 0.28 : 0.8,
+      clearcoat: isLight ? 1 : 1,
+      clearcoatRoughness: isLight ? 0.06 : 0.08,
+      envMapIntensity: isLight ? 0.85 : 1.3,
+    });
+    /* Machined seam: the joint lines are what make a plinth read as a built
+       object instead of an extruded shape. */
+    const plinthSeam = new THREE.MeshStandardMaterial({
+      color: isLight ? "#55657a" : "#33240f",
+      roughness: isLight ? 0.3 : 0.34,
+      metalness: isLight ? 0.82 : 0.86,
+      envMapIntensity: isLight ? 0.95 : 1.05,
+    });
+    const plinthGlow = new THREE.MeshStandardMaterial({
+      color: isLight ? "#8cc2ff" : "#42260e",
+      emissive: new THREE.Color(isLight ? "#3d8dff" : "#ffb066"),
+      /* a glaze, not a neon tube: at daylight brightness a full-strength
+         emissive ring under the shell cuts the base off its own shadow */
+      emissiveIntensity: isLight ? 0.6 : 0.9,
+      toneMapped: false,
+      side: THREE.DoubleSide,
     });
     return {
       blue,
@@ -115,6 +144,8 @@ function useKartMaterials(mode: string = "dark") {
       plinth,
       plinthFace,
       plinthTop,
+      plinthSeam,
+      plinthGlow,
       cargo: {
         red: cargo("#dd3327"),
         orange: cargo("#f97c1c"),
@@ -156,8 +187,8 @@ function basketGeometry() {
   return geo;
 }
 
-function Basket() {
-  const { blue, blueInner, lattice } = useKartMaterials();
+function Basket({ mode = "dark" }: { mode?: string }) {
+  const { blue, blueInner, lattice } = useKartMaterials(mode);
   const geo = useMemo(() => basketGeometry(), []);
 
   const bars = useMemo(() => {
@@ -382,8 +413,10 @@ function Cargo() {
 
 function Pedestal({ mode = "dark" }: { mode?: string }) {
   const isLight = mode === "light";
-  const { plinth, plinthFace, plinthTop } = useKartMaterials(mode);
+  const { plinth, plinthFace, plinthTop, plinthSeam, plinthGlow } = useKartMaterials(mode);
   const label = useMemo(() => pedestalLabel(mode), [mode]);
+  const topContact = useMemo(() => contactShadow(), []);
+  const base = useMemo(() => (isLight ? baseShadow() : null), [isLight]);
   const spin = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -392,16 +425,40 @@ function Pedestal({ mode = "dark" }: { mode?: string }) {
 
   return (
     <group>
+      {/* No shadow-catcher plane, no pasted-on reflective disc: in daylight the
+         plaza underneath is real geometry that receives the sun key, so the
+         plinth drops its own shadow onto the ground it is actually standing on
+         and the plaza mirrors it back. The only thing left to add is the
+         contact darkening where paint meets paving. */}
+      {/* Where paint meets paving. The shadow the sun would throw is shorter
+         than the base is wide, so the ground shadow of this plinth lives
+         entirely underneath it — the darkening at the foot is therefore not a
+         detail, it is the only thing telling the eye the shell is resting on
+         the deck and not hovering above it. */}
+      {isLight && base && (
+        <mesh position={[0, 0.014, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
+          <circleGeometry args={[3.5, 64]} />
+          <meshBasicMaterial map={base} transparent opacity={0.52} depthWrite={false} />
+        </mesh>
+      )}
       {/* ground plinth: expanded to 4.7m diameter */}
       <mesh position={[0, 0.09, 0]} material={plinth} receiveShadow castShadow>
         <cylinderGeometry args={[2.32, 2.42, 0.18, 72]} />
       </mesh>
-      <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.42, 2.62, 72]} />
+      {/* machined foot: a dark, slightly oversailing lip that seats the plinth
+         on the plaza. Without it the base is white on white and dissolves. */}
+      <mesh position={[0, 0.033, 0]} material={plinthSeam} receiveShadow castShadow>
+        <cylinderGeometry args={[2.41, 2.47, 0.066, 72]} />
+      </mesh>
+      <mesh position={[0, 0.185, 0]} material={plinth} receiveShadow castShadow>
+        <cylinderGeometry args={[2.25, 2.33, 0.06, 72]} />
+      </mesh>
+      <mesh position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={isLight ? [2.47, 2.5, 72] : [2.42, 2.62, 72]} />
         <meshStandardMaterial
-          color={isLight ? "#e2e8f0" : "#04122b"}
-          emissive={new THREE.Color(isLight ? "#000000" : "#2f8dff")}
-          emissiveIntensity={isLight ? 0 : 0.8}
+          color={isLight ? "#7fb9ff" : "#04122b"}
+          emissive={new THREE.Color(isLight ? "#368eff" : "#2f8dff")}
+          emissiveIntensity={isLight ? 0.18 : 0.8}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
@@ -410,36 +467,51 @@ function Pedestal({ mode = "dark" }: { mode?: string }) {
       <mesh position={[0, 0.44, 0]} material={plinthFace} receiveShadow castShadow>
         <cylinderGeometry args={[2.2, 2.3, 0.52, 72]} />
       </mesh>
+      {/* the lit reveal between the plinth and the shell — the blue line the
+         daylight reference reads as its ground glow */}
+      {isLight && (
+        <mesh position={[0, 0.196, 0]} rotation={[-Math.PI / 2, 0, 0]} material={plinthGlow}>
+          <ringGeometry args={[2.28, 2.37, 72]} />
+        </mesh>
+      )}
+      {/* shaded joint under the cap */}
+      {isLight && (
+        <mesh position={[0, 0.692, 0]} material={plinthSeam} castShadow receiveShadow>
+          <cylinderGeometry args={[2.2, 2.232, 0.042, 72]} />
+        </mesh>
+      )}
       <mesh position={[0, 0.78, 0]} material={plinthTop} castShadow receiveShadow>
         <cylinderGeometry args={[2.12, 2.22, 0.2, 72]} />
       </mesh>
       <mesh position={[0, 0.9, 0]} material={plinthTop}>
         <cylinderGeometry args={[2.1, 2.1, 0.05, 72]} />
       </mesh>
+      {isLight && (
+        <mesh position={[0.08, 0.928, 0.08]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={3}>
+          <planeGeometry args={[3.82, 2.35]} />
+          <meshBasicMaterial map={topContact} transparent opacity={0.15} depthWrite={false} />
+        </mesh>
+      )}
       {/* warm light seam under the cap */}
-      <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.22, 2.32, 72]} />
-        <meshStandardMaterial
-          color={isLight ? "#cbd5e1" : "#42260e"}
-          emissive={new THREE.Color(isLight ? "#000000" : "#ffb066")}
-          emissiveIntensity={isLight ? 0 : 0.9}
-          toneMapped={false}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      {!isLight && (
+        <mesh position={[0, 0.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[2.22, 2.32, 72]} />
+          <meshStandardMaterial color="#42260e" emissive={new THREE.Color("#ffb066")} emissiveIntensity={0.9} toneMapped={false} side={THREE.DoubleSide} />
+        </mesh>
+      )}
       {/* service ring */}
-      <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      {!isLight && <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <mesh>
           <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
           <meshStandardMaterial
-            color={isLight ? "#cbd5e1" : "#061428"}
+            color={isLight ? "#d0e0f0" : "#061428"}
             emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
             emissiveIntensity={isLight ? 0.3 : 0.75}
             toneMapped={false}
             side={THREE.DoubleSide}
           />
         </mesh>
-      </group>
+      </group>}
       {/* dimensional CAMPUSKART lettering wrapped on drum */}
       <mesh position={[0, 0.44, 0]}>
         <cylinderGeometry args={[2.305, 2.315, 0.44, 96, 1, true, -0.52, 1.04]} />
@@ -466,7 +538,11 @@ function Pedestal({ mode = "dark" }: { mode?: string }) {
           <PedestalGlow />
         </>
       )}
-      <ContactShadow />
+      {/* Two contact shadows, tight inside wide: the tight one is the dark line
+         where the plinth meets the plaza, the wide one the soft canopy of
+         occlusion around it. One gradient alone can only be either. */}
+      <ContactShadow opacity={isLight ? 0.62 : 0.8} size={isLight ? 6.6 : 11.5} />
+      {isLight && <ContactShadow opacity={0.3} size={12} />}
     </group>
   );
 }
@@ -500,12 +576,12 @@ function PedestalGlow() {
   );
 }
 
-function ContactShadow() {
+function ContactShadow({ opacity = 0.8, size = 11.5 }: { opacity?: number; size?: number }) {
   const texture = useMemo(() => contactShadow(), []);
   return (
     <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={2}>
-      <planeGeometry args={[11.5, 11.5]} />
-      <meshBasicMaterial map={texture} transparent opacity={0.8} depthWrite={false} />
+      <planeGeometry args={[size, size]} />
+      <meshBasicMaterial map={texture} transparent opacity={opacity} depthWrite={false} />
     </mesh>
   );
 }
@@ -540,14 +616,22 @@ export default function Monument({
       const settle = reduced
         ? 0
         : Math.sin(Math.min(1, Math.max(0, (local - 0.9) / 0.9)) * Math.PI) * 0.018;
+      /* One pedestal height for both themes: the mark lands on the same deck it
+         stands on at night. (Light mode used to ride 5 cm higher to compensate
+         for a stretched pedestal, which is exactly the gap that read as the
+         sculpture hovering over its plinth.) */
       group.current.position.y = DECK_Y - (1 - rise) * 0.85 - settle;
 
       const idleYaw = reduced ? 0 : Math.sin(t * 0.17) * 0.02;
       const leanX = reduced ? 0 : -pointer.y * 0.035;
       const leanZ = reduced ? 0 : pointer.x * 0.04;
-      group.current.rotation.y = idleYaw + (reduced ? 0 : pointer.x * 0.06);
-      group.current.rotation.z = leanZ * 0.4;
-      group.current.rotation.x = leanX * 0.4;
+      /* The mark now rides on a pedestal that belongs to the ground, so it is
+         allowed a millimetre of lean and nothing more: a floating showpiece
+         sways, a plinth holding a sculpture does not. */
+      const sway = reduced ? 1 : isLight ? 0.35 : 1;
+      group.current.rotation.y = idleYaw + (reduced ? 0 : pointer.x * 0.06) * sway;
+      group.current.rotation.z = leanZ * 0.4 * sway;
+      group.current.rotation.x = leanX * 0.4 * sway;
     }
 
     if (accentLight.current) {
@@ -570,7 +654,7 @@ export default function Monument({
 
       <group ref={group} position={[0, DECK_Y, 0]}>
         <group rotation={[0.03, -0.5, -0.055]} scale={tier === "low" ? 1.0 : 1.05}>
-          <Basket />
+          <Basket mode={mode} />
           <Handle />
           <Wheel position={[-0.82, 0.36, 0.72]} />
           <Wheel position={[-0.82, 0.36, -0.72]} />
