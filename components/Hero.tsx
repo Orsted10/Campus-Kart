@@ -180,7 +180,7 @@ export default function Hero() {
       id="top"
       data-play={play ? "1" : "0"}
       className={`ck-hero relative isolate w-full overflow-hidden transition-colors duration-500 ${
-        isLight ? "bg-[#e8f4ff] text-slate-900" : "bg-[#05070d] text-white"
+        isLight ? "bg-[#dceeff] text-slate-900" : "bg-[#05070d] text-white"
       }`}
       style={{ "--ck-accent": accent } as React.CSSProperties}
     >
@@ -188,7 +188,7 @@ export default function Hero() {
       <div className="absolute inset-0 -z-10">
         <div
           className="absolute inset-0 ck-glow"
-          style={{ background: `radial-gradient(120% 90% at 62% 68%, ${accent}${isLight ? "25" : "22"} 0%, transparent 55%)` }}
+          style={{ background: `radial-gradient(120% 90% at 62% 68%, ${accent}${isLight ? "16" : "22"} 0%, transparent 55%)` }}
         />
         <div
           className="absolute inset-0 ck-scene"
@@ -197,22 +197,23 @@ export default function Hero() {
         >
           <HeroScene tier={tier} reduced={reduced} accent={accent} active={inView} mode={theme} />
         </div>
-        {/* atmospheric scrims: depth, legibility, and the vignette of a lens */}
+        {/* atmospheric scrims: kept thin so the grade comes from the scene,
+            not from a wash of milk or ink laid over it */}
         <div
           className={`ck-par pointer-events-none absolute inset-x-0 top-0 h-[26vh] bg-gradient-to-b ${
-            isLight ? "from-[#eef6ff]/22 via-[#eef6ff]/8 to-transparent" : "from-[#04060c]/92 via-[#04060c]/45 to-transparent"
+            isLight ? "from-[#dbe9f8]/14 via-[#dbe9f8]/4 to-transparent" : "from-[#04060c]/80 via-[#04060c]/35 to-transparent"
           }`}
           data-depth="2"
         />
         <div
           className={`ck-par pointer-events-none absolute inset-x-0 bottom-0 h-[20vh] bg-gradient-to-t ${
-            isLight ? "from-[#f4faff]/45 via-[#f4faff]/12 to-transparent" : "from-[#04060c] via-[#04060c]/72 to-transparent"
+            isLight ? "from-[#e2eefa]/12 via-[#e2eefa]/4 to-transparent" : "from-[#04060c] via-[#04060c]/55 to-transparent"
           }`}
           data-depth="9"
         />
         <div
           className={`ck-par pointer-events-none absolute inset-y-0 left-0 w-[40%] bg-gradient-to-r ${
-            isLight ? "from-[#f7fbff]/76 via-[#f7fbff]/30 to-transparent" : "from-[#04060c]/86 via-[#04060c]/38 to-transparent"
+            isLight ? "from-[#eef5fd]/38 via-[#eef5fd]/12 to-transparent" : "from-[#04060c]/70 via-[#04060c]/30 to-transparent"
           }`}
           data-depth="4"
         />

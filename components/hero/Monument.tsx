@@ -4,7 +4,16 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
-import { baseShadow, contactShadow, glowSprite, pedestalLabel, pedestalSkin } from "./procedural";
+import {
+  baseGlow,
+  baseShadow,
+  contactShadow,
+  glowSprite,
+  pedestalGloss,
+  pedestalLabel,
+  pedestalSkin,
+  reflectionMask,
+} from "./procedural";
 import { pointer } from "./heroState";
 import type { Tier } from "./CampusEnv";
 
@@ -19,7 +28,7 @@ import type { Tier } from "./CampusEnv";
 type Accent = { color: string };
 
 const EASE_OUT = (t: number) => 1 - Math.pow(1 - t, 3);  /* the deck the mark stands on: the sculpture's local origin sits here */
-const DECK_Y = 0.95;
+const DECK_Y = 1.105;
 
 const CART = {
   basketBottom: { w: 1.82, d: 1.28 },
@@ -33,22 +42,27 @@ function useKartMaterials(mode: string = "dark") {
   const isLight = mode === "light";
   return useMemo(() => {
     const skin = isLight ? pedestalSkin() : null;
-    /* Brand paint: saturated electric blue that survives a cool sky reflection. */
+    /* Fine surface grain goes here rather than into the albedo: it breaks the
+       clearcoat highlight up the way real paint does, without drawing a single
+       visible line around a drum that is 14 m of circumference. */
+    const gloss = isLight ? pedestalGloss() : null;
+    /* Brand paint: saturated electric blue with a wet, deep-gloss clearcoat —
+       the toy-car lacquer the references are built on. */
     const blue = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#0755df" : "#0b49d8",
       metalness: 0.06,
-      roughness: 0.34,
-      clearcoat: 0.35,
-      clearcoatRoughness: 0.42,
-      envMapIntensity: 0.5,
+      roughness: 0.18,
+      clearcoat: 1,
+      clearcoatRoughness: 0.2,
+      envMapIntensity: 1.1,
     });
     const blueDeep = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#093ea7" : "#0a3690",
       metalness: 0.15,
-      roughness: 0.38,
-      clearcoat: 0.3,
-      clearcoatRoughness: 0.42,
-      envMapIntensity: 0.45,
+      roughness: 0.22,
+      clearcoat: 1,
+      clearcoatRoughness: 0.22,
+      envMapIntensity: 1,
     });
     const blueInner = new THREE.MeshStandardMaterial({
       color: isLight ? "#1e3a8a" : "#051229",
@@ -59,10 +73,10 @@ function useKartMaterials(mode: string = "dark") {
     const lattice = new THREE.MeshPhysicalMaterial({
       color: isLight ? "#54a1ff" : "#3f86e0",
       metalness: 0.06,
-      roughness: 0.36,
-      clearcoat: 0.3,
-      clearcoatRoughness: 0.4,
-      envMapIntensity: 0.5,
+      roughness: 0.2,
+      clearcoat: 1,
+      clearcoatRoughness: 0.22,
+      envMapIntensity: 1,
     });
     const rubber = new THREE.MeshStandardMaterial({
       color: "#12141c",
@@ -84,47 +98,53 @@ function useKartMaterials(mode: string = "dark") {
         clearcoatRoughness: 0.05,
         envMapIntensity: 1.45,
       });
-    /* Daylight pedestal. Painted stone, not paper: the plinth is a shade below
-       the plaza photo so its foot has an edge, the drum carries the shell
-       texture, and the cap is near-white and polished so the sky throws a
-    /* Daylight pedestal. Painted satin metallic stone & aluminum: plinth drum has sleek metallic specular,
-       and cap is bright white polished metallic so the sun throws clear highlights. */
+    /* Daylight pedestal: bright acrylic-white with a satin clearcoat. The
+       base colours sit just below white so the sun still models the drum,
+       and the env carries the blue cast off the sky that reads as gloss. */
     const plinth = new THREE.MeshPhysicalMaterial({
-      color: isLight ? "#dbeafe" : "#141821",
-      roughness: isLight ? 0.22 : 0.28,
-      metalness: isLight ? 0.38 : 0.75,
-      clearcoat: isLight ? 0.5 : 0,
-      clearcoatRoughness: 0.15,
-      envMapIntensity: isLight ? 0.85 : 1.1,
+      color: isLight ? "#eef2f7" : "#141821",
+      roughness: isLight ? 0.32 : 0.28,
+      roughnessMap: gloss,
+      metalness: isLight ? 0 : 0.75,
+      clearcoat: isLight ? 0.6 : 0,
+      clearcoatRoughness: 0.18,
+      clearcoatRoughnessMap: gloss,
+      envMapIntensity: isLight ? 0.7 : 1.1,
     });
     const plinthFace = new THREE.MeshPhysicalMaterial({
-      color: isLight ? "#f8fafc" : "#14181f",
+      color: isLight ? "#f2f6fa" : "#14181f",
       map: skin,
-      roughness: isLight ? 0.16 : 0.22,
-      metalness: isLight ? 0.35 : 0.7,
-      clearcoat: isLight ? 0.85 : 0.9,
+      roughness: isLight ? 0.3 : 0.22,
+      roughnessMap: gloss,
+      metalness: isLight ? 0 : 0.7,
+      clearcoat: isLight ? 0.75 : 0.9,
       clearcoatRoughness: isLight ? 0.12 : 0.15,
-      envMapIntensity: isLight ? 0.95 : 0.9,
+      clearcoatRoughnessMap: gloss,
+      envMapIntensity: isLight ? 0.7 : 0.9,
     });
     const plinthTop = new THREE.MeshPhysicalMaterial({
-      color: isLight ? "#ffffff" : "#2a3346",
-      roughness: isLight ? 0.08 : 0.16,
-      metalness: isLight ? 0.45 : 0.8,
-      clearcoat: 1,
-      clearcoatRoughness: 0.04,
-      envMapIntensity: isLight ? 1.3 : 1.3,
+      color: isLight ? "#f7fafd" : "#2a3346",
+      roughness: isLight ? 0.22 : 0.16,
+      roughnessMap: gloss,
+      metalness: isLight ? 0 : 0.8,
+      clearcoat: 0.7,
+      clearcoatRoughness: isLight ? 0.08 : 0.04,
+      envMapIntensity: isLight ? 0.85 : 1.3,
     });
     /* Machined seam */
     const plinthSeam = new THREE.MeshStandardMaterial({
-      color: isLight ? "#94a3b8" : "#33240f",
-      roughness: isLight ? 0.18 : 0.34,
-      metalness: isLight ? 0.8 : 0.86,
-      envMapIntensity: isLight ? 1.1 : 1.05,
+      color: isLight ? "#6b7889" : "#33240f",
+      roughness: isLight ? 0.32 : 0.34,
+      metalness: isLight ? 0.55 : 0.86,
+      envMapIntensity: isLight ? 0.7 : 1.05,
     });
+    /* Daylight fills this slot with the sky in the clearcoat, not with an
+       emitter. Left switched on in daylight it was the single largest thing
+       pushing the base of the plinth past white. */
     const plinthGlow = new THREE.MeshStandardMaterial({
-      color: isLight ? "#38bdf8" : "#42260e",
-      emissive: new THREE.Color(isLight ? "#2563eb" : "#ffb066"),
-      emissiveIntensity: isLight ? 1.3 : 0.9,
+      color: isLight ? "#4c6076" : "#42260e",
+      emissive: new THREE.Color(isLight ? "#0d1b2a" : "#ffb066"),
+      emissiveIntensity: isLight ? 0 : 0.9,
       toneMapped: false,
       side: THREE.DoubleSide,
     });
@@ -405,12 +425,117 @@ function Cargo() {
 
 /* -------------------------------------------------------------- pedestal */
 
+/* The plinth's profile, in metres off the plaza. Three lathes carry the whole
+   silhouette, so every crease in it is an edge between two surfaces rather than
+   a seam between two stacked cylinders — that stack is exactly what read as a
+   lampshade. The drum is deliberately dead straight between its two ends: the
+   wordmark band rides 5 mm off the shell and can only hug it if the shell has
+   no curvature the band does not know about. */
+const PED = {
+  deck: 1.0675,
+  drumBot: { r: 2.302, y: 0.24 },
+  /* The drum's wall is the plinth, really: in the reference it is 30% of the
+     drum's own diameter and the wordmark sits at two thirds of the way up it.
+     Both of those are what make it read as a pedestal holding something up
+     rather than a dish something happens to be standing on. */
+  drumTop: { r: 2.202, y: 0.885 },
+  lip: 2.736,
+  label: { y: 0.62, h: 0.46, span: 1.26, lift: 0.005 },
+};
+
+/* One number sets the plinth's footprint, and its height is not part of it. The
+   reference is a tall drum standing on a tight, steep flare; at the 5.5 m this
+   started out as, the plinth read as a wide dish with a toy on top — the cart's
+   2.2 m of wheels covered 42% of it against 56% in the reference. Everything
+   radial scales together, so the wordmark, the lip and the glow stay in the
+   same relationship to the shell they belong to. */
+const PLINTH_SCALE = 0.75;
+const R = (r: number) => r * PLINTH_SCALE;
+
+const drumR = (y: number) =>
+  PLINTH_SCALE *
+  (PED.drumBot.r +
+    ((y - PED.drumBot.y) / (PED.drumTop.y - PED.drumBot.y)) *
+      (PED.drumTop.r - PED.drumBot.r));
+
+/* The collar: a saucer sweeping out from under the drum to a lip thin enough to
+   catch light along its whole edge, with the paving visible underneath it. */
+const COLLAR: [number, number][] = [
+  [2.358, 0.0],
+  [2.362, 0.018],
+  [2.406, 0.03],
+  [2.52, 0.035],
+  [2.716, 0.042],
+  [PED.lip, 0.062],
+  [2.676, 0.12],
+  [2.556, 0.174],
+  [2.372, 0.211],
+  [2.306, 0.214],
+];
+
+const DRUM: [number, number][] = [
+  [PED.drumBot.r, 0.206],
+  [PED.drumBot.r, PED.drumBot.y],
+  [PED.drumTop.r, PED.drumTop.y],
+  /* Continue past the cap's underside and turn inward to meet it. The drum and
+     the cap are two separate lathes and between them sat an 18 mm slot: from
+     any camera below the cap's plane that opened straight through to the sky,
+     which is the bright hairline across the back of the shell in every
+     daylight frame. Closing it here means the joint is geometry — an actual
+     surface — instead of a hole that happens to be hard to notice. */
+  [PED.drumTop.r - 0.004, 0.9],
+  [PED.drumTop.r - 0.1, 0.906],
+  [PED.drumTop.r - 0.26, 0.908],
+];
+
+/* The cap: a lid that oversails the drum by seven centimetres. The dark line
+   under it is geometry — a real overhang the sun cannot reach — rather than a
+   painted seam, which is the only kind of line that survives being lit twice. */
+const CAP: [number, number][] = [
+  [2.14, 0.903],
+  [2.238, 0.897],
+  [2.292, 0.911],
+  [2.296, 1.003],
+  [2.262, 1.031],
+  [2.198, 1.053],
+  [2.12, 1.063],
+  [1.3, 1.067],
+  [0.0, PED.deck],
+];
+
+/* The cap is a separate lathe from the drum and its first point sits inboard of
+   the drum's top edge, so on its own it is a lid with a hole under the rim.
+   The drum now closes that hole (see DRUM), which is why the underside of the
+   cap is never seen through: the two surfaces meet and overlap. */
+
+function lathe(profile: [number, number][], segments = 96) {
+  return new THREE.LatheGeometry(
+    profile.map(([r, y]) => new THREE.Vector2(R(r), y)),
+    segments,
+  );
+}
+
 function Pedestal({ mode = "dark" }: { mode?: string }) {
   const isLight = mode === "light";
-  const { plinth, plinthFace, plinthTop, plinthSeam, plinthGlow } = useKartMaterials(mode);
-  const label = useMemo(() => pedestalLabel(mode), [mode]);
+  const { plinth, plinthFace, plinthTop, plinthSeam } = useKartMaterials(mode);
+  /* The wordmark is drawn to the aspect of the band it wraps, so the texture has
+     to be told what that band is. Get this wrong by a third and the letters are
+     stretched sideways on the shell no matter how well the type was drawn. */
+  const labelAspect =
+    (drumR(PED.label.y) * PED.label.span) / PED.label.h;
+  const label = useMemo(() => pedestalLabel(mode, labelAspect), [mode, labelAspect]);
   const topContact = useMemo(() => contactShadow(), []);
-  const base = useMemo(() => (isLight ? baseShadow() : null), [isLight]);
+  const grounding = useMemo(
+    () =>
+      isLight
+        ? { shadow: baseShadow(), glow: baseGlow(), polish: reflectionMask() }
+        : null,
+    [isLight],
+  );
+  const shell = useMemo(
+    () => ({ collar: lathe(COLLAR), drum: lathe(DRUM), cap: lathe(CAP) }),
+    [],
+  );
   const spin = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -419,140 +544,216 @@ function Pedestal({ mode = "dark" }: { mode?: string }) {
 
   return (
     <group>
-      {isLight && base && (
-        <mesh position={[0, 0.014, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
-          <circleGeometry args={[3.5, 64]} />
-          <meshBasicMaterial map={base} transparent opacity={0.52} depthWrite={false} />
-        </mesh>
+      {/* --------------------------------------------------------- ground ---
+          Three decals, painted in order: a polished apron that dissolves the
+          paving grid the monument stands on, the contact shadow that seats it,
+          and last — so nothing dims it — the blue the lip throws onto stone. */}
+      {grounding && (
+        <>
+          {/* The apron is *polished stone*, so it is smoother and very slightly
+              darker than the paving around it, not brighter. Painting it near
+              white put a plate of pure light under the plinth, which is what
+              was reading as a sunburst on the ground. A real honed slab holds
+              a reflection; it does not emit. */}
+          <mesh position={[0, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
+            <circleGeometry args={[R(4.3), 72]} />
+            <meshPhysicalMaterial
+              color="#7d8894"
+              roughness={0.22}
+              metalness={0}
+              clearcoat={0.7}
+              clearcoatRoughness={0.14}
+              envMapIntensity={0.5}
+              transparent
+              alphaMap={grounding.polish}
+              opacity={0.34}
+              depthWrite={false}
+            />
+          </mesh>
+          <mesh position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={2}>
+            <circleGeometry args={[R(3.5), 64]} />
+            <meshBasicMaterial map={grounding.shadow} transparent opacity={0.6} depthWrite={false} />
+          </mesh>      {/* the blue puddle: a tight annulus, not a pad. A wide one reads as a
+          base the plinth is parked on rather than light it is throwing. In
+              daylight it is a faint bounce, not a pool of lamp oil — additive
+              over paving that is already near white is how the base of this
+              plinth ended up as a blue-white sunburst. */}
+          <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={4}>
+            {/* sized off the lip, not eyeballed: the texture is brightest at 0.61
+                of its radius, so the disc has to be lip/0.61 wide for that band
+                to land on the edge the light is coming from */}
+            <circleGeometry args={[R(4.48), 64]} />
+            <meshBasicMaterial
+              map={grounding.glow}
+              transparent
+              opacity={0.16}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              fog={false}
+            />
+          </mesh>
+        </>
       )}
 
-      {/* ground plinth base */}
-      <mesh position={[0, 0.09, 0]} material={plinth} receiveShadow castShadow>
-        <cylinderGeometry args={[2.32, 2.42, 0.18, 72]} />
-      </mesh>
+      {/* ------------------------------------------------------- the base --- */}
+      <mesh geometry={shell.collar} material={plinth} receiveShadow castShadow />
 
-      {/* machined foot: oversailing lip */}
-      <mesh position={[0, 0.033, 0]} material={plinthSeam} receiveShadow castShadow>
-        <cylinderGeometry args={[2.41, 2.47, 0.066, 72]} />
-      </mesh>
-
-      {/* illuminated neon blue translucent acrylic base rim (matching reference image 2) */}
-      <mesh position={[0, 0.024, 0]} receiveShadow castShadow>
-        <cylinderGeometry args={[2.46, 2.54, 0.045, 72]} />
+      {/* lit acrylic lip, sitting in the crease where the saucer turns away.
+          The references make this a live emitter in both hours: a glowing blue
+          rim by day, a hot orange one by night — the bloom pass is what keeps
+          it from reading as a painted stripe. */}
+      <mesh position={[0, 0.052, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[R(2.726), R(0.013), 10, 128]} />
         <meshStandardMaterial
-          color={isLight ? "#38bdf8" : "#061836"}
-          emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
-          emissiveIntensity={isLight ? 1.4 : 0.8}
+          color={isLight ? "#2f6fd0" : "#3a1f08"}
+          emissive={new THREE.Color(isLight ? "#2f8dff" : "#ff9a4d")}
+          emissiveIntensity={isLight ? 1.6 : 2.2}
+          roughness={0.34}
+          metalness={isLight ? 0.25 : 0}
           toneMapped={false}
         />
       </mesh>
 
-      {/* ground glowing blue halo ring */}
-      <mesh position={[0, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={isLight ? [2.44, 2.75, 72] : [2.42, 2.62, 72]} />
+      {/* the light that leaks out of the joint where the drum lands on it */}
+      <mesh position={[0, 0.2135, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[R(2.303), R(2.36), 96]} />
         <meshStandardMaterial
-          color={isLight ? "#38bdf8" : "#04122b"}
-          emissive={new THREE.Color(isLight ? "#2563eb" : "#2f8dff")}
-          emissiveIntensity={isLight ? 1.5 : 0.8}
+          color={isLight ? "#27507f" : "#42260e"}
+          emissive={new THREE.Color(isLight ? "#2f8dff" : "#ffb066")}
+          emissiveIntensity={isLight ? 0.9 : 1.6}
+          roughness={0.36}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* left side metallic step block accent (matching reference image 2) */}
-      <mesh position={[-2.32, 0.036, 0.42]} rotation={[0, 0.32, 0]} material={plinthTop} receiveShadow castShadow>
-        <boxGeometry args={[0.65, 0.045, 0.28]} />
+      {/* --------------------------------------------------------- drum --- */}
+      <mesh geometry={shell.drum} material={plinthFace} receiveShadow castShadow />
+
+      {/* its underside, so the plinth is not hollow to a lens looking up */}
+      <mesh position={[0, 0.206, 0]} rotation={[Math.PI / 2, 0, 0]} material={plinthSeam}>
+        <circleGeometry args={[R(2.35), 64]} />
       </mesh>
 
-      <mesh position={[0, 0.185, 0]} material={plinth} receiveShadow castShadow>
-        <cylinderGeometry args={[2.25, 2.33, 0.06, 72]} />
-      </mesh>
-
-      {/* drum */}
-      <mesh position={[0, 0.44, 0]} material={plinthFace} receiveShadow castShadow>
-        <cylinderGeometry args={[2.2, 2.3, 0.52, 72]} />
-      </mesh>
-
-      {/* reveal glow between plinth and shell */}
-      {isLight && (
-        <mesh position={[0, 0.196, 0]} rotation={[-Math.PI / 2, 0, 0]} material={plinthGlow}>
-          <ringGeometry args={[2.28, 2.37, 72]} />
-        </mesh>
-      )}
-
-      {/* upper seam LED light strip under cap */}
-      <mesh position={[0, 0.696, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.2, 2.25, 72]} />
+      {/* LED strip tucked into the cap's overhang — the blue sliver the lid
+          reads by, and the only light on the shell the sun did not put there. */}
+      <mesh position={[0, 0.89, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[R(2.204), R(2.292), 96]} />
         <meshStandardMaterial
-          color={isLight ? "#ffffff" : "#42260e"}
-          emissive={new THREE.Color(isLight ? "#ffffff" : "#ffb066")}
-          emissiveIntensity={isLight ? 1.0 : 0.9}
+          color={isLight ? "#22405f" : "#42260e"}
+          emissive={new THREE.Color(isLight ? "#2f8dff" : "#ffb066")}
+          emissiveIntensity={isLight ? 0.7 : 1.5}
+          roughness={0.4}
           toneMapped={false}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* top cap flared overhang */}
-      <mesh position={[0, 0.78, 0]} material={plinthTop} castShadow receiveShadow>
-        <cylinderGeometry args={[2.12, 2.22, 0.2, 72]} />
-      </mesh>
-      <mesh position={[0, 0.9, 0]} material={plinthTop}>
-        <cylinderGeometry args={[2.1, 2.1, 0.05, 72]} />
-      </mesh>
+      {/* ---------------------------------------------------------- cap --- */}
+      <mesh geometry={shell.cap} material={plinthTop} castShadow receiveShadow />
 
       {isLight && (
-        <mesh position={[0.08, 0.928, 0.08]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={3}>
+        <mesh position={[0.08, 1.069, 0.08]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={3}>
           <planeGeometry args={[3.82, 2.35]} />
           <meshBasicMaterial map={topContact} transparent opacity={0.15} depthWrite={false} />
         </mesh>
       )}
 
-      {/* service ring */}
-      {!isLight && (
-        <group ref={spin} position={[0, 0.19, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <mesh>
-            <ringGeometry args={[2.34, 2.42, 72, 1, 0, Math.PI * 1.3]} />
-            <meshStandardMaterial
-              color="#061428"
-              emissive={new THREE.Color("#2f8dff")}
-              emissiveIntensity={0.75}
-              toneMapped={false}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </group>
-      )}
+      {/* service ring: a slow sweep of light across the paving at the base —
+          live at night, a faint blue glow-puddle by day */}
+      <group ref={spin} position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh>
+          <ringGeometry args={[R(2.84), R(3.04), 96, 1, 0, Math.PI * 1.3]} />
+          <meshStandardMaterial
+            color="#061428"
+            emissive={new THREE.Color("#2f8dff")}
+            emissiveIntensity={isLight ? 0.35 : 1.2}
+            toneMapped={false}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      </group>
 
-      {/* dimensional CAMPUSKART 3D lettering wrapped on drum */}
-      <mesh position={[0, 0.44, 0]}>
-        <cylinderGeometry args={[2.305, 2.315, 0.44, 96, 1, true, -0.52, 1.04]} />
+      {/* dimensional CAMPUSKART 3D lettering wrapped on drum.
+          The band is solved off the drum's own taper so it rides 5 mm proud of
+          the shell at every height. The version before this one sat up to
+          10 cm off it at the top of the band: the letters read as a grey shelf
+          floating in front of the plinth, and no material could have saved the
+          type while the surface it was printed on was in the wrong place. */}
+      <mesh position={[0, PED.label.y, 0]}>
+        <cylinderGeometry
+          args={[
+            drumR(PED.label.y + PED.label.h / 2) + PED.label.lift,
+            drumR(PED.label.y - PED.label.h / 2) + PED.label.lift,
+            PED.label.h,
+            128,
+            1,
+            true,
+            -PED.label.span / 2,
+            PED.label.span,
+          ]}
+        />
         <meshStandardMaterial
           map={label}
           transparent
           alphaTest={0.02}
           side={THREE.DoubleSide}
-          metalness={isLight ? 0.35 : 0.15}
-          roughness={isLight ? 0.18 : 0.34}
+          metalness={isLight ? 0.05 : 0.15}
+          roughness={isLight ? 0.3 : 0.34}
+          envMapIntensity={isLight ? 0.35 : 0.8}
           polygonOffset
           polygonOffsetFactor={-3}
-          toneMapped={false}
+          /* The lettering is the one surface that has to agree with the exposure
+             around it. Skipping tone mapping here left the letters sitting in a
+             different response curve from the shell they are cut into, so they
+             read as a decal laid over the plinth rather than type standing
+             proud of it. */
+          toneMapped
         />
       </mesh>
 
-      {/* Pedestal Lights & Glow */}
-      <pointLight position={[0, 0.2, 1.8]} color="#38bdf8" intensity={isLight ? 3.0 : 4} distance={7} decay={2} />
-      <pointLight position={[0, 0.75, 1.4]} color="#ffffff" intensity={isLight ? 2.2 : 0} distance={5} decay={2} />
+      {/* Pedestal lights. The sun is forty metres away, so on its own it models
+          the plinth like a wall: every surface it reaches is lit at nearly the
+          same angle and the drum ends up with no highlight to bend around.
+          Daylight gets a close warm key at the front-left for the glossy
+          streak, and a cool rim on the right so the shade side stays blue.
+
+          These are shaping lights, not a second sun. At 26 candela four metres
+          from a white drum this was delivering more illuminance than the key,
+          which is why the drum had no shade side to shape with — it was simply
+          past the top of the range everywhere. A third of that gives the same
+          modelling with headroom left for the highlight to land in. */}
+      <pointLight
+        position={isLight ? [-3.6, 3.9, 5.2] : [0, 0.2, 1.8]}
+        color={isLight ? "#fff5e8" : "#38bdf8"}
+        intensity={isLight ? 7.5 : 4}
+        distance={isLight ? 17 : 7}
+        decay={2}
+      />
+      <pointLight
+        position={isLight ? [5.4, 2.6, 1.6] : [3.2, 1.5, 3.2]}
+        color={isLight ? "#8fc4ff" : "#ffc78c"}
+        intensity={isLight ? 1.6 : 10}
+        distance={isLight ? 14 : 15}
+        decay={2}
+      />
       {!isLight && (
         <>
-          <pointLight color="#ffc78c" intensity={10} distance={15} decay={2} position={[3.2, 1.5, 3.2]} />
           <pointLight color="#9fc6ff" intensity={8} distance={15} decay={2} position={[-3.5, 1.2, 2.8]} />
         </>
       )}
+      {/* A tight highlight is the whole difference between glossy acrylic and
+          white paint, and it has to come off a small source close to the drum so
+          it stays a streak instead of spreading into the drum's own shading. */}
+      {isLight && (
+        <pointLight position={[-1.9, 1.5, 4.1]} color="#ffffff" intensity={3.4} distance={11} decay={2} />
+      )}
       <PedestalGlow mode={mode} />
 
-      {/* Contact shadows */}
-      <ContactShadow opacity={isLight ? 0.62 : 0.8} size={isLight ? 6.6 : 11.5} />
-      {isLight && <ContactShadow opacity={0.3} size={12} />}
+      {/* Contact shadows. Daylight seats the plinth on its own decals, so the
+          airbrushed gradients only have to soften the edges of that stack. */}
+      <ContactShadow opacity={isLight ? 0.5 : 0.8} size={R(isLight ? 6.6 : 11.5)} />
+      {isLight && <ContactShadow opacity={0.22} size={R(12)} />}
     </group>
   );
 }
@@ -562,22 +763,26 @@ function PedestalGlow({ mode = "dark" }: { mode?: string }) {
   const warm = useMemo(() => glowSprite(isLight ? "56,189,248" : "255,186,120"), [isLight]);
   return (
     <group>
+      {/* Daylight builds its glow out of lit surfaces — the lip, the floor, the
+          sky in the clearcoat — so the airbrush has to get out of the way: at
+          even 8% this sprite is a cyan haze sitting on top of the wordmark, and
+          over near-white paving it reads as lens flare rather than light. */}
       <sprite position={[0, 1.05, 0.15]} scale={[8.4, 3.2, 1]} renderOrder={5}>
         <spriteMaterial
           map={warm}
           transparent
-          opacity={isLight ? 0.08 : 0.12}
+          opacity={isLight ? 0.008 : 0.12}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
         />
       </sprite>
-      <sprite position={[0, 0.05, 0]} scale={[14.2, 5.0, 1]} renderOrder={4}>
+      <sprite position={[0, 0.05, 0]} scale={[R(10.6), 3.5, 1]} renderOrder={4}>
         <spriteMaterial
           map={warm}
-          color={isLight ? "#38bdf8" : "#5ea8ff"}
+          color={isLight ? "#4f86c4" : "#5ea8ff"}
           transparent
-          opacity={isLight ? 0.15 : 0.09}
+          opacity={isLight ? 0.022 : 0.09}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           fog={false}
@@ -646,7 +851,13 @@ export default function Monument({
     }
 
     if (accentLight.current) {
-      accentLight.current.color.lerp(new THREE.Color(accent.color), Math.min(1, delta * 1.6));
+      /* Pure service-orange on the blue basket mixes to magenta, so the front
+         accent rides a blend of the accent and the brand blue — the violet
+         gradient the references show on the basket face. */
+      accentLight.current.color.lerp(
+        new THREE.Color(accent.color).lerp(new THREE.Color("#5aa2ff"), 0.5),
+        Math.min(1, delta * 1.6),
+      );
     }
     if (rimLight.current) {
       rimLight.current.color.lerp(
@@ -658,7 +869,7 @@ export default function Monument({
 
   return (
     <group>
-      <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={12} distance={16} decay={2} />
+      <pointLight ref={accentLight} position={[-3.5, 3.6, 3.2]} color={accent.color} intensity={8} distance={16} decay={2} />
       <pointLight ref={rimLight} position={[3.8, 2.6, -3.2]} color={accent.color} intensity={9} distance={17} decay={2} />
 
       <Pedestal mode={mode} />

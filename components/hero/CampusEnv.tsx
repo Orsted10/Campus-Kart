@@ -25,26 +25,32 @@ function useCampusMaterials(mode: string = "dark") {
     /* Daylight palette. Paving stays cool grey-blue, the architecture goes warm
        limestone, and the planting goes brighter: three temperatures the eye can
        separate at a glance, so the white plinth has something to stand against
-       instead of a campus that is white on white on white. */
-    const concrete = new THREE.MeshStandardMaterial({        color: isLight ? "#bdb3a2" : "#2b3141",
+       instead of a campus that is white on white on white.
+
+       The architecture is deliberately pitched a step darker and warmer than
+       its first daylight pass. Everything in this scene is sunlit, so anything
+       that is merely light-valued converges on the same tone under the same
+       key — the blocks were landing within a few percent of the paving, and a
+       campus with no tonal separation behind the mark reads as haze. */
+    const concrete = new THREE.MeshStandardMaterial({        color: isLight ? "#c2b294" : "#2b3141",
       roughness: 0.82,
       metalness: 0.04,
     });
-    const concreteDark = new THREE.MeshStandardMaterial({        color: isLight ? "#a89c8a" : "#1c2130",
+    const concreteDark = new THREE.MeshStandardMaterial({        color: isLight ? "#a4977c" : "#1c2130",
       roughness: 0.88,
       metalness: 0.03,
     });
-    const stone = new THREE.MeshStandardMaterial({        color: isLight ? "#b8afa0" : "#454d5f",
+    const stone = new THREE.MeshStandardMaterial({        color: isLight ? "#b7a88d" : "#454d5f",
       roughness: 0.55,
       metalness: 0.12,
     });
     const metal = new THREE.MeshStandardMaterial({
-      color: isLight ? "#8aa0b8" : "#12161f",
+      color: isLight ? "#7b8fa6" : "#12161f",
       roughness: 0.38,
       metalness: 0.88,
     });
     const foliage = new THREE.MeshStandardMaterial({
-      color: isLight ? "#2c8f42" : "#1d3a28",
+      color: isLight ? "#2fa14d" : "#1d3a28",
       roughness: 0.95,
       metalness: 0,
       flatShading: true,
@@ -52,7 +58,7 @@ function useCampusMaterials(mode: string = "dark") {
       emissiveIntensity: isLight ? 0.08 : 0.9,
     });
     const hedge = new THREE.MeshStandardMaterial({
-      color: isLight ? "#2a8b3d" : "#16291d",
+      color: isLight ? "#2b9647" : "#16291d",
       roughness: 0.98,
       metalness: 0,
       flatShading: true,
@@ -74,11 +80,11 @@ function useCampusMaterials(mode: string = "dark") {
       toneMapped: false,
     });
     const glass = new THREE.MeshStandardMaterial({
-      color: isLight ? "#b8d8f0" : "#0a1220",
+      color: isLight ? "#cdeafc" : "#0a1220",
       roughness: 0.1,
       metalness: 0.35,
       emissive: new THREE.Color(isLight ? "#c8e8ff" : "#3d5f96"),
-      emissiveIntensity: isLight ? 0.12 : 0.28,
+      emissiveIntensity: isLight ? 0.2 : 0.28,
       transparent: true,
       opacity: 0.88,
     });
@@ -112,9 +118,9 @@ function Sky({ mode = "dark" }: { mode?: string }) {
   const isLight = mode === "light";
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color(isLight ? "#55a9f5" : "#04081a") },
-      uMid: { value: new THREE.Color(isLight ? "#8bc8f7" : "#101c46") },
-      uHorizon: { value: new THREE.Color(isLight ? "#ffe8c8" : "#ff8f3d") },
+      uTop: { value: new THREE.Color(isLight ? "#1565d8" : "#050a20") },
+      uMid: { value: new THREE.Color(isLight ? "#64b0f6" : "#101c46") },
+      uHorizon: { value: new THREE.Color(isLight ? "#c4e4fb" : "#ff8f3d") },
       uGlow: { value: new THREE.Color(isLight ? "#fff8e8" : "#ffdcac") },
       uSun: { value: new THREE.Vector3(0.25, isLight ? 0.62 : 0.06, -0.94) },
       uIsLight: { value: isLight ? 1.0 : 0.0 },
@@ -148,29 +154,38 @@ function Sky({ mode = "dark" }: { mode?: string }) {
             float h = d.y;
             vec3 dir = normalize(uSun);
 
-            vec3 col = mix(uHorizon, uMid, smoothstep(0.0, 0.12, h));
-            col = mix(col, uTop, smoothstep(0.10, 0.46, h));
+            vec3 col = mix(uHorizon, uMid, smoothstep(0.0, 0.06, h));
+            col = mix(col, uTop, smoothstep(0.05, 0.34, h));
 
             float sun = max(dot(d, dir), 0.0);
             col += uGlow * pow(sun, 180.0) * 4.0;
             col += uGlow * pow(sun, 10.0) * 0.25;
 
             if (uIsLight > 0.5) {
-              // Soft white haze near the horizon. Kept light: a heavy haze band
-              // puts the sky at the value of the buildings, and every roofline
-              // in the campus disappears into it.
+              // Soft white haze near the horizon, tinted bluer so the sky reads
+              // as clear daylight rather than smog.
               float haze = pow(max(1.0 - abs(h - 0.03) * 7.0, 0.0), 1.6);
-              col = mix(col, vec3(0.94, 0.96, 0.99), haze * 0.1);
+              col = mix(col, vec3(0.92, 0.96, 1.0), haze * 0.13);
+              /* Cumulus tops: bright, well-separated white so the upper frame
+                 has real weather in it to be darker than. Two octaves of cheap
+                 value noise, thresholded so only the tops catch light. */
+              vec2 sp = vec2(atan(d.z, d.x) * 1.6, d.y * 3.2);
+              float c = 0.0;
+              c += sin(sp.x * 2.3 + sp.y * 1.7) * 0.5;
+              c += sin(sp.x * 4.1 - sp.y * 3.1 + 1.7) * 0.3;
+              c += sin(sp.x * 7.7 + sp.y * 5.3 + 4.2) * 0.2;
+              float deck = smoothstep(0.3, 0.82, c) * smoothstep(0.02, 0.3, h) * (1.0 - smoothstep(0.62, 0.95, h));
+              col = mix(col, vec3(1.0, 0.995, 0.99), deck * 0.8);
             } else {
               float band = pow(max(1.0 - abs(h - 0.075) * 11.0, 0.0), 2.0);
-              col += vec3(0.36, 0.11, 0.15) * band * (0.2 + 0.8 * sun);
+              col += vec3(0.36, 0.11, 0.15) * band * (0.2 + 0.8 * sun) * 1.4;
               float low = pow(max(1.0 - abs(h - 0.03) * 9.0, 0.0), 2.4);
-              col += vec3(0.85, 0.36, 0.12) * low * pow(sun, 0.5) * 1.45;
+              col += vec3(0.85, 0.36, 0.12) * low * pow(sun, 0.5) * 2.0;
             }
 
             // ground haze
-            vec3 hazeCol = uIsLight > 0.5 ? vec3(0.88, 0.92, 0.97) : vec3(0.024, 0.031, 0.055);
-            col = mix(col, hazeCol, smoothstep(0.0, -0.2, h) * (uIsLight > 0.5 ? 0.32 : 1.0));
+            vec3 hazeCol = uIsLight > 0.5 ? vec3(0.76, 0.82, 0.9) : vec3(0.024, 0.031, 0.055);
+            col = mix(col, hazeCol, smoothstep(0.0, -0.2, h) * (uIsLight > 0.5 ? 0.26 : 1.0));
 
             gl_FragColor = vec4(col, 1.0);
           }
@@ -198,7 +213,7 @@ function CloudBank({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
       list.push({
         pos: [-190 + t * 430, 26 + (i % 3) * 14, -175 - (i % 2) * 70],
         scale: 200 + (i % 4) * 70,
-        opacity: isLight ? 0.45 : 0.3 - (i % 3) * 0.06,
+        opacity: isLight ? 0.16 + (i % 3) * 0.05 : 0.3 - (i % 3) * 0.06,
         tint: isLight ? "#ffffff" : i % 2 === 0 ? "#3a3550" : "#2e2c48",
       });
     });
@@ -301,11 +316,26 @@ function Block({
   mode?: string;
 }) {
   const isLight = mode === "light";
-  const actualWall = isLight ? "#bcae92" : wall;
+  const actualWall = isLight ? "#c0ad8c" : wall;
   const actualLit = isLight ? 0 : lit;
+  /* Only the two broad faces (+Z and -Z) carry the facade, and they are
+     size[0] wide by size[1] tall. Passing that through means the painted window
+     grid keeps the proportions of the real elevation instead of being stretched
+     to fit whatever canvas the generator picked. */
+  const faceAspect = size[0] / Math.max(0.001, size[1]);
   const tex = useMemo(
-    () => facadeTextures({ seed, wall: actualWall, lit: actualLit, warm, cols, rows }),
-    [seed, actualWall, actualLit, warm, cols, rows],
+    () =>
+      facadeTextures({
+        seed,
+        wall: actualWall,
+        lit: actualLit,
+        warm,
+        cols,
+        rows,
+        daylight: isLight,
+        aspect: faceAspect,
+      }),
+    [seed, actualWall, actualLit, warm, cols, rows, isLight, faceAspect],
   );
   const face = useMemo(
     () =>
@@ -317,7 +347,7 @@ function Block({
         /* the day sky env is held off the facades: at full strength it washes
            the glazing back up to the value of the wall and the window grid —
            the only architecture the hero actually reads — disappears */
-        envMapIntensity: isLight ? 0.35 : 1,
+        envMapIntensity: isLight ? 0.6 : 1,
         roughness: 0.82,
         metalness: 0.08,
       }),
@@ -326,14 +356,14 @@ function Block({
   const side = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: isLight ? "#a99b82" : "#232a38",
+        color: isLight ? "#a5977f" : "#232a38",
         roughness: 0.85,
         metalness: 0.06,
       }),
     [isLight],
   );
   const roof = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: isLight ? "#9c9078" : "#11151f", roughness: 0.9 }),
+    () => new THREE.MeshStandardMaterial({ color: isLight ? "#7c7263" : "#11151f", roughness: 0.9 }),
     [isLight],
   );
 
@@ -499,32 +529,30 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -8]} receiveShadow>
         <planeGeometry args={[220, 150]} />
-        {tier === "high" ? (
-          <MeshReflectorMaterial
+        {tier === "high" ? (<MeshReflectorMaterial
             resolution={1024}
             blur={[260, 80]}
             mixBlur={1.15}
-            mixStrength={isLight ? 0.18 : 3.1}
+            mixStrength={isLight ? 0.9 : 3.6}
             depthScale={1.1}
             minDepthThreshold={0.3}
             maxDepthThreshold={1.4}
             depthToBlurRatioBias={0.3}
             map={paving ?? undefined}
-            color={isLight ? "#a89c8e" : "#141b2b"}
-            metalness={isLight ? 0.06 : 0.78}
-            roughness={isLight ? 0.88 : 0.42}
-            /* The day env is a blue sky, and a plaza with a full-strength IBL
-               on it renders as sky-blue water. The deck has to keep its own
-               value: it is the surface the white plinth is read against. */
-            envMapIntensity={isLight ? 0.3 : 1}
+            color={isLight ? "#9aa0a8" : "#141b2b"}
+            metalness={isLight ? 0.25 : 0.78}
+            roughness={isLight ? 0.72 : 0.36}
+            /* A soft mirror of the sky and the plinth in daylight; the day env
+               carries the saturation so the deck itself stays neutral. */
+            envMapIntensity={isLight ? 0.7 : 1}
           />
         ) : (
           <meshStandardMaterial
             map={paving ?? undefined}
-            color={isLight ? "#a89c8e" : "#131a28"}
-            metalness={isLight ? 0.06 : 0.55}
-            roughness={isLight ? 0.88 : 0.5}
-            envMapIntensity={isLight ? 0.3 : 1}
+            color={isLight ? "#9aa0a8" : "#131a28"}
+            metalness={isLight ? 0.25 : 0.55}
+            roughness={isLight ? 0.72 : 0.5}
+            envMapIntensity={isLight ? 0.7 : 1}
           />
         )}
       </mesh>
@@ -555,7 +583,7 @@ function Plaza({ tier, mode = "dark" }: { tier: Tier; mode?: string }) {
           receiveShadow
         >
           <meshStandardMaterial
-            color={isLight ? "#9c9082" : "#161b28"}
+            color={isLight ? "#85888d" : "#161b28"}
             roughness={0.5}
             metalness={0.22}
             envMapIntensity={isLight ? 0.4 : 1}
@@ -690,24 +718,47 @@ function MidGround({ mode = "dark" }: { mode?: string }) {
 /* ------------------------------------------------------------ landscaping */
 
 function Tree({ position, scale = 1, seed = 1, mode = "dark" }: { position: [number, number, number]; scale?: number; seed?: number; mode?: string }) {
-  const { metal, foliage } = useCampusMaterials(mode);
+  const { metal } = useCampusMaterials(mode);
+  const isLight = mode === "light";
+  /* Per-blob foliage. A canopy built from one shared flat-shaded material
+     reads as a single green cut-out in daylight, because every facet gets the
+     same albedo and the sun then has nothing to describe. Four tones — sunlit
+     crown, mid, deep shade, and a warmer yellow-green — give the mass internal
+     depth for the cost of four materials. */
+  const leaves = useMemo(() => {
+    const base = isLight ? ["#2f8c3c", "#256f31", "#1a5527", "#3d9a44"] : ["#1d3a28", "#172e20", "#12261a", "#244630"];
+    return base.map((c) =>
+      new THREE.MeshStandardMaterial({
+        color: c,
+        roughness: 0.95,
+        metalness: 0,
+        flatShading: true,
+        emissive: new THREE.Color(isLight ? "#0a2810" : "#0a1710"),
+        emissiveIntensity: isLight ? 0.06 : 0.9,
+      }),
+    );
+  }, [isLight]);
   const blobs = useMemo(() => {
     let a = seed * 9301;
     const rand = () => {
       a = (a * 9301 + 49297) % 233280;
       return a / 233280;
     };
-    return Array.from({ length: 9 }, (_, i) => {
-      const t = i / 8;
+    return Array.from({ length: 11 }, (_, i) => {
+      const t = i / 10;
       const spread = 0.85 + t * 0.5;
+      /* Higher blobs sit in more light, lower ones deeper in the canopy's own
+         shade, so tone is assigned by height rather than at random. */
+      const tone = Math.max(0, Math.min(3, Math.floor((3 - t) * 0.9 + rand() * 1.1)));
       return {
         p: [
           (rand() - 0.5) * 2 * spread,
           3.05 + rand() * 1.5 + t * 0.5,
           (rand() - 0.5) * 2 * spread,
         ] as [number, number, number],
-        r: 0.6 + rand() * 0.5,
+        r: 0.52 + rand() * 0.52,
         s: rand(),
+        tone,
       };
     });
   }, [seed]);
@@ -718,7 +769,7 @@ function Tree({ position, scale = 1, seed = 1, mode = "dark" }: { position: [num
         <cylinderGeometry args={[0.14, 0.24, 3.4, 7]} />
       </mesh>
       {blobs.map((b, i) => (
-        <mesh key={i} position={b.p} material={foliage} castShadow rotation={[b.s * 2, b.s * 3, b.s]}>
+        <mesh key={i} position={b.p} material={leaves[b.tone]} castShadow rotation={[b.s * 2, b.s * 3, b.s]}>
           <icosahedronGeometry args={[b.r, 0]} />
         </mesh>
       ))}

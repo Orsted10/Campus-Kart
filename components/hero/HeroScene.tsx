@@ -172,18 +172,17 @@ function Lights({ tier, mode }: { tier: Tier; mode?: string }) {
   if (isLight) {
     return (
       <>
-        {/* Daytime ambient. Kept deliberately below the key so the white
-           pedestal keeps a lit side and a shade side — a flat wash of ambient
-           is what turned it into a paper cut-out. */}
-        <ambientLight color="#e9f3ff" intensity={0.18} />
-        <hemisphereLight color="#b6dcf8" groundColor="#e8eff5" intensity={0.18} />
+        {/* Daytime ambient. The key stays dominant so the white pedestal keeps
+           a lit side and a shade side, but the wash is bright enough to read
+           as open daylight rather than an overcast dusk. */}
+        <ambientLight color="#e9f3ff" intensity={0.3} />
+        <hemisphereLight color="#b6dcf8" groundColor="#e8eff5" intensity={0.45} />
 
         {/* Sun key — high, and forward enough that the campus facades the camera
-           actually sees are the lit ones. A sun set squarely to the side would
-           model the plinth beautifully and leave every building in shade. */}
+           actually sees are the lit ones. */}
         <directionalLight
-          color="#fff4e6"
-          intensity={3.2}
+          color="#fff1dc"
+          intensity={3.6}
           position={[26, 25, 17]}
           castShadow
           shadow-mapSize-width={shadow}
@@ -198,16 +197,15 @@ function Lights({ tier, mode }: { tier: Tier; mode?: string }) {
           shadow-normalBias={0.024}
         />
         {/* Cool sky fill from the left */}
-        <directionalLight color="#a9d8f7" intensity={0.3} position={[-22, 15, 12]} />
+        <directionalLight color="#a9d8f7" intensity={0.5} position={[-22, 15, 12]} />
         {/* Ground bounce — subtle cool reflection off concrete */}
-        <directionalLight color="#cfe9f8" intensity={0.18} position={[1, -7, 3]} />
-        {/* Camera-side fill. This is the light that keeps the plaza and the
-           plinth's face readable without lifting the whole frame into white. */}
-        <directionalLight color="#f8fbff" intensity={0.34} position={[-6, 7, 20]} />
-        {/* Daytime practials: a hint of bounce off the plaza, nothing that a
-           clear day would not already do at ten times this brightness. */}
-        <pointLight position={[7.5, 3.6, 4]} color="#91c7ff" intensity={1.1} distance={30} decay={2} />
-        <pointLight position={[-2.4, 4.2, 7.4]} color="#fff4e8" intensity={0.8} distance={20} decay={2} />
+        <directionalLight color="#cfe9f8" intensity={0.25} position={[1, -7, 3]} />
+        {/* Camera-side fill keeps the plaza readable; kept below the key so it
+           never flattens the mark. */}
+        <directionalLight color="#f8fbff" intensity={0.3} position={[-6, 7, 20]} />
+        {/* Daytime practials: plaza bounce warmth near the monument. */}
+        <pointLight position={[7.5, 3.6, 4]} color="#91c7ff" intensity={2.5} distance={30} decay={2} />
+        <pointLight position={[-2.4, 4.2, 7.4]} color="#fff4e8" intensity={1.8} distance={20} decay={2} />
       </>
     );
   }
@@ -235,13 +233,13 @@ function Lights({ tier, mode }: { tier: Tier; mode?: string }) {
         shadow-normalBias={0.024}
       />
       {/* cool sky fill so the blue paint keeps its edge on the shadow side */}
-      <directionalLight color="#4a86ff" intensity={1.1} position={[-18, 9, 13]} />
+      <directionalLight color="#4a86ff" intensity={1.5} position={[-18, 9, 13]} />
       {/* bounce off the wet plaza */}
-      <directionalLight color="#2e5cae" intensity={0.3} position={[2, -6, 4]} />
+      <directionalLight color="#2e5cae" intensity={0.4} position={[2, -6, 4]} />
       {/* the campus itself is a light source at blue hour: warm wash off the
           lit facades so the architecture reads warm against the cold sky */}
-      <directionalLight color="#ffb479" intensity={0.65} position={[12, 5, -30]} />
-      <pointLight position={[7.5, 3.6, 4]} color="#ffab5e" intensity={22} distance={34} decay={2} />
+      <directionalLight color="#ffb479" intensity={0.9} position={[12, 5, -30]} />
+      <pointLight position={[7.5, 3.6, 4]} color="#ffab5e" intensity={26} distance={34} decay={2} />
       {/* Front fill. A wide directional reads as bounce light and keeps the
           mark's front face an even blue; a close point light blows a hotspot
           straight through the clearcoat and turns the paint pale lavender. */}
@@ -252,23 +250,25 @@ function Lights({ tier, mode }: { tier: Tier; mode?: string }) {
 }
 
 function Effects({ tier, isLight }: { tier: Tier; isLight: boolean }) {
-  /* Daylight wants even less bloom than dusk: the sky and the pedestal are
-     already near white, so the threshold has to sit above them or the whole
-     frame glows. The depth of field is what sells the campus as a place with
-     distance rather than a flat backdrop. */
+  /* Bloom is the punch: emissive rims, lamp glass and the sky's brightest
+     values halo slightly in both hours. The threshold sits below the near-
+     white daylight so the lit acrylic and hot highlights carry a glow. */
   if (tier === "low") {
     return (
-      <EffectComposer multisampling={0} enableNormalPass={false}>
-        <Bloom intensity={isLight ? 0.1 : 0.22} luminanceThreshold={isLight ? 0.95 : 0.85} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
-        <Vignette offset={0.3} darkness={isLight ? 0.16 : 0.6} />
+      <EffectComposer multisampling={0} enableNormalPass={false} frameBufferType={THREE.HalfFloatType}>
+        <Bloom intensity={isLight ? 0.28 : 0.52} luminanceThreshold={isLight ? 0.88 : 0.76} luminanceSmoothing={0.25} mipmapBlur radius={0.75} />
+        <Vignette offset={0.3} darkness={isLight ? 0.05 : 0.45} />
       </EffectComposer>
     );
   }
+  /* multisampling stays at 0: the MSAA resolve target drops the buffer's
+     sRGB colorspace and the whole frame gets a second encode — the milky
+     veil over the sky. Edge aliasing is handled by the bloom pass instead. */
   return (
-    <EffectComposer multisampling={4} enableNormalPass={false}>
-      <DepthOfField focusDistance={15} focusRange={23} bokehScale={isLight ? 0.66 : 1.15} height={520} />
-      <Bloom intensity={isLight ? 0.1 : 0.2} luminanceThreshold={isLight ? 0.95 : 0.88} luminanceSmoothing={0.3} mipmapBlur radius={0.7} />
-      <Vignette offset={0.3} darkness={isLight ? 0.16 : 0.55} />
+    <EffectComposer multisampling={0} enableNormalPass={false} frameBufferType={THREE.HalfFloatType}>
+      <DepthOfField focusDistance={15} focusRange={23} bokehScale={isLight ? 0.85 : 1.15} height={520} />
+      <Bloom intensity={isLight ? 0.28 : 0.52} luminanceThreshold={isLight ? 0.88 : 0.76} luminanceSmoothing={0.25} mipmapBlur radius={0.75} />
+      <Vignette offset={0.3} darkness={isLight ? 0.05 : 0.45} />
     </EffectComposer>
   );
 }
@@ -315,10 +315,10 @@ export default function HeroScene({
   }
 
   const isLight = mode === "light";
-  const fogColor = isLight ? "#d5e7f6" : "#1a2444";
+  const fogColor = isLight ? "#bcd9f4" : "#16214a";
   /* Daylight haze is aerial perspective: enough to stack the far blocks behind
-     the near ones, not enough to grey the plaza the monument is standing on. */
-  const fogDensity = isLight ? (tier === "high" ? 0.0013 : 0.0022) : (tier === "high" ? 0.003 : 0.0044);
+     the near ones, but bluer than grey so it reads as sky haze, not smog. */
+  const fogDensity = isLight ? (tier === "high" ? 0.0009 : 0.0016) : (tier === "high" ? 0.0026 : 0.004);
 
   return (
     <Canvas
@@ -337,10 +337,10 @@ export default function HeroScene({
       camera={{ position: [0, 1.0, 17], fov: 28, near: 0.1, far: 900 }}
       onCreated={(state) => {
         state.gl.toneMapping = THREE.ACESFilmicToneMapping;
-        /* Daylight sits at 1.0: the key is already bright enough to put the
-           plinth over 0.85 and the sky above it, and an exposure lifted to
-           compensate just takes the plaza with it. */
-        state.gl.toneMappingExposure = flat ? 1.08 : 1.0;
+        /* Lifted exposure powers the punchier grade: the bloom threshold now
+           sits below the whites, so the extra headroom lands as glow rather
+           than clipping. */
+        state.gl.toneMappingExposure = isLight ? (flat ? 1.38 : 1.3) : flat ? 1.2 : 1.12;
         (window as unknown as { __ck?: unknown }).__ck = state;
       }}
       style={{ width: "100%", height: "100%", display: "block" }}
